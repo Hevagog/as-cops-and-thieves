@@ -2,7 +2,7 @@ from environments import SimpleEnv
 
 
 def main():
-    env = SimpleEnv()
+    env = SimpleEnv(cops_count=1, thieves_count=1)
     env.reset()
 
 
