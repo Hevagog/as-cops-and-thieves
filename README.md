@@ -1,1 +1,1 @@
-# Agent Systems COPS AND THIEVES
+# Agent Systems Cops and Thieves
