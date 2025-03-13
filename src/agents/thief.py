@@ -8,3 +8,4 @@ class Thief(Entity):
 
     def __init__(self):
         super().__init__()
+        self.color = (255, 0, 0)

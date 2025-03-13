@@ -8,3 +8,4 @@ class Cop(Entity):
 
     def __init__(self):
         super().__init__()
+        self.color = (0, 0, 255)

@@ -1,5 +1,6 @@
 from typing import List
 
+from utils import get_window_height, get_window_width
 from agents import Cop, Thief
 import gymnasium as gym
 import pygame
@@ -22,6 +23,8 @@ class BaseEnv(gym.Env):
         super().__init__()
         self.cops: List[Cop] = [Cop() for _ in range(cops_count)]
         self.thieves: List[Thief] = [Thief() for _ in range(thieves_count)]
+        self.width = get_window_height()
+        self.height = get_window_width()
 
     def step(self, action):
         raise NotImplementedError
