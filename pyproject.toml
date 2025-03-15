@@ -9,13 +9,11 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.6"
 
-[tool.as-cops-and-thieves]
+[tool.physical-params]
 unit_velocity = 10.0
 unit_mass = 1.0
 unit_size = 2.0
 
 [tool.visualization]
-window_width = 1200
-window_height = 800
 background_color = [0, 0, 0]
-
+wall_color = [255, 255, 255]

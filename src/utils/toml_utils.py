@@ -30,7 +30,7 @@ def get_window_height() -> int:
 
 
 @contextmanager
-def _get_specific_config(name: str = "tool.as-cops-and-thieves"):
+def _get_specific_config(name: str = "tool.physical-params"):
     with open("config.toml") as f:
         config = tomli.load(f)
     yield config[name]
