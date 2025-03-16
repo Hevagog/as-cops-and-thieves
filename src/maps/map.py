@@ -7,8 +7,6 @@ import pymunk.pygame_util
 
 import pygame
 
-# from utils import get_unit_size
-
 
 class Map:
     """
@@ -75,7 +73,7 @@ class Map:
             w = block.get("w") if block.get("w") is not None else 1
             h = block.get("h") if block.get("h") is not None else 1
 
-            block_segment = pymunk.Segment(space.static_body, (x, y), (x + w, y + h), 2)
+            block_segment = pymunk.Segment(space.static_body, (x, y), (x + w, y + h), 1)
             space.add(block_segment)
 
     def render(self, screen: pygame.Surface) -> None:

@@ -33,10 +33,15 @@ class Entity:
         radius: float | None = None,
         speed: float | None = None,
         mass: float | None = None,
+        color: tuple[int, int, int] = (255, 255, 255),
     ):
         """
         Initialize the agent with the given radius and speed.
         """
+        self._radius = get_unit_size() if radius is None else radius
+        self._speed = get_unit_velocity() if speed is None else speed
+        self._mass = get_unit_mass() if mass is None else mass
+
         self.action_space = gym.spaces.Discrete(4)  # 4 actions: left, down, right, up
         # Force mappings for the actions of the agent.
         # 0: left, 1: down, 2: right, 3: up.
@@ -48,16 +53,15 @@ class Entity:
         }
 
         self.observation_space = None
-        self._radius = get_unit_size() if radius is None else radius
-        self._speed = get_unit_velocity() if speed is None else speed
-        self._mass = get_unit_mass() if mass is None else mass
 
         self.body = pymunk.Body(
             self._mass,
-            pymunk.moment_for_circle(self._mass, inner_radius=0, outer_radius=radius),
+            pymunk.moment_for_circle(
+                self._mass, inner_radius=0.0, outer_radius=self._radius
+            ),
         )  # inner_radius = 0 because we represent filled circles as agents.
 
-        self.radius = pymunk.Circle(self.body, radius=radius)
+        self.radius = pymunk.Circle(self.body, radius=self._radius)
 
     def _perform_action(self, action: np.ndarray) -> None:
         """
@@ -72,7 +76,7 @@ class Entity:
     def step(self, action: np.ndarray):
         """
         Method to update the agent's state.
-        # TODO: Add view of the agent
+        # TODO: Add view controller for the agent.
         """
         self._perform_action(action)
         # return np.array(state, dtype=np.float32), reward, terminated, False, {}
