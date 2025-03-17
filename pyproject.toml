@@ -4,7 +4,7 @@ version = "0.0.1"
 description = "TODO"
 authors = [
     {name = "Tomasz Kawiak", email = "qkawiak@gmail.com"},
-    {name = "Mateusz Mazur", email = ""},
+    {name = "Mateusz Mazur", email = "m-mazur@wp.pl"},
 ]
 readme = "README.md"
 requires-python = ">=3.6"
