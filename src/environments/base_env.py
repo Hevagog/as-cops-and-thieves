@@ -3,12 +3,15 @@ import gymnasium as gym
 import pymunk
 import pygame
 import numpy as np
+from pettingzoo import ParallelEnv
+from gymnasium.utils import seeding
+
 
 from agents import Cop, Thief
-from maps.map import Map
+from maps import Map
 
 
-class BaseEnv(gym.Env):
+class BaseEnv(ParallelEnv):
     metadata = {"render_modes": ["human", "rgb_array"]}
 
     def __init__(self, cops_count: int, thieves_count: int, map: Map, render_mode=None):
@@ -21,8 +24,17 @@ class BaseEnv(gym.Env):
             render_mode: The mode in which to render the environment (either "human" or "rgb_array")
         """
         super().__init__()
+        # Define Agents and their Action and Observation Spaces
         self.cops: List[Cop] = [Cop() for _ in range(cops_count)]
         self.thieves: List[Thief] = [Thief() for _ in range(thieves_count)]
+        self.agents = self.cops + self.thieves
+        self.possible_agents = self.agents.copy()
+        self.action_spaces = {agent: agent.action_space for agent in self.agents}
+        self.observation_spaces = {
+            agent: agent.observation_space for agent in self.agents
+        }
+
+        # Define Map and Space
         self.map = map
         self.width, self.height = self.map.window_dimensions
         self.canvas_width, self.canvas_height = self.map.canvas_dimensions
@@ -51,7 +63,10 @@ class BaseEnv(gym.Env):
         # return observation, reward, terminated, False, info
 
     def reset(self, seed=None, options=None):
-        super().reset(seed=seed)
+        # Copied from gym.Env.reset method
+        if seed is not None:
+            self._np_random, self._np_random_seed = seeding.np_random(seed)
+
         # TODO: Implement the reset method for the agents. Should they be reset to a random position?
         # for cop in self.cops:
         #     cop.reset()
