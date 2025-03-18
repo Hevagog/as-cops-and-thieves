@@ -70,7 +70,7 @@ We expect to achieve the following behaviors from agents:
 In our project we intend to use the following frameworks:
 
 - skrl ([@fig:skrl]) for MARL implementation.
-- Gymnasium ([@fig:gym]) to guarantee MARL environment standards.
+- PettingZoo ([@fig:gym]) to guarantee MARL environment standards.
 - pymunk ([@fig:pymunk]) as 2D physics engine, complemented by:
     - pygame ([@fig:pygame]) for visualization.
 
@@ -79,7 +79,7 @@ In our project we intend to use the following frameworks:
 ![skrl logo](img/skrl.jpg){#fig:skrl width=100%}
 :::
 ::: {.column width="25%"}
-![Gymnasium logo](img/gym.png){#fig:gym width=100%}
+![PettingZoo logo](img/gym.png){#fig:gym width=100%}
 :::
 ::: {.column width="25%"}
 ![pymunk logo](img/pymunk.jpg){#fig:pymunk width=100%}
@@ -91,4 +91,6 @@ In our project we intend to use the following frameworks:
 <!-- this column acts as a margin for the table -->
 :::
 :::: 
+
+
 
