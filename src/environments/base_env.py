@@ -1,13 +1,16 @@
 from typing import List
-import gymnasium as gym
+import functools
 import pymunk
 import pygame
+import gymnasium as gym
 import numpy as np
-from pettingzoo import ParallelEnv
+from pettingzoo import ParallelEnv, AECEnv
+from pettingzoo.utils import parallel_to_aec
 from gymnasium.utils import seeding
 
 
 from agents import Cop, Thief
+from agents.entity import Entity
 from maps import Map
 
 
@@ -24,14 +27,17 @@ class BaseEnv(ParallelEnv):
             render_mode: The mode in which to render the environment (either "human" or "rgb_array")
         """
         super().__init__()
-        # Define Agents and their Action and Observation Spaces
-        self.cops: List[Cop] = [Cop() for _ in range(cops_count)]
-        self.thieves: List[Thief] = [Thief() for _ in range(thieves_count)]
-        self.agents = self.cops + self.thieves
-        self.possible_agents = self.agents.copy()
-        self.action_spaces = {agent: agent.action_space for agent in self.agents}
-        self.observation_spaces = {
-            agent: agent.observation_space for agent in self.agents
+        # Create the agents
+        self.cops: List[Cop] = [Cop(id=f"cop_{id}") for id in range(cops_count)]
+        self.thieves: List[Thief] = [
+            Thief(id=f"thief_{id}") for id in range(thieves_count)
+        ]
+
+        # possible_agents is a static list of all possible agents in the environment that could ever be present in the environment.
+        # This generalization is needed for the PettingZoo API.
+        self.possible_agents = [agent.get_id() for agent in (self.cops + self.thieves)]
+        self.agent_name_mapping = {
+            agent.get_id(): agent for agent in (self.cops + self.thieves)
         }
 
         # Define Map and Space
@@ -55,34 +61,64 @@ class BaseEnv(ParallelEnv):
         self.window = None
         self.clock = None
 
-    def step(self, action):
+    @functools.lru_cache(maxsize=None)
+    def observation_space(self, agent: Entity):
+        return agent.observation_space
 
-        if self.render_mode == "human":
-            self._render_frame()
+    @functools.lru_cache(maxsize=None)
+    def action_space(self, agent: Entity) -> gym.spaces.Discrete:
+        return agent.action_space
 
-        # return observation, reward, terminated, False, info
-
-    def reset(self, seed=None, options=None):
+    def reset(
+        self,
+        seed: int | None = None,
+        options: dict | None = None,
+    ):
         # Copied from gym.Env.reset method
         if seed is not None:
             self._np_random, self._np_random_seed = seeding.np_random(seed)
 
-        # TODO: Implement the reset method for the agents. Should they be reset to a random position?
-        # for cop in self.cops:
-        #     cop.reset()
-        # for thief in self.thieves:
-        #     thief.reset()
+        self.agents = self.possible_agents[:]
+        for agent in self.agents:
+            self.agent_name_mapping[
+                agent
+            ].reset()  # @TODO: Implement the reset method for the agents.
+        self.num_moves = 0
+
         # TODO: Implement the _get_observation and _get_info methods
         # observation = self._get_observation()
         # info = self._get_info()
+        observations = {
+            agent: self.agent_name_mapping[agent].get_observation()
+            for agent in self.agents
+        }
+        infos = {agent: {} for agent in self.agents}
+
+        self.state = observations
+        return observations, infos
+
+    def step(self, action):
+        """
+        Method to update the environment's state.
+        """
+        # If a user passes in actions with no agents, then just return empty observations, etc.
+        if not actions:
+            self.agents = []
+            return {}, {}, {}, {}, {}
+
+        # rewards for all agents are placed in the rewards dictionary to be returned
+        results = [
+            self.agent_name_mapping[agent].step(action[agent]) for agent in self.agents
+        ]
+        observations, rewards, terminations, truncations, infos = [
+            dict(zip(self.agents, values)) for values in zip(*results)
+        ]
+
+        self.state = observations
 
         if self.render_mode == "human":
             self._render_frame()
-
-        # return observation, info
-
-    def _get_observation(self):
-        raise NotImplementedError
+        return observations, rewards, truncations, False, infos
 
     def _get_info(self):
         raise NotImplementedError
@@ -114,3 +150,31 @@ class BaseEnv(ParallelEnv):
             return np.transpose(
                 np.array(pygame.surfarray.pixels3d(d_canvas)), axes=(1, 0, 2)
             )
+
+    def close(self):
+        if self.window is not None:
+            pygame.quit()
+            self.window = None
+            self.clock = None
+
+    def observe(self, agent):
+        return np.array(agent.get_observation(), dtype=np.float32)
+
+
+def raw_env(map: Map, cops_count=1, thieves_count=1, render_mode="rgb_array") -> AECEnv:
+    """
+    In support of the PettingZoo API, this function returns a raw environment (see https://pettingzoo.farama.org/api/aec/#about-aec).
+    Args:
+        map(Map): The map object for the environment
+        cops_count(int): Number of cops in the environment
+        thieves_count(int): Number of thieves in the environment
+        render_mode(str): The mode in which to render the environment (either "human" or "rgb_array")
+    """
+    env = BaseEnv(
+        cops_count=cops_count,
+        thieves_count=thieves_count,
+        map=map,
+        render_mode=render_mode,
+    )
+    env = parallel_to_aec(env)
+    return env
