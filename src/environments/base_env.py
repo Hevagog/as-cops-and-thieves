@@ -17,20 +17,37 @@ from maps import Map
 class BaseEnv(ParallelEnv):
     metadata = {"render_modes": ["human", "rgb_array"]}
 
-    def __init__(self, cops_count: int, thieves_count: int, map: Map, render_mode=None):
+    def __init__(self, map: Map, render_mode=None):
         """
         Base class for the environment, based on the Gymnasium environment class (see https://gymnasium.farama.org/tutorials/gymnasium_basics/environment_creation/).
         Args:
-            cops_count: Number of cops in the environment
-            thieves_count: Number of thieves in the environment
-            map: The map object for the environment
+            map: The map object for the environment. Has the agent's initial positions and count.
             render_mode: The mode in which to render the environment (either "human" or "rgb_array")
         """
         super().__init__()
+
+        # Define Space
+        self.map = map
+        self.width, self.height = self.map.window_dimensions
+        self.space = pymunk.Space()
+        self.map.populate_space(self.space)
+
         # Create the agents
-        self.cops: List[Cop] = [Cop(id=f"cop_{id}") for id in range(cops_count)]
+        self.cops: List[Cop] = [
+            Cop(
+                start_position=pymunk.Vec2d(*map.cops_positions[id]),
+                space=self.space,
+                id=f"cop_{id}",
+            )
+            for id in range(map.cops_count)
+        ]
         self.thieves: List[Thief] = [
-            Thief(id=f"thief_{id}") for id in range(thieves_count)
+            Thief(
+                start_position=pymunk.Vec2d(*map.thieves_positions[id]),
+                space=self.space,
+                id=f"thief_{id}",
+            )
+            for id in range(map.thieves_count)
         ]
 
         # possible_agents is a static list of all possible agents in the environment that could ever be present in the environment.
@@ -39,13 +56,6 @@ class BaseEnv(ParallelEnv):
         self.agent_name_mapping = {
             agent.get_id(): agent for agent in (self.cops + self.thieves)
         }
-
-        # Define Map and Space
-        self.map = map
-        self.width, self.height = self.map.window_dimensions
-        self.canvas_width, self.canvas_height = self.map.canvas_dimensions
-        self.space = pymunk.Space()
-        self.map.populate_space(self.space)
 
         assert render_mode is None or render_mode in self.metadata["render_modes"]
         self.render_mode = render_mode
@@ -66,8 +76,8 @@ class BaseEnv(ParallelEnv):
         return agent.observation_space
 
     @functools.lru_cache(maxsize=None)
-    def action_space(self, agent: Entity) -> gym.spaces.Discrete:
-        return agent.action_space
+    def action_space(self, agent: str) -> gym.spaces.Discrete:
+        return self.agent_name_mapping[agent].action_space
 
     def reset(
         self,
@@ -85,9 +95,6 @@ class BaseEnv(ParallelEnv):
             ].reset()  # @TODO: Implement the reset method for the agents.
         self.num_moves = 0
 
-        # TODO: Implement the _get_observation and _get_info methods
-        # observation = self._get_observation()
-        # info = self._get_info()
         observations = {
             agent: self.agent_name_mapping[agent].get_observation()
             for agent in self.agents
@@ -95,6 +102,10 @@ class BaseEnv(ParallelEnv):
         infos = {agent: {} for agent in self.agents}
 
         self.state = observations
+
+        if self.render_mode == "human":
+            self._render_frame()
+
         return observations, infos
 
     def step(self, action):
@@ -102,7 +113,7 @@ class BaseEnv(ParallelEnv):
         Method to update the environment's state.
         """
         # If a user passes in actions with no agents, then just return empty observations, etc.
-        if not actions:
+        if not action:
             self.agents = []
             return {}, {}, {}, {}, {}
 
@@ -116,8 +127,11 @@ class BaseEnv(ParallelEnv):
 
         self.state = observations
 
+        self.space.step(1 / 60.0)  # @TODO: Parameterize the time step
+
         if self.render_mode == "human":
             self._render_frame()
+
         return observations, rewards, truncations, False, infos
 
     def _get_info(self):
@@ -131,25 +145,23 @@ class BaseEnv(ParallelEnv):
         if self.window is None and self.render_mode == "human":
             pygame.init()
             self.window = pygame.display.set_mode((self.width, self.height))
-            draw_options = pymunk.pygame_util.DrawOptions(self.window)
         if self.clock is None and self.render_mode == "human":
             self.clock = pygame.time.Clock()
-
-        d_canvas = pygame.Surface((self.width, self.height))
-        d_canvas.fill((255, 255, 255))
-        self.map.render(d_canvas)
-
-        # TODO: Render the agents on the screen
+        draw_options = pymunk.pygame_util.DrawOptions(self.window)
+        self.window.fill((255, 255, 255))
+        agents_positions = [
+            self.agent_name_mapping[agent].body.position for agent in self.agents
+        ]
 
         if self.render_mode == "human":
-            self.window.blit(d_canvas, d_canvas.get_rect())
-            pygame.event.pump()
-            pygame.display.update()
+            self.space.debug_draw(draw_options)
+            pygame.display.flip()
             self.clock.tick(60)
         else:  # rgb_array
-            return np.transpose(
-                np.array(pygame.surfarray.pixels3d(d_canvas)), axes=(1, 0, 2)
-            )
+            self.space.debug_draw(draw_options)
+            return pygame.surfarray.array3d(self.window)
+
+        self.clock.tick(60)
 
     def close(self):
         if self.window is not None:

@@ -12,7 +12,8 @@ requires-python = ">=3.6"
 [tool.physical-params]
 unit_velocity = 10.0
 unit_mass = 1.0
-unit_size = 2.0
+unit_size = 5.0
+max_speed = 125.0
 
 [tool.visualization]
 background_color = [0, 0, 0]

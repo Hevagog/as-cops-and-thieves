@@ -1,11 +1,11 @@
 from typing import Tuple, Dict, List
 import json
 import os
-
 import pymunk
 import pymunk.pygame_util
-
 import pygame
+
+from utils import get_unit_size
 
 
 class Map:
@@ -26,6 +26,11 @@ class Map:
         self.blocks = List[
             Dict[str, int]
         ]  # I have pytorch installed on python 3.10 so no type T_T
+        self.cops_count: int
+        self.thieves_count: int
+        self.cops_positions: List[Tuple[int, int]]
+        self.thieves_positions: List[Tuple[int, int]]
+        self.unit_size = get_unit_size()
 
         self._parse_json_map(map_path)
 
@@ -38,29 +43,17 @@ class Map:
         with open(map_path, "r") as f:
             map_data = json.load(f)
             self.window_dimensions = tuple(map_data["window"].values())
-            self.canvas_dimensions = tuple(map_data["canvas"].values())
             self.blocks = map_data["objects"]["blocks"]
+            agents = map_data["agents"]
 
-        self._scaling_factor_x = int(
-            round(self.window_dimensions[0] / self.canvas_dimensions[0])
-        )
-        self._scaling_factor_y = int(
-            round(self.window_dimensions[1] / self.canvas_dimensions[1])
-        )
-
-    def _physics_to_screen(self, x: int, y: int) -> Tuple[int, int]:
-        """
-        Convert physics coordinates (from the canvas) to screen coordinates.
-        This is used ONLY for visualizing objects on the pygame display.
-
-        Args:
-            x (int): The x coordinate in the physics space.
-            y (int): The y coordinate in the physics space.
-
-        Returns:
-            Tuple[int, int]: Rescaled screen coordinates.
-        """
-        return x * self._scaling_factor_x, y * self._scaling_factor_y
+            self.cops_count = sum(1 for agent in agents if agent["type"] == "cop")
+            self.thieves_count = sum(1 for agent in agents if agent["type"] == "thief")
+            self.cops_positions = [
+                (agent["x"], agent["y"]) for agent in agents if agent["type"] == "cop"
+            ]
+            self.thieves_positions = [
+                (agent["x"], agent["y"]) for agent in agents if agent["type"] == "thief"
+            ]
 
     def populate_space(self, space: pymunk.Space) -> None:
         """
@@ -68,30 +61,14 @@ class Map:
         Args:
             space (pymunk.Space): The pymunk space to populate with the map objects.
         """
+
         for block in self.blocks:
             x, y = block.get("x"), block.get("y")
-            w = block.get("w") if block.get("w") is not None else 1
-            h = block.get("h") if block.get("h") is not None else 1
-
-            block_segment = pymunk.Segment(space.static_body, (x, y), (x + w, y + h), 1)
-            space.add(block_segment)
-
-    def render(self, screen: pygame.Surface) -> None:
-        """
-        Visualize the map objects on the screen using the physics-to-screen coordinate conversion.
-        This affects the display of the map on the pygame window, not the physics objects.
-        Args:
-            screen: The pygame surface to render the map on.
-        """
-        for block in self.blocks:
-            x, y = block.get("x"), block.get("y")
-            w = block.get("w") if block.get("w") is not None else 1
-            h = block.get("h") if block.get("h") is not None else 1
-            screen_x, screen_y = self._physics_to_screen(x, y)
-            screen_w, screen_h = self._physics_to_screen(w, h)
-            pygame.draw.rect(
-                screen, (0, 0, 0), (screen_x, screen_y, screen_w, screen_h), 0
+            x2, y2 = block.get("x2"), block.get("y2")
+            block_segment = pymunk.Segment(
+                space.static_body, (x, y), (x2, y2), self.unit_size
             )
+            space.add(block_segment)
 
 
 ### For now only for basic tests to showcase the map rendering
@@ -110,6 +87,6 @@ if __name__ == "__main__":
             if event.type == pygame.QUIT:
                 running = False
         screen.fill((255, 255, 255))
-        map.render(screen)
+        map.render(screen, [])
         pygame.display.flip()
         clock.tick(60)

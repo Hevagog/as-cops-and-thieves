@@ -1,10 +1,17 @@
 import gymnasium as gym
 import numpy as np
+import pygame
 import pymunk
 import uuid
 import math
 
-from utils import get_unit_size, get_unit_velocity, get_unit_mass, ObjectType
+from utils import (
+    get_unit_size,
+    get_unit_velocity,
+    get_unit_mass,
+    get_max_speed,
+    ObjectType,
+)
 
 
 class Entity:
@@ -30,6 +37,8 @@ class Entity:
 
     def __init__(
         self,
+        start_position: pymunk.Vec2d,
+        space: pymunk.Space,
         radius: float | None = None,
         speed: float | None = None,
         mass: float | None = None,
@@ -52,16 +61,17 @@ class Entity:
         self._speed = get_unit_velocity() if speed is None else speed
         self._mass = get_unit_mass() if mass is None else mass
         self._id = uuid.uuid4().hex if id is None else id
-
+        self._max_speed = get_max_speed()
         self.action_space = gym.spaces.Discrete(4)
+        self._space = space
 
         # Define force mappings for actions:
         # 0: left, 1: down, 2: right, 3: up.
         self._force_mappings = {
-            0: (-self._speed, 0),
-            1: (0, -self._speed),
-            2: (self._speed, 0),
-            3: (0, self._speed),
+            0: pymunk.Vec2d(-self._speed, 0),
+            1: pymunk.Vec2d(0, self._speed),
+            2: pymunk.Vec2d(self._speed, 0),
+            3: pymunk.Vec2d(0, -self._speed),
         }
 
         self._ray_length = 400  # Length of the ray for the agent's view.
@@ -90,35 +100,40 @@ class Entity:
                 self._mass, inner_radius=0.0, outer_radius=self._radius
             ),
         )
+        self.body.position = start_position
         self._b_box = pymunk.Circle(self.body, radius=self._radius)
         self._b_box.filter = pymunk.ShapeFilter(categories=filter_category)
         self.ray_filter = pymunk.ShapeFilter(
             mask=pymunk.ShapeFilter.ALL_MASKS() ^ filter_category
         )
+        self._space.add(self.body, self._b_box)
 
-    def _perform_action(self, action: np.ndarray) -> None:
+    def _perform_action(self, action: int) -> None:
         """
         Performs an action in the environment.
         """
         # Map the action to a force direction:
+        force = self._force_mappings.get(action)
+        self.body.apply_impulse_at_local_point(force)
+        if abs(self.body.velocity) > self._max_speed:
+            self.body.velocity = self.body.velocity.normalized() * self._max_speed
 
-        action_idx = int(action[0])
-        force = self._force_mappings.get(action_idx, (0, 0))
-        self.body.apply_force_at_local_point(force)
-
-    def step(self, action: np.ndarray):
+    def step(self, action: int):
         """
         Method to update the agent's state.
-        # TODO: Add view controller for the agent.
         """
         self._perform_action(action)
-        raise NotImplementedError
-        # return np.array(state, dtype=np.float32), reward, terminated, False, {}
+        observations = self.get_observation()
+        reward = 0
+        terminated = False
+
+        return observations, reward, terminated, False, {}
 
     def reset(self):
-        raise NotImplementedError
+        # raise NotImplementedError
+        pass
 
-    def get_observation(self, space: pymunk.Space):
+    def get_observation(self):
         """
         Get the observation of the agent.
 
@@ -140,7 +155,9 @@ class Entity:
         object_types = np.empty(self._num_rays, dtype=np.uint8)
 
         for i, end in enumerate(endpoints):
-            hit = space.segment_query_first(origin, pymunk.Vec2d(*end), 1, ray_filter)
+            hit = self._space.segment_query_first(
+                origin, pymunk.Vec2d(*end), 1, ray_filter
+            )
             if hit is not None:
                 dx = hit.point[0] - origin_x
                 dy = hit.point[1] - origin_y

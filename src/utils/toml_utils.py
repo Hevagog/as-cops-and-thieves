@@ -12,6 +12,11 @@ def get_unit_velocity() -> int:
         return config["unit_velocity"]
 
 
+def get_max_speed() -> int:
+    with _get_specific_config() as config:
+        return config["max_speed"]
+
+
 def get_unit_mass() -> int:
     with _get_specific_config() as config:
         return config["unit_mass"]
