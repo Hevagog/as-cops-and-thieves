@@ -2,8 +2,9 @@ import gymnasium as gym
 import numpy as np
 import pymunk
 import uuid
+import math
 
-from utils import get_unit_size, get_unit_velocity, get_unit_mass
+from utils import get_unit_size, get_unit_velocity, get_unit_mass, ObjectType
 
 
 class Entity:
@@ -23,8 +24,6 @@ class Entity:
     - 3: Move up
 
     ## Observation Space
-    # TODO: Add observation space for the agent: 360 degree view with a possibility for narrower view.
-    The observation space is dependent on the field of view of the agent.
 
 
     """
@@ -35,18 +34,28 @@ class Entity:
         speed: float | None = None,
         mass: float | None = None,
         id: str | None = None,
+        filter_category: int = 0b1,
         color: tuple[int, int, int] = (255, 255, 255),
     ):
         """
-        Initialize the agent with the given radius and speed.
+        Initialize the agent.
+
+        Args:
+            radius: The radius of the agent.
+            speed: The speed of the agent.
+            mass: The mass of the agent.
+            id: The unique ID of the agent.
+            filter_category: The category for collision filtering.
+            color: The color of the agent.
         """
         self._radius = get_unit_size() if radius is None else radius
         self._speed = get_unit_velocity() if speed is None else speed
         self._mass = get_unit_mass() if mass is None else mass
-        # Generate a unique ID for the agent (needed for environment).
         self._id = uuid.uuid4().hex if id is None else id
-        self.action_space = gym.spaces.Discrete(4)  # 4 actions: left, down, right, up
-        # Force mappings for the actions of the agent.
+
+        self.action_space = gym.spaces.Discrete(4)
+
+        # Define force mappings for actions:
         # 0: left, 1: down, 2: right, 3: up.
         self._force_mappings = {
             0: (-self._speed, 0),
@@ -55,18 +64,37 @@ class Entity:
             3: (0, self._speed),
         }
 
-        self.observation_space = (
-            None  # @TODO: Implement the observation space for the agent.
+        self._ray_length = 400  # Length of the ray for the agent's view.
+        self._fov = 2 * np.pi  # Field of view in radians.
+        self._num_rays = 90  # One ray every ~4 degrees.
+
+        # Observation space includes distance and object type for each ray.
+        self.observation_space = gym.spaces.Dict(
+            {
+                "distance": gym.spaces.Box(
+                    low=0.0,
+                    high=self._ray_length,
+                    shape=(self._num_rays,),
+                    dtype=np.float16,
+                ),
+                "object_type": gym.spaces.MultiDiscrete(
+                    [max(item.value for item in ObjectType)] * self._num_rays
+                ),
+            }
         )
 
+        # Create the physics body and bounding circle representing the agent.
         self.body = pymunk.Body(
             self._mass,
             pymunk.moment_for_circle(
                 self._mass, inner_radius=0.0, outer_radius=self._radius
             ),
-        )  # inner_radius = 0 because we represent filled circles as agents.
-
-        self.radius = pymunk.Circle(self.body, radius=self._radius)
+        )
+        self._b_box = pymunk.Circle(self.body, radius=self._radius)
+        self._b_box.filter = pymunk.ShapeFilter(categories=filter_category)
+        self.ray_filter = pymunk.ShapeFilter(
+            mask=pymunk.ShapeFilter.ALL_MASKS() ^ filter_category
+        )
 
     def _perform_action(self, action: np.ndarray) -> None:
         """
@@ -90,12 +118,52 @@ class Entity:
     def reset(self):
         raise NotImplementedError
 
-    def get_observation(self):
+    def get_observation(self, space: pymunk.Space):
         """
-        Get the observation of the agent. For now it's its position.
+        Get the observation of the agent.
 
         """
-        return self.body.position
+        angles = np.linspace(0, self._fov, self._num_rays, endpoint=False)
+        cosines = np.cos(angles)
+        sines = np.sin(angles)
+
+        origin = self.body.position
+        origin_x, origin_y = origin[0], origin[1]
+        ray_length = self._ray_length
+        ray_filter = self.ray_filter
+
+        endpoints = np.column_stack(
+            (origin_x + ray_length * cosines, origin_y + ray_length * sines)
+        )
+
+        distances = np.empty(self._num_rays, dtype=np.float16)
+        object_types = np.empty(self._num_rays, dtype=np.uint8)
+
+        for i, end in enumerate(endpoints):
+            hit = space.segment_query_first(origin, pymunk.Vec2d(*end), 1, ray_filter)
+            if hit is not None:
+                dx = hit.point[0] - origin_x
+                dy = hit.point[1] - origin_y
+                distances[i] = math.hypot(dx, dy)
+                body_type = hit.shape.body.body_type
+                if body_type == pymunk.Body.DYNAMIC:
+                    shape = hit.shape
+                    if isinstance(shape, pymunk.Poly):
+                        object_types[i] = ObjectType.MOVABLE.value
+                    elif isinstance(shape, pymunk.Circle):
+                        object_types[i] = ObjectType.AGENT.value
+                    else:
+                        object_types[i] = ObjectType.EMPTY.value
+                else:
+                    object_types[i] = ObjectType.WALL.value
+            else:
+                distances[i] = ray_length
+                object_types[i] = ObjectType.EMPTY.value
+
+        return {
+            "distance": distances,
+            "object_type": object_types,
+        }
 
     def get_id(self) -> str:
         return self._id
