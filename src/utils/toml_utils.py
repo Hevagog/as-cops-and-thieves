@@ -22,6 +22,16 @@ def get_unit_mass() -> int:
         return config["unit_mass"]
 
 
+def get_cop_start_category() -> int:
+    with _get_specific_config() as config:
+        return config["pymunk_cop_start_category"]
+
+
+def get_thief_start_category() -> int:
+    with _get_specific_config() as config:
+        return config["pymunk_thief_start_category"]
+
+
 @contextmanager
 def _get_specific_config(keys=["tool", "physical-params"]):
     with open("pyproject.toml", "rb") as f:

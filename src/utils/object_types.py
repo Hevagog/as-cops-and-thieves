@@ -3,6 +3,7 @@ import enum
 
 class ObjectType(enum.Enum):
     WALL = 0
-    AGENT = 1
-    MOVABLE = 2
-    EMPTY = 3
+    COP = 1
+    THIEF = 2
+    MOVABLE = 3
+    EMPTY = 4

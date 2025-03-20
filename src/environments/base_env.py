@@ -12,6 +12,7 @@ from gymnasium.utils import seeding
 from agents import Cop, Thief
 from agents.entity import Entity
 from maps import Map
+from utils import get_cop_start_category, get_thief_start_category
 
 
 class BaseEnv(ParallelEnv):
@@ -31,6 +32,17 @@ class BaseEnv(ParallelEnv):
         self.width, self.height = self.map.window_dimensions
         self.space = pymunk.Space()
         self.map.populate_space(self.space)
+        # Define pymunk agents categories. For vision, we want agents to see each other and know their type.
+        self.cop_start_category = get_cop_start_category()
+        self.thief_start_category = get_thief_start_category()
+        self.cop_category = list(
+            range(self.cop_start_category, self.cop_start_category + map.cops_count)
+        )
+        self.thief_category = list(
+            range(
+                self.thief_start_category, self.thief_start_category + map.thieves_count
+            )
+        )
 
         # Create the agents
         self.cops: List[Cop] = [
@@ -38,6 +50,7 @@ class BaseEnv(ParallelEnv):
                 start_position=pymunk.Vec2d(*map.cops_positions[id]),
                 space=self.space,
                 id=f"cop_{id}",
+                filter_category=self.cop_category[id],
             )
             for id in range(map.cops_count)
         ]
@@ -46,6 +59,7 @@ class BaseEnv(ParallelEnv):
                 start_position=pymunk.Vec2d(*map.thieves_positions[id]),
                 space=self.space,
                 id=f"thief_{id}",
+                filter_category=self.thief_category[id],
             )
             for id in range(map.thieves_count)
         ]

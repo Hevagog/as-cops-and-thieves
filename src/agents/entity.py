@@ -10,6 +10,7 @@ from utils import (
     get_unit_velocity,
     get_unit_mass,
     get_max_speed,
+    get_thief_start_category,
     ObjectType,
 )
 
@@ -77,6 +78,7 @@ class Entity:
         self._ray_length = 400  # Length of the ray for the agent's view.
         self._fov = 2 * np.pi  # Field of view in radians.
         self._num_rays = 90  # One ray every ~4 degrees.
+        self._thief_start_category = get_thief_start_category()
 
         # Observation space includes distance and object type for each ray.
         self.observation_space = gym.spaces.Dict(
@@ -168,7 +170,10 @@ class Entity:
                     if isinstance(shape, pymunk.Poly):
                         object_types[i] = ObjectType.MOVABLE.value
                     elif isinstance(shape, pymunk.Circle):
-                        object_types[i] = ObjectType.AGENT.value
+                        if hit.shape.filter.categories < self._thief_start_category:
+                            object_types[i] = ObjectType.COP.value
+                        elif hit.shape.filter.categories >= self._thief_start_category:
+                            object_types[i] = ObjectType.THIEF.value
                     else:
                         object_types[i] = ObjectType.EMPTY.value
                 else:
