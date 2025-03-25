@@ -70,6 +70,7 @@ class Entity:
         self.action_space = gym.spaces.Discrete(4)
         self._space = space
         self._thief_category = get_thief_category()
+        self._initial_position = start_position
 
         # Define force mappings for actions:
         # 0: left, 1: down, 2: right, 3: up.
@@ -106,7 +107,7 @@ class Entity:
                 self._mass, inner_radius=0.0, outer_radius=self._radius
             ),
         )
-        self.body.position = start_position
+        self.body.position = self._initial_position
         self._b_box = pymunk.Circle(self.body, radius=self._radius)
         self._b_box.color = color
         self._b_box.filter = pymunk.ShapeFilter(group=group, categories=filter_category)
@@ -139,8 +140,11 @@ class Entity:
         return observations, reward, terminated, False, {}
 
     def reset(self):
-        # raise NotImplementedError
-        pass
+        """
+        Resets the agent to its initial state.
+        """
+        self.body.position = self._initial_position
+        self.body.velocity = pymunk.Vec2d(0, 0)
 
     def get_observation(self) -> dict[str, np.ndarray]:
         """

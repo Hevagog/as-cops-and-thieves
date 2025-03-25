@@ -99,12 +99,8 @@ class BaseEnv(ParallelEnv):
             self._np_random, self._np_random_seed = seeding.np_random(seed)
 
         self.agents = self.possible_agents[:]
-        print(self.agents)
         for agent in self.agents:
-            self.agent_name_mapping[
-                agent
-            ].reset()  # @TODO: Implement the reset method for the agents.
-        self.num_moves = 0
+            self.agent_name_mapping[agent].reset()
 
         observations = {
             agent: self.agent_name_mapping[agent].get_observation()
