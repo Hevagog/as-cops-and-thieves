@@ -22,14 +22,14 @@ def get_unit_mass() -> int:
         return config["unit_mass"]
 
 
-def get_cop_start_category() -> int:
+def get_cop_category() -> int:
     with _get_specific_config() as config:
-        return config["pymunk_cop_start_category"]
+        return config["pymunk_cop_category"]
 
 
-def get_thief_start_category() -> int:
+def get_thief_category() -> int:
     with _get_specific_config() as config:
-        return config["pymunk_thief_start_category"]
+        return config["pymunk_thief_category"]
 
 
 @contextmanager

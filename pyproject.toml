@@ -14,8 +14,8 @@ unit_velocity = 10.0
 unit_mass = 1.0
 unit_size = 5.0
 max_speed = 125.0
-pymunk_cop_start_category = 42
-pymunk_thief_start_category = 2137
+pymunk_cop_category = 42
+pymunk_thief_category = 2137
 
 [tool.visualization]
 background_color = [0, 0, 0]

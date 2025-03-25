@@ -4,6 +4,7 @@ import pymunk
 import pygame
 import gymnasium as gym
 import numpy as np
+import itertools
 from pettingzoo import ParallelEnv, AECEnv
 from pettingzoo.utils import parallel_to_aec
 from gymnasium.utils import seeding
@@ -12,7 +13,7 @@ from gymnasium.utils import seeding
 from agents import Cop, Thief
 from agents.entity import Entity
 from maps import Map
-from utils import get_cop_start_category, get_thief_start_category
+from utils import get_thief_category, get_cop_category
 
 
 class BaseEnv(ParallelEnv):
@@ -33,24 +34,18 @@ class BaseEnv(ParallelEnv):
         self.space = pymunk.Space()
         self.map.populate_space(self.space)
         # Define pymunk agents categories. For vision, we want agents to see each other and know their type.
-        self.cop_start_category = get_cop_start_category()
-        self.thief_start_category = get_thief_start_category()
-        self.cop_category = list(
-            range(self.cop_start_category, self.cop_start_category + map.cops_count)
-        )
-        self.thief_category = list(
-            range(
-                self.thief_start_category, self.thief_start_category + map.thieves_count
-            )
-        )
+        self.cop_category = get_cop_category()
+        self.thief_category = get_thief_category()
 
+        group_counter = itertools.count(1)
         # Create the agents
         self.cops: List[Cop] = [
             Cop(
                 start_position=pymunk.Vec2d(*map.cops_positions[id]),
                 space=self.space,
+                group=next(group_counter),
                 id=f"cop_{id}",
-                filter_category=self.cop_category[id],
+                filter_category=self.cop_category,
             )
             for id in range(map.cops_count)
         ]
@@ -58,8 +53,9 @@ class BaseEnv(ParallelEnv):
             Thief(
                 start_position=pymunk.Vec2d(*map.thieves_positions[id]),
                 space=self.space,
+                group=next(group_counter),
                 id=f"thief_{id}",
-                filter_category=self.thief_category[id],
+                filter_category=self.thief_category,
             )
             for id in range(map.thieves_count)
         ]
@@ -103,6 +99,7 @@ class BaseEnv(ParallelEnv):
             self._np_random, self._np_random_seed = seeding.np_random(seed)
 
         self.agents = self.possible_agents[:]
+        print(self.agents)
         for agent in self.agents:
             self.agent_name_mapping[
                 agent

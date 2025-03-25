@@ -10,7 +10,7 @@ from utils import (
     get_unit_velocity,
     get_unit_mass,
     get_max_speed,
-    get_thief_start_category,
+    get_thief_category,
     ObjectType,
 )
 
@@ -32,7 +32,9 @@ class Entity:
     - 3: Move up
 
     ## Observation Space
-
+    The observation space is a dictionary with two keys:
+    - `distance`: A numpy array containing the distances from the agent to the first object hit along each ray.
+    - `object_type`: A numpy array containing the type of object detected for each ray, based on pre-defined ObjectType values.
 
     """
 
@@ -40,23 +42,25 @@ class Entity:
         self,
         start_position: pymunk.Vec2d,
         space: pymunk.Space,
+        group: int,
         radius: float | None = None,
         speed: float | None = None,
         mass: float | None = None,
         id: str | None = None,
         filter_category: int = 0b1,
-        color: tuple[int, int, int] = (255, 255, 255),
+        color: tuple[int, int, int, int] = (0, 0, 0, 255),
     ):
         """
         Initialize the agent.
 
         Args:
-            radius: The radius of the agent.
+            radius (float): The radius of the agent.
             speed: The speed of the agent.
+            filter_category: The category for agent.
             mass: The mass of the agent.
             id: The unique ID of the agent.
-            filter_category: The category for collision filtering.
-            color: The color of the agent.
+            group: unique group for each agent for collision filtering.
+            color: The color of the agent in RGBA format.
         """
         self._radius = get_unit_size() if radius is None else radius
         self._speed = get_unit_velocity() if speed is None else speed
@@ -65,6 +69,7 @@ class Entity:
         self._max_speed = get_max_speed()
         self.action_space = gym.spaces.Discrete(4)
         self._space = space
+        self._thief_category = get_thief_category()
 
         # Define force mappings for actions:
         # 0: left, 1: down, 2: right, 3: up.
@@ -78,7 +83,6 @@ class Entity:
         self._ray_length = 400  # Length of the ray for the agent's view.
         self._fov = 2 * np.pi  # Field of view in radians.
         self._num_rays = 90  # One ray every ~4 degrees.
-        self._thief_start_category = get_thief_start_category()
 
         # Observation space includes distance and object type for each ray.
         self.observation_space = gym.spaces.Dict(
@@ -104,9 +108,12 @@ class Entity:
         )
         self.body.position = start_position
         self._b_box = pymunk.Circle(self.body, radius=self._radius)
-        self._b_box.filter = pymunk.ShapeFilter(categories=filter_category)
+        self._b_box.color = color
+        self._b_box.filter = pymunk.ShapeFilter(group=group, categories=filter_category)
+
         self.ray_filter = pymunk.ShapeFilter(
-            mask=pymunk.ShapeFilter.ALL_MASKS() ^ filter_category
+            group=group,
+            categories=filter_category,
         )
         self._space.add(self.body, self._b_box)
 
@@ -135,10 +142,28 @@ class Entity:
         # raise NotImplementedError
         pass
 
-    def get_observation(self):
+    def get_observation(self) -> dict[str, np.ndarray]:
         """
-        Get the observation of the agent.
+        Computes the observation for the agent by performing multiple ray casts within its field of view.
 
+        This method projects an array of rays from the agent's current position, equally distributed across a specified field of view (FOV). For each ray, it computes an endpoint based on the agent's position, the ray length, and the ray's angle. A segment query is then performed to determine if the ray collides with any object in the environment.
+
+        For each ray:
+        - If a collision is detected (hit):
+            - The distance from the agent to the point of collision is calculated.
+            - The type of object hit is determined:
+                - If the hit body is dynamic:
+                    - If the shape is a polygon, it is classified as a movable object.
+                    - If the shape is a circle, it is classified either as a thief or a cop, based on its filter categories.
+                    - Otherwise, it defaults to an empty classification.
+                - If the body is not dynamic, it is classified as a wall.
+        - If no collision occurs:
+            - The default ray length is recorded as the distance.
+            - The object type is marked as empty.
+        Returns:
+            A dictionary with the following keys:
+                "distance": A numpy array (dtype=np.float16) containing the distances from the agent to the first object hit along each ray.
+                "object_type": A numpy array (dtype=np.uint8) containing the type of object detected for each ray, based on pre-defined ObjectType values.
         """
         angles = np.linspace(0, self._fov, self._num_rays, endpoint=False)
         cosines = np.cos(angles)
@@ -157,27 +182,31 @@ class Entity:
         object_types = np.empty(self._num_rays, dtype=np.uint8)
 
         for i, end in enumerate(endpoints):
+            # Perform a ray cast from the agent's position.
             hit = self._space.segment_query_first(
                 origin, pymunk.Vec2d(*end), 1, ray_filter
             )
+            # If the ray hits something, calculate the distance to the hit point.
             if hit is not None:
                 dx = hit.point[0] - origin_x
                 dy = hit.point[1] - origin_y
                 distances[i] = math.hypot(dx, dy)
                 body_type = hit.shape.body.body_type
+                # If the body is dynamic, it is either a movable object, a cop, or a thief.
                 if body_type == pymunk.Body.DYNAMIC:
                     shape = hit.shape
                     if isinstance(shape, pymunk.Poly):
                         object_types[i] = ObjectType.MOVABLE.value
                     elif isinstance(shape, pymunk.Circle):
-                        if hit.shape.filter.categories < self._thief_start_category:
-                            object_types[i] = ObjectType.COP.value
-                        elif hit.shape.filter.categories >= self._thief_start_category:
+                        if hit.shape.filter.categories == self._thief_category:
                             object_types[i] = ObjectType.THIEF.value
+                        else:
+                            object_types[i] = ObjectType.COP.value
                     else:
                         object_types[i] = ObjectType.EMPTY.value
                 else:
                     object_types[i] = ObjectType.WALL.value
+
             else:
                 distances[i] = ray_length
                 object_types[i] = ObjectType.EMPTY.value
