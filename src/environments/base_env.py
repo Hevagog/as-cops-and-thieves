@@ -185,13 +185,9 @@ def raw_env(map: Map, cops_count=1, thieves_count=1, render_mode="rgb_array") ->
     In support of the PettingZoo API, this function returns a raw environment (see https://pettingzoo.farama.org/api/aec/#about-aec).
     Args:
         map(Map): The map object for the environment
-        cops_count(int): Number of cops in the environment
-        thieves_count(int): Number of thieves in the environment
         render_mode(str): The mode in which to render the environment (either "human" or "rgb_array")
     """
     env = BaseEnv(
-        cops_count=cops_count,
-        thieves_count=thieves_count,
         map=map,
         render_mode=render_mode,
     )
