@@ -82,8 +82,8 @@ class BaseEnv(ParallelEnv):
         self.clock = None
 
     @functools.lru_cache(maxsize=None)
-    def observation_space(self, agent: Entity):
-        return agent.observation_space
+    def observation_space(self, agent: str):
+        return self.agent_name_mapping[agent].observation_space
 
     @functools.lru_cache(maxsize=None)
     def action_space(self, agent: str) -> gym.spaces.Discrete:
@@ -139,7 +139,7 @@ class BaseEnv(ParallelEnv):
         if self.render_mode == "human":
             self._render_frame()
 
-        return observations, rewards, truncations, False, infos
+        return observations, rewards, terminations, truncations, infos
 
     def _get_info(self):
         raise NotImplementedError

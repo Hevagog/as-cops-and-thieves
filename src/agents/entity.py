@@ -130,7 +130,9 @@ class Entity:
 
     def step(self, action: int):
         """
-        Method to update the agent's state.
+        Performs a step in the environment based on the action taken.
+        Args:
+            action: The action to be performed.
         """
         self._perform_action(action)
         observations = self.get_observation()
