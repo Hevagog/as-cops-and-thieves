@@ -1,5 +1,9 @@
 from agents.entity import Entity
 import pymunk
+import gymnasium as gym
+import numpy as np
+
+from utils import ObjectType
 
 
 class Cop(Entity):
@@ -24,6 +28,7 @@ class Cop(Entity):
             id (str | None): The id of the agent.
         """
         self.color = (0, 0, 255, 255)
+        self.proximity_coeff = 0.05
         super().__init__(
             start_position=start_position,
             space=space,
@@ -32,3 +37,30 @@ class Cop(Entity):
             group=group,
             filter_category=filter_category,
         )
+
+    def reward(self, observation: gym.spaces.Dict, is_terminated: bool) -> float:
+        """
+        Reward function for the cop agent.
+        Args:
+            observation (gym.spaces.Dict): The observation space of the agent:
+                - distance : A numpy array containing the distances from the agent to the first object hit along each ray.
+                - object_type : A numpy array containing the type of object detected for each ray, based on pre-defined ObjectType values.
+            is_terminated (bool): A function that checks if the cop has captured a thief. TODO: Implement this function.
+
+                This function should return True if the cop is within the capture radius of any thief, and False otherwise.
+        Returns:
+            float: The reward for the cop agent.
+        """
+        # This is a penalty for taking a step without capturing a thief.
+        reward = -0.1
+
+        if is_terminated:
+            reward += 10.0
+        else:
+            thief_mask = observation["object_type"] == ObjectType.THIEF.value
+            if np.any(thief_mask):
+                d = np.min(observation["distance"][thief_mask])
+                reward += self.proximity_coeff * max(
+                    0, (observation["distance"].max() - d)
+                )
+        return reward

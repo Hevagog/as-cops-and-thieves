@@ -13,7 +13,7 @@ from gymnasium.utils import seeding
 from agents import Cop, Thief
 from agents.entity import Entity
 from maps import Map
-from utils import get_thief_category, get_cop_category
+from utils import get_thief_category, get_cop_category, get_termination_radius
 
 
 class BaseEnv(ParallelEnv):
@@ -36,6 +36,7 @@ class BaseEnv(ParallelEnv):
         # Define pymunk agents categories. For vision, we want agents to see each other and know their type.
         self.cop_category = get_cop_category()
         self.thief_category = get_thief_category()
+        self._termination_radius = get_termination_radius()
 
         group_counter = itertools.count(1)
         # Create the agents
@@ -123,10 +124,11 @@ class BaseEnv(ParallelEnv):
         if not action:
             self.agents = []
             return {}, {}, {}, {}, {}
-
+        is_terminated = self._termination_criterion()
         # rewards for all agents are placed in the rewards dictionary to be returned
         results = [
-            self.agent_name_mapping[agent].step(action[agent]) for agent in self.agents
+            self.agent_name_mapping[agent].step(action[agent], is_terminated)
+            for agent in self.agents
         ]
         observations, rewards, terminations, truncations, infos = [
             dict(zip(self.agents, values)) for values in zip(*results)
@@ -156,11 +158,14 @@ class BaseEnv(ParallelEnv):
             self.clock = pygame.time.Clock()
         draw_options = pymunk.pygame_util.DrawOptions(self.window)
         self.window.fill((255, 255, 255))
-        agents_positions = [
-            self.agent_name_mapping[agent].body.position for agent in self.agents
-        ]
 
         if self.render_mode == "human":
+
+            font = pygame.font.Font(None, 36)
+            fps = int(self.clock.get_fps())
+            fps_text = font.render(f"FPS: {fps}", True, (0, 0, 0))
+            self.window.blit(fps_text, (10, 10))
+
             self.space.debug_draw(draw_options)
             pygame.display.flip()
             self.clock.tick(60)
@@ -179,8 +184,29 @@ class BaseEnv(ParallelEnv):
     def observe(self, agent):
         return np.array(agent.get_observation(), dtype=np.float32)
 
+    def _termination_criterion(self):
+        """
+        Check if the game is over. The game is over if all thieves are caught.
+        """
+        for thief in self.thieves:
+            for cop in self.cops:
+                filter = pymunk.ShapeFilter(
+                    mask=~(thief.filter_category | cop.filter_category) & 0xFFFFFFFF
+                )
+                hit = self.space.segment_query_first(
+                    thief.body.position, cop.body.position, 1, shape_filter=filter
+                )
+                if hit is None:
+                    if (
+                        thief.body.position.get_distance(cop.body.position)
+                        < self._termination_radius
+                    ):
+                        return True
 
-def raw_env(map: Map, cops_count=1, thieves_count=1, render_mode="rgb_array") -> AECEnv:
+        return False
+
+
+def raw_env(map: Map, render_mode="rgb_array") -> AECEnv:
     """
     In support of the PettingZoo API, this function returns a raw environment (see https://pettingzoo.farama.org/api/aec/#about-aec).
     Args:

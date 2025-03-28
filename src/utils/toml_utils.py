@@ -32,6 +32,11 @@ def get_thief_category() -> int:
         return config["pymunk_thief_category"]
 
 
+def get_termination_radius() -> float:
+    with _get_specific_config() as config:
+        return config["termination_radius"]
+
+
 @contextmanager
 def _get_specific_config(keys=["tool", "physical-params"]):
     with open("pyproject.toml", "rb") as f:

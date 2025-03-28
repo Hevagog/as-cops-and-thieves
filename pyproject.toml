@@ -16,6 +16,7 @@ unit_size = 5.0
 max_speed = 125.0
 pymunk_cop_category = 42
 pymunk_thief_category = 2137
+termination_radius = 20.0
 
 [tool.visualization]
 background_color = [0, 0, 0]

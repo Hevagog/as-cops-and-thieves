@@ -71,6 +71,7 @@ class Entity:
         self._space = space
         self._thief_category = get_thief_category()
         self._initial_position = start_position
+        self.filter_category = filter_category
 
         # Define force mappings for actions:
         # 0: left, 1: down, 2: right, 3: up.
@@ -128,7 +129,7 @@ class Entity:
         if abs(self.body.velocity) > self._max_speed:
             self.body.velocity = self.body.velocity.normalized() * self._max_speed
 
-    def step(self, action: int):
+    def step(self, action: int, is_terminated: bool):
         """
         Performs a step in the environment based on the action taken.
         Args:
@@ -136,11 +137,9 @@ class Entity:
         """
         self._perform_action(action)
         observations = self.get_observation()
-        # TODO: Add reward calculation based on the agent's state and actions.
-        reward = 0
-        terminated = False
+        reward = self.reward(observations, is_terminated)
 
-        return observations, reward, terminated, False, {}
+        return observations, reward, is_terminated, False, {}
 
     def reset(self):
         """

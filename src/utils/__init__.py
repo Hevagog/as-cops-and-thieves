@@ -5,6 +5,7 @@ from utils.toml_utils import (
     get_max_speed,
     get_cop_category,
     get_thief_category,
+    get_termination_radius,
 )
 from utils.object_types import ObjectType
 
@@ -16,4 +17,5 @@ __all__ = [
     "get_max_speed",
     "get_cop_category",
     "get_thief_category",
+    "get_termination_radius",
 ]
