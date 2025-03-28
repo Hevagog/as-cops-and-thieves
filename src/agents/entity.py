@@ -136,6 +136,7 @@ class Entity:
         """
         self._perform_action(action)
         observations = self.get_observation()
+        # TODO: Add reward calculation based on the agent's state and actions.
         reward = 0
         terminated = False
 
@@ -184,43 +185,58 @@ class Entity:
             (origin_x + ray_length * cosines, origin_y + ray_length * sines)
         )
 
-        distances = np.empty(self._num_rays, dtype=np.float16)
-        object_types = np.empty(self._num_rays, dtype=np.uint8)
+        hits = [
+            self._space.segment_query_first(origin, pymunk.Vec2d(*end), 1, ray_filter)
+            for end in endpoints
+        ]
 
-        for i, end in enumerate(endpoints):
-            # Perform a ray cast from the agent's position.
-            hit = self._space.segment_query_first(
-                origin, pymunk.Vec2d(*end), 1, ray_filter
+        distances = np.full(self._num_rays, ray_length, dtype=np.float16)
+        object_types = np.full(self._num_rays, ObjectType.EMPTY.value, dtype=np.uint8)
+
+        valid_idx = [i for i, hit in enumerate(hits) if hit is not None]
+        if valid_idx:
+            valid_hits = [hits[i] for i in valid_idx]
+            valid_points = np.array([hit.point for hit in valid_hits], dtype=np.float16)
+
+            dx = valid_points[:, 0] - origin_x
+            dy = valid_points[:, 1] - origin_y
+            distances[valid_idx] = np.hypot(dx, dy).astype(np.float16)
+
+            object_types[valid_idx] = np.array(
+                [self._query_body(hit.shape) for hit in valid_hits],
+                dtype=np.uint8,
             )
-            # If the ray hits something, calculate the distance to the hit point.
-            if hit is not None:
-                dx = hit.point[0] - origin_x
-                dy = hit.point[1] - origin_y
-                distances[i] = math.hypot(dx, dy)
-                body_type = hit.shape.body.body_type
-                # If the body is dynamic, it is either a movable object, a cop, or a thief.
-                if body_type == pymunk.Body.DYNAMIC:
-                    shape = hit.shape
-                    if isinstance(shape, pymunk.Poly):
-                        object_types[i] = ObjectType.MOVABLE.value
-                    elif isinstance(shape, pymunk.Circle):
-                        if hit.shape.filter.categories == self._thief_category:
-                            object_types[i] = ObjectType.THIEF.value
-                        else:
-                            object_types[i] = ObjectType.COP.value
-                    else:
-                        object_types[i] = ObjectType.EMPTY.value
-                else:
-                    object_types[i] = ObjectType.WALL.value
-
-            else:
-                distances[i] = ray_length
-                object_types[i] = ObjectType.EMPTY.value
 
         return {
             "distance": distances,
             "object_type": object_types,
         }
 
+    def _query_body(self, hit_shape: pymunk.Shape) -> ObjectType:
+        """
+        Determines the type of object hit by the ray based on its properties.
+        Args:
+            hit_shape (pymunk.Shape): The shape that was hit by the ray.
+        Returns:
+            ObjectType: The type of object hit by the ray.
+        """
+        if hit_shape.body.body_type == pymunk.Body.DYNAMIC:
+            if isinstance(hit_shape, pymunk.Poly):
+                return ObjectType.MOVABLE.value
+            elif isinstance(hit_shape, pymunk.Circle):
+                if hit_shape.filter.categories == self._thief_category:
+                    return ObjectType.THIEF.value
+                else:
+                    return ObjectType.COP.value
+            else:
+                return ObjectType.EMPTY.value
+        else:
+            return ObjectType.WALL.value
+
     def get_id(self) -> str:
         return self._id
+
+    def reward(
+        self, observation: gym.spaces.Dict, capture_condition: callable
+    ) -> float:
+        raise NotImplementedError("This method ought to be implemented in subclasses.")
