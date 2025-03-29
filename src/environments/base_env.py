@@ -9,6 +9,7 @@ from pettingzoo import ParallelEnv, AECEnv
 from pettingzoo.utils import parallel_to_aec
 from gymnasium.utils import seeding
 
+from pathlib import Path
 
 from agents import Cop, Thief
 from agents.entity import Entity
@@ -20,7 +21,12 @@ from utils import ObjectType
 class BaseEnv(ParallelEnv):
     metadata = {"render_modes": ["human", "rgb_array"]}
 
-    def __init__(self, map: Map, render_mode=None):
+    def __init__(
+            self,
+            map: Map, 
+            map_image: Path = None,
+            render_mode=None
+        ):
         """
         Base class for the environment, based on the Gymnasium environment class (see https://gymnasium.farama.org/tutorials/gymnasium_basics/environment_creation/).
         Args:
@@ -31,6 +37,7 @@ class BaseEnv(ParallelEnv):
 
         # Define Space
         self.map = map
+        self.map_image = map_image
         self.width, self.height = self.map.window_dimensions
         self.space = pymunk.Space()
         self.map.populate_space(self.space)
@@ -183,6 +190,7 @@ class BaseEnv(ParallelEnv):
         if self.window is None and self.render_mode == "human":
             pygame.init()
             self.window = pygame.display.set_mode((self.width, self.height))
+            pygame.display.set_caption("Cops and Robbers")
         if self.clock is None and self.render_mode == "human":
             self.clock = pygame.time.Clock()
         draw_options = pymunk.pygame_util.DrawOptions(self.window)
@@ -190,12 +198,22 @@ class BaseEnv(ParallelEnv):
 
         if self.render_mode == "human":
 
+            if self.map_image:
+                map_image = pygame.image.load(self.map_image) 
+                map_image.set_alpha(int(.75*255))  # Set opacity (0 is fully transparent, 255 is fully opaque)
+                map_image = pygame.transform.scale(
+                    map_image, 
+                    (self.width, self.height)
+                )
+                self.window.blit(map_image, (0, 0))
+
+            self.space.debug_draw(draw_options)
+            
             font = pygame.font.Font(None, 36)
             fps = int(self.clock.get_fps())
             fps_text = font.render(f"FPS: {fps}", True, (0, 0, 0))
             self.window.blit(fps_text, (10, 10))
 
-            self.space.debug_draw(draw_options)
             pygame.display.flip()
             self.clock.tick(60)
         else:  # rgb_array

@@ -1,9 +1,14 @@
 from environments import BaseEnv
 from maps import Map
-
+from pathlib import Path
 
 class SimpleEnv(BaseEnv):
-    def __init__(self, map: Map, render_mode="rgb_array"):
+    def __init__(
+        self,
+        map: Map,
+        map_image: Path,
+        render_mode="rgb_array"
+    ):
         """
         Simple environment for the cops and thieves game.
         # TODO: Is it feasible to have base_env.py and simple_env.py? Maybe we can have more generalized BaseEnv
@@ -13,5 +18,6 @@ class SimpleEnv(BaseEnv):
         """
         super().__init__(
             map=map,
+            map_image=map_image,
             render_mode=render_mode,
         )
