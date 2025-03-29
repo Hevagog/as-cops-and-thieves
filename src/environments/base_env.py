@@ -41,33 +41,18 @@ class BaseEnv(ParallelEnv):
         self.width, self.height = self.map.window_dimensions
         self.space = pymunk.Space()
         self.map.populate_space(self.space)
+
+        self.step_count = 0
+
         # Define pymunk agents categories. For vision, we want agents to see each other and know their type.
         self.cop_category = get_cop_category()
         self.thief_category = get_thief_category()
         self._termination_radius = get_termination_radius()
 
-        group_counter = itertools.count(1)
         # Create the agents
-        self.cops: List[Cop] = [
-            Cop(
-                start_position=pymunk.Vec2d(*map.cops_positions[id]),
-                space=self.space,
-                group=next(group_counter),
-                id=f"cop_{id}",
-                filter_category=self.cop_category,
-            )
-            for id in range(map.cops_count)
-        ]
-        self.thieves: List[Thief] = [
-            Thief(
-                start_position=pymunk.Vec2d(*map.thieves_positions[id]),
-                space=self.space,
-                group=next(group_counter),
-                id=f"thief_{id}",
-                filter_category=self.thief_category,
-            )
-            for id in range(map.thieves_count)
-        ]
+        group_counter = itertools.count(1)
+        self.cops: List[Cop] = self._init_cops(group_counter)
+        self.thieves: List[Thief] = self._init_thieves(group_counter)
 
         # possible_agents is a static list of all possible agents in the environment that could ever be present in the environment.
         # This generalization is needed for the PettingZoo API.
@@ -76,8 +61,6 @@ class BaseEnv(ParallelEnv):
             agent.get_id(): agent for agent in (self.cops + self.thieves)
         }
 
-        assert render_mode is None or render_mode in self.metadata["render_modes"]
-        self.render_mode = render_mode
 
         # For skrl and MAPPO, we need to define the observation and action spaces
         self.observation_spaces = {
@@ -87,7 +70,51 @@ class BaseEnv(ParallelEnv):
         self.action_spaces = {
             agent.get_id(): agent.action_space for agent in (self.cops + self.thieves)
         }
-        self.shared_observation_spaces = {}
+
+        self.shared_observation_spaces = self._init_shared_observation_space()
+
+        # Rendering
+        assert render_mode is None or render_mode in self.metadata["render_modes"]
+        self.render_mode = render_mode
+        self.window = None
+        self.clock = None
+        self._init_rendering()
+
+    def _init_cops(self, group_counter):
+        """
+        Initialize the cops in the environment.
+        Based on the map, the cops are placed in their initial positions.
+        """
+        return [
+            Cop(
+                start_position=pymunk.Vec2d(*self.map.cops_positions[id]),
+                space=self.space,
+                group=next(group_counter),
+                id=f"cop_{id}",
+                filter_category=self.cop_category,
+            )
+            for id in range(self.map.cops_count)
+        ]
+    
+    def _init_thieves(self, group_counter):
+        """
+        Initialize the thieves in the environment.
+        Based on the map, the thieves are placed in their initial positions.
+        """
+        return [
+            Thief(
+                start_position=pymunk.Vec2d(*self.map.thieves_positions[id]),
+                space=self.space,
+                group=next(group_counter),
+                id=f"thief_{id}",
+                filter_category=self.thief_category,
+            )
+            for id in range(self.map.thieves_count)
+        ]
+
+    def _init_shared_observation_space(self):
+
+        sos = {}
 
         max_dim = max(self.map.window_dimensions)
         for team, agents in [("cops", self.cops), ("thieves", self.thieves)]:
@@ -101,18 +128,10 @@ class BaseEnv(ParallelEnv):
                 }
             )
             for agent in agents:
-                self.shared_observation_spaces[agent.get_id()] = team_space
+                sos[agent.get_id()] = team_space
 
-        """
-        If human-rendering is used, `self.window` will be a reference
-        to the window that we draw to. `self.clock` will be a clock that is used
-        to ensure that the environment is rendered at the correct framerate in
-        human-mode. They will remain `None` until human-mode is used for the
-        first time.
-        credit: https://gymnasium.farama.org/tutorials/gymnasium_basics/environment_creation/#rendering
-        """
-        self.window = None
-        self.clock = None
+        return sos
+
 
     @functools.lru_cache(maxsize=None)
     def observation_space(self, agent: str):
@@ -154,6 +173,8 @@ class BaseEnv(ParallelEnv):
         """
         Method to update the environment's state.
         """
+        self.step_count += 1
+
         # If a user passes in actions with no agents, then just return empty observations, etc.
         if not action:
             self.agents = []
@@ -178,6 +199,25 @@ class BaseEnv(ParallelEnv):
             self._render_frame()
 
         return observations, rewards, terminations, truncations, infos
+    
+    def _init_rendering(self):
+        """
+        Initialize the rendering of the environment.
+
+        If human-rendering is used, `self.window` will be a reference
+        to the window that we draw to. `self.clock` will be a clock that is used
+        to ensure that the environment is rendered at the correct framerate in
+        human-mode. They will remain `None` until human-mode is used for the
+        first time.
+        credit: https://gymnasium.farama.org/tutorials/gymnasium_basics/environment_creation/#rendering
+        """
+        if self.render_mode == "human":
+            pygame.init()
+            self.window = pygame.display.set_mode((self.width, self.height))
+            pygame.display.set_caption("Cops and Robbers")
+            self.clock = pygame.time.Clock()
+        elif self.render_mode == "rgb_array":
+            pass
 
     def _get_info(self):
         raise NotImplementedError
@@ -187,12 +227,6 @@ class BaseEnv(ParallelEnv):
             return self._render_frame()
 
     def _render_frame(self):
-        if self.window is None and self.render_mode == "human":
-            pygame.init()
-            self.window = pygame.display.set_mode((self.width, self.height))
-            pygame.display.set_caption("Cops and Robbers")
-        if self.clock is None and self.render_mode == "human":
-            self.clock = pygame.time.Clock()
         draw_options = pymunk.pygame_util.DrawOptions(self.window)
         self.window.fill((255, 255, 255))
 
@@ -213,12 +247,18 @@ class BaseEnv(ParallelEnv):
             fps = int(self.clock.get_fps())
             fps_text = font.render(f"FPS: {fps}", True, (0, 0, 0))
             self.window.blit(fps_text, (10, 10))
+            step_text = font.render(f"Step: {self.step_count}", True, (0, 0, 0))
+            self.window.blit(step_text, (10, 50))
 
             pygame.display.flip()
             self.clock.tick(60)
-        else:  # rgb_array
+
+        elif self.render_mode == "rgb_array":
             self.space.debug_draw(draw_options)
             return pygame.surfarray.array3d(self.window)
+        
+        else:
+            raise ValueError(f"Invalid render mode: {self.render_mode}")
 
         self.clock.tick(60)
 

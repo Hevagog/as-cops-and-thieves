@@ -3,6 +3,7 @@ from maps import Map
 from time import sleep
 from pathlib import Path
 import argparse
+import pygame as pg
 
 
 def configure_argparser():
@@ -47,7 +48,7 @@ def configure_argparser():
     # )
     
     return parser.parse_args()
-    
+
 
 def main():
 
@@ -59,18 +60,35 @@ def main():
         map_image=args.map_image,
         render_mode=args.render_mode
     )
+    
+    # initial reset
     observations, infos = env.reset()
-    for i in range(10_000):
+
+    def step_machen_dawaj_burwo_step():
         actions = {agent: env.action_space(agent).sample() for agent in env.agents}
         observations, rewards, terminations, _, infos = env.step(actions)
-        if i % 500 == 0:
-            print(f"Step {i}")
-            observations, infos = env.reset()
+        # the above should be handeled here
 
-    if args.keep_alive:
-        # @FIXME: this is a tmp solution to keep the window open
-        # Keep the window open until the user presses Enter
-        input("Press Enter to close the window...")
+    auto_step = False
+    running = True
+    while running:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                running = False
+
+            if event.type == pg.KEYDOWN:
+                if event.key in [pg.K_ESCAPE, pg.K_q]:
+                    running = False
+                if event.key == pg.K_SPACE:
+                    auto_step = not auto_step
+                if event.key == pg.K_RIGHT:
+                    auto_step = False
+                    step_machen_dawaj_burwo_step()
+                                       
+        if auto_step:
+            step_machen_dawaj_burwo_step()
+            
+    env.close()
 
 if __name__ == "__main__":
     main()
