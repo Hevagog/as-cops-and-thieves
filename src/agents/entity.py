@@ -228,7 +228,7 @@ class Entity:
                 else:
                     return ObjectType.COP.value
             else:
-                return ObjectType.EMPTY.value
+                return ObjectType.WALL.value
         else:
             return ObjectType.WALL.value
 

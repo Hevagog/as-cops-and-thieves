@@ -14,6 +14,7 @@ from agents import Cop, Thief
 from agents.entity import Entity
 from maps import Map
 from utils import get_thief_category, get_cop_category, get_termination_radius
+from utils import ObjectType
 
 
 class BaseEnv(ParallelEnv):
@@ -71,6 +72,30 @@ class BaseEnv(ParallelEnv):
         assert render_mode is None or render_mode in self.metadata["render_modes"]
         self.render_mode = render_mode
 
+        # For skrl and MAPPO, we need to define the observation and action spaces
+        self.observation_spaces = {
+            agent.get_id(): agent.observation_space
+            for agent in (self.cops + self.thieves)
+        }
+        self.action_spaces = {
+            agent.get_id(): agent.action_space for agent in (self.cops + self.thieves)
+        }
+        self.shared_observation_spaces = {}
+
+        max_dim = max(self.map.window_dimensions)
+        for team, agents in [("cops", self.cops), ("thieves", self.thieves)]:
+            team_space = gym.spaces.Dict(
+                {
+                    "distance": agents[0].observation_space["distance"],
+                    "object_type": agents[0].observation_space["object_type"],
+                    "team_positions": gym.spaces.Box(
+                        low=0.0, high=max_dim, shape=(len(agents), 2), dtype=np.float16
+                    ),
+                }
+            )
+            for agent in agents:
+                self.shared_observation_spaces[agent.get_id()] = team_space
+
         """
         If human-rendering is used, `self.window` will be a reference
         to the window that we draw to. `self.clock` will be a clock that is used
@@ -109,6 +134,8 @@ class BaseEnv(ParallelEnv):
         }
         infos = {agent: {} for agent in self.agents}
 
+        self.shared_observation_spaces = self.get_shared_observations(observations)
+
         self.state = observations
 
         if self.render_mode == "human":
@@ -133,6 +160,8 @@ class BaseEnv(ParallelEnv):
         observations, rewards, terminations, truncations, infos = [
             dict(zip(self.agents, values)) for values in zip(*results)
         ]
+
+        self.shared_observation_spaces = self.get_shared_observations(observations)
 
         self.state = observations
 
@@ -204,6 +233,53 @@ class BaseEnv(ParallelEnv):
                         return True
 
         return False
+
+    def get_shared_observations(self, observations) -> dict:
+        """
+        Create the actual shared observations based on the observations and agent-specific priority order.
+        Args:
+            observations (dict): The observations for each agent.
+        Returns:
+            dict: The shared observations for all agents.
+        """
+        shared_observations = {}
+        cop_positions = np.array(
+            [cop.body.position for cop in self.cops], dtype=np.float16
+        )
+        thief_positions = np.array(
+            [thief.body.position for thief in self.thieves], dtype=np.float16
+        )
+
+        for team_name, team_agents, team_positions in [
+            ("cops", self.cops, cop_positions),
+            ("thieves", self.thieves, thief_positions),
+        ]:
+            if not team_agents:
+                continue
+
+            first_agent = team_agents[0]
+            obj_masked = (
+                np.ones_like(observations[first_agent.get_id()]["object_type"]) * 4
+            )
+            dist_masked = np.zeros_like(observations[first_agent.get_id()]["distance"])
+
+            for agent in team_agents:
+                obs = observations[agent.get_id()]
+                obj_types = obs["object_type"]
+                distances = obs["distance"]
+
+                for priority_type in agent.observation_priorities:
+                    mask = (obj_types == priority_type.value) & (obj_masked == 4)
+                    obj_masked[mask] = obj_types[mask]
+                    dist_masked[mask] = distances[mask]
+
+            shared_observations[team_name] = {
+                "object_type": obj_masked,
+                "distance": dist_masked,
+                "team_positions": team_positions,
+            }
+
+        return shared_observations
 
 
 def raw_env(map: Map, render_mode="rgb_array") -> AECEnv:

@@ -37,6 +37,14 @@ class Thief(Entity):
             filter_category=filter_category,
         )
 
+        self.observation_priorities = [
+            ObjectType.COP,
+            ObjectType.MOVABLE,
+            ObjectType.THIEF,
+            ObjectType.WALL,
+            ObjectType.EMPTY,
+        ]
+
     def reward(self, observation: gym.spaces.Dict, is_terminated: bool) -> float:
         """
         Reward function for the cop agent.
