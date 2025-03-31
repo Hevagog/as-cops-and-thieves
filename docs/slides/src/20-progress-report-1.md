@@ -3,8 +3,32 @@
 
 ## Change log
 
-<!-- @TODO @Hevagog place your changes here -->
+### Agents
 
+As stated in our first presentation, we have 2 agent types, namely, cops and thieves. Because this part is critical for our project to move forward, we have implemented agent functionality, which covers:
+
+- observation space implemented using vision controller (ray casting),
+- action space (enabling movement of our agents in 2D space),
+- initial reward function.
+
+---
+
+\vspace{1em}
+
+![Visualization of vision controller ](img/ray-vision.png){width=60%}
+
+---
+
+### Environment
+
+Using *PettingZoo* library we have implemented initial environment, compliant with `Parallel API` in order for all agents to simultaneously perform action and observations.
+As part of this we have implemented:
+
+- rendering together with map generation (explained in-depth later on).
+- Basic methods needed for *Reinforcement Learning* algorithms (`reset`, `step`, etc. ).
+- Shared observation space:
+    - needed for learning loop, where agents from the same category share a common observation that represents global information about the environment, 
+    - constructed based on their intrinsic priority (i.e. cops wanting to catch a thief), shared observation holds the most important information about their observations.
 
 ---
 
