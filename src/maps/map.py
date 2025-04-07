@@ -1,9 +1,6 @@
-from typing import Tuple, Dict, List
+from typing import Tuple, List
 import json
-import os
 import shapely as shp
-from shapely import affinity
-
 import pymunk
 import pymunk.pygame_util
 import pygame
@@ -26,9 +23,7 @@ class Map:
         self.canvas_dimensions: Tuple[int, int]  # width, height
         self._scaling_factor_x: int  # scene can be larger/smaller than the window
         self._scaling_factor_y: int
-        self.blocks = List[
-            Dict[str, int]
-        ]  # I have pytorch installed on python 3.10 so no type T_T
+        self.blocks = List[shp.Polygon]
         self.cops_count: int
         self.thieves_count: int
         self.cops_positions: List[Tuple[int, int]]
@@ -38,11 +33,13 @@ class Map:
         self._parse_json_map(map_path)
 
     def _parse_block(self, blk_json):
-        blk_type = blk_json.get("type", "rect") # default to rect
+        blk_type = blk_json.get("type", "rect")  # default to rect
         if blk_type == "rect":
             x, y = blk_json.get("x"), blk_json.get("y")
             if x is None or y is None:
-                raise ValueError("x and y coordinates are required for rectangle blocks.")
+                raise ValueError(
+                    "x and y coordinates are required for rectangle blocks."
+                )
             # w and h are optional, default to 1
             w = blk_json.get("w") if blk_json.get("w") is not None else 1
             h = blk_json.get("h") if blk_json.get("h") is not None else 1
@@ -58,7 +55,7 @@ class Map:
             if vs is None:
                 raise ValueError("Vertices are required for polygon blocks.")
             # Convert vertices to tuples
-            vs = [(v.get('x'), v.get('y')) for v in vs]
+            vs = [(v.get("x"), v.get("y")) for v in vs]
         else:
             raise ValueError(f"Unknown block type: {blk_type}")
         return shp.Polygon(vs)
@@ -74,8 +71,7 @@ class Map:
             self.window_dimensions = tuple(map_data["window"].values())
             self.canvas_dimensions = tuple(map_data["canvas"].values())
             blocks = map_data["objects"]["blocks"]
-            self.blocks = [self._parse_block(block) for block in blocks] 
-
+            self.blocks = [self._parse_block(block) for block in blocks]
 
             agents = map_data["agents"]
             self.cops_positions = [
@@ -97,7 +93,6 @@ class Map:
             vs = list(block.exterior.coords)
             block_segment = pymunk.Poly(space.static_body, vs, radius=1)
             space.add(block_segment)
-
 
 
 ### For now only for basic tests to showcase the map rendering
