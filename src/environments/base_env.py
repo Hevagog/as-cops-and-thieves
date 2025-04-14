@@ -39,7 +39,14 @@ class BaseEnv(ParallelEnv):
 
     metadata = {"render_modes": ["human", "rgb_array"]}
 
-    def __init__(self, map: Map, map_image: Path = None, render_mode=None):
+    def __init__(
+        self,
+        map: Map,
+        map_image: Path = None,
+        render_mode=None,
+        max_step_count: int = 400,
+        time_step: float = 1 / 60.0,
+    ):
         """
         Initialize the cops and thieves environment with map configuration and rendering options.
 
@@ -48,6 +55,9 @@ class BaseEnv(ParallelEnv):
             map_image (Path, optional): Path to an image file for background rendering.
             render_mode (str, optional): Visualization mode, either "human" for interactive display
                                         or "rgb_array" for programmatic access.
+            max_step_count (int, optional): Maximum number of steps before environment truncation.
+                                          Defaults to 400.
+            time_step (float, optional): Time step for physics simulation. Defaults to 1/60.0.
         """
         super().__init__()
 
@@ -59,6 +69,8 @@ class BaseEnv(ParallelEnv):
         self.map.populate_space(self.space)
 
         self.step_count = 0
+        self.max_step_count = max_step_count
+        self.time_step = time_step
 
         # Define pymunk agents categories. For vision, we want agents to see each other and know their type.
         self.cop_category = get_cop_category()
@@ -238,34 +250,33 @@ class BaseEnv(ParallelEnv):
     @functools.lru_cache(maxsize=None)
     def get_nested_agent_observation_spaces(self) -> gym.spaces:
         """
-        Get a hierarchically nested version of all agent observation spaces.
+        Get a flattened version of agent observation spaces suitable for MAPPO.
 
-        Creates a nested structure where each agent's space contains
-        references to all other agents' spaces. This allows agents to
-        potentially access information from other agents during training.
-
-        This is needed for MAPPO training.
+        Instead of deep nesting, this creates a flat structure where each agent's
+        space includes their own observations plus flattened versions of others'.
 
         Returns:
-            gym.spaces.Dict: Nested dictionary of observation spaces
+            gym.spaces.Dict: Dictionary of flattened observation spaces
         """
-        shared_spaces = {
-            agent_id: gym.spaces.Dict(
-                {
-                    # Copy the agent's own space first
-                    **self._shared_observation_spaces[agent_id],
-                    # Add other agents' spaces as nested entries
-                    **{
-                        other_id: gym.spaces.Dict(other_space)
-                        for other_id, other_space in self._shared_observation_spaces.items()
-                        if other_id != agent_id
-                    },
-                }
-            )
-            for agent_id in self._shared_observation_spaces
-        }
+        flat_spaces = {}
 
-        return gym.spaces.Dict(shared_spaces)
+        for agent_id in self._shared_observation_spaces:
+            # Start with agent's own space
+            agent_space = {}
+            for key, space in self._shared_observation_spaces[agent_id].spaces.items():
+                agent_space[key] = space
+
+            # Add flattened versions of other agents' spaces
+            for other_id in self._shared_observation_spaces:
+                if other_id != agent_id:
+                    for key, space in self._shared_observation_spaces[
+                        other_id
+                    ].spaces.items():
+                        agent_space[f"{other_id}_{key}"] = space
+
+            flat_spaces[agent_id] = gym.spaces.Dict(agent_space)
+
+        return gym.spaces.Dict(flat_spaces)
 
     def reset(
         self,
@@ -306,6 +317,8 @@ class BaseEnv(ParallelEnv):
         if self.render_mode == "human":
             self._render_frame()
 
+        self.step_count = 0
+
         return observations, infos
 
     def step(self, action) -> tuple[dict, dict, dict, dict, dict]:
@@ -332,22 +345,27 @@ class BaseEnv(ParallelEnv):
         if not action:
             self.agents = []
             return {}, {}, {}, {}, {}
+
         is_terminated = self._termination_criterion()
         # rewards for all agents are placed in the rewards dictionary to be returned
         results = [
             self.agent_name_mapping[agent].step(action[agent], is_terminated)
             for agent in self.agents
         ]
-        observations, rewards, terminations, truncations, infos = [
+        observations, rewards, terminations, _, infos = [
             dict(zip(self.agents, values)) for values in zip(*results)
         ]
 
         self.shared_observation_spaces = self.get_shared_observations(observations)
 
-        self.space.step(1 / 60.0)  # @TODO: Parameterize the time step
+        self.space.step(self.time_step)
 
         if self.render_mode == "human":
             self._render_frame()
+
+        truncations = {agent: is_terminated[1] for agent in self.agents}
+        if any(terminations.values()):
+            self.agents = []
 
         return observations, rewards, terminations, truncations, infos
 
@@ -384,7 +402,22 @@ class BaseEnv(ParallelEnv):
             self.clock = pygame.time.Clock()
 
     def _get_info(self):
-        raise NotImplementedError
+        """
+        Get additional information about the current environment state.
+
+        This method is meant to be overridden by subclasses to provide
+        environment-specific debugging and monitoring information.
+
+        Returns:
+            dict: Information about the current environment state
+        """
+        # Base implementation with minimal information
+        return {
+            "step_count": self.step_count,
+            "thief_count": len(self.thieves),
+            "cop_count": len(self.cops),
+            "terminated": any(self._termination_criterion()),
+        }
 
     def render(self):
         if self.render_mode == "rgb_array":
@@ -434,7 +467,7 @@ class BaseEnv(ParallelEnv):
     def observe(self, agent):
         return np.array(agent.get_observation(), dtype=np.float32)
 
-    def _termination_criterion(self) -> bool:
+    def _termination_criterion(self) -> tuple[bool, bool]:
         """
         Check if the termination condition has been met.
 
@@ -443,7 +476,9 @@ class BaseEnv(ParallelEnv):
         and no obstacles are between them.
 
         Returns:
-            bool: True if the termination condition is met, False otherwise
+            tuple[bool, bool]: A tuple containing two boolean values:
+            - True if cops catch thieves (termination condition met)
+            - True if the maximum step count is reached (truncation condition met)
         """
         for thief in self.thieves:
             for cop in self.cops:
@@ -458,9 +493,11 @@ class BaseEnv(ParallelEnv):
                         thief.body.position.get_distance(cop.body.position)
                         < self._termination_radius
                     ):
-                        return True
+                        return (True, False)
+        if self.step_count >= self.max_step_count:
+            return (False, True)
 
-        return False
+        return (False, False)
 
     def get_shared_observations(self, observations) -> dict:
         """
@@ -501,7 +538,8 @@ class BaseEnv(ParallelEnv):
 
             first_agent = team_agents[0]
             obj_masked = (
-                np.ones_like(observations[first_agent.get_id()]["object_type"]) * 4
+                np.ones_like(observations[first_agent.get_id()]["object_type"])
+                * ObjectType.EMPTY.value
             )
             dist_masked = np.zeros_like(observations[first_agent.get_id()]["distance"])
 
@@ -511,7 +549,9 @@ class BaseEnv(ParallelEnv):
                 distances = obs["distance"]
 
                 for priority_type in agent.observation_priorities:
-                    mask = (obj_types == priority_type.value) & (obj_masked == 4)
+                    mask = (obj_types == priority_type.value) & (
+                        obj_masked == ObjectType.EMPTY.value
+                    )
                     obj_masked[mask] = obj_types[mask]
                     dist_masked[mask] = distances[mask]
 

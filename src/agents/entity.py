@@ -133,7 +133,7 @@ class Entity:
         if abs(self.body.velocity) > self._max_speed:
             self.body.velocity = self.body.velocity.normalized() * self._max_speed
 
-    def step(self, action: int, is_terminated: bool):
+    def step(self, action: int, is_terminated: tuple[bool, bool]) -> tuple:
         """
         Performs a step in the environment based on the action taken.
         Args:
@@ -143,13 +143,15 @@ class Entity:
         observations = self.get_observation()
         reward = self.reward(observations, is_terminated)
 
-        return observations, reward, is_terminated, False, {}
+        return observations, reward, is_terminated[0] or is_terminated[1], False, {}
 
     def reset(self):
         """
         Resets the agent to its initial state.
         """
-        self.body.position = self._initial_position
+        self.body.position = pymunk.Vec2d(
+            self._initial_position.x, self._initial_position.y
+        )
         self.body.velocity = pymunk.Vec2d(0, 0)
 
     def get_observation(self) -> gym.spaces.Dict:

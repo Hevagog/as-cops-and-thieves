@@ -47,30 +47,22 @@ class Thief(Entity):
 
     def reward(self, observation: gym.spaces.Dict, is_terminated: bool) -> float:
         """
-        Reward function for the cop agent.
-
-
+        Reward function for the thief agent.
+        Args:
+            observation (gym.spaces.Dict): The observation space of the agent:
+                - distance : A numpy array containing the distances from the agent to the first object hit along each ray.
+                - object_type : A numpy array containing the type of object detected for each ray, based on pre-defined ObjectType values.
+            is_terminated (tuple[bool, bool]): A tuple indicating whether the game is terminated for the cop and thief agents.
         Returns:
-            float: The reward for the cop agent.
+            float: The reward for the thief agent.
         """
-        # If thief gets caught, give a penalty of -10.0. Episode terminates.
-        if is_terminated:
-            reward = 10.0
+        if is_terminated[0]:
+            return -1.0
+        if is_terminated[1]:
+            return 1.0
+        cop_mask = observation["object_type"] == ObjectType.COP.value
+        if cop_mask.any():
+            min_cop_distance = np.min(observation["distance"][cop_mask])
+            return 0.01 + np.exp((min_cop_distance - 40.0) / 400.0) - 1.0
         else:
-            # Survival reward
-            reward = 0.1
-            # Calculate safety: reward increases with distance from cops
-            cop_indices = [
-                i
-                for i, obj in enumerate(observation["object_type"])
-                if obj == ObjectType.COP.value
-            ]
-            if cop_indices:
-                d = np.min([observation["distance"][i] for i in cop_indices])
-                lambda_thief = 0.05
-                reward += lambda_thief * (d / observation["distance"].max())
-            else:
-                # If if no cops are detected, give a reward for being hidden
-                reward += 0.5
-
-        return reward
+            return 1.0
