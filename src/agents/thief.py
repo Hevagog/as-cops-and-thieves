@@ -57,12 +57,12 @@ class Thief(Entity):
             float: The reward for the thief agent.
         """
         if is_terminated[0]:
-            return -1.0
+            return -5.0
         if is_terminated[1]:
-            return 1.0
+            return 5.0
         cop_mask = observation["object_type"] == ObjectType.COP.value
         if cop_mask.any():
             min_cop_distance = np.min(observation["distance"][cop_mask])
-            return 0.01 + np.exp((min_cop_distance - 40.0) / 400.0) - 1.0
+            return np.exp((min_cop_distance - 200.0) / 200.0) - 2.0
         else:
             return 1.0
