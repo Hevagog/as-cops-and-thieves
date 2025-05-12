@@ -72,8 +72,17 @@ class Map:
             self.canvas_dimensions = tuple(map_data["canvas"].values())
             blocks = map_data["objects"]["blocks"]
             self.blocks = [self._parse_block(block) for block in blocks]
-
             agents = map_data["agents"]
+            self.agent_spawn_regions = {}
+            agent_type_counts = {}
+            for agent in agents:
+                agent_type = agent["type"]
+                count = agent_type_counts.get(agent_type, 0)
+                agent_id = f"{agent_type}_{count}"
+                if "spawn_region" in agent:
+                    self.agent_spawn_regions[agent_id] = agent["spawn_region"]
+                agent_type_counts[agent_type] = count + 1
+
             self.cops_positions = [
                 (agent["x"], agent["y"]) for agent in agents if agent["type"] == "cop"
             ]
@@ -82,6 +91,7 @@ class Map:
             ]
             self.cops_count = len(self.cops_positions)
             self.thieves_count = len(self.thieves_positions)
+            print("spon reg: ", self.agent_spawn_regions)
 
     def populate_space(self, space: pymunk.Space) -> None:
         """

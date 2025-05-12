@@ -145,10 +145,12 @@ class Entity:
 
         return observations, reward, is_terminated[0] or is_terminated[1], False, {}
 
-    def reset(self):
+    def reset(self, position: pymunk.Vec2d | None = None) -> None:
         """
         Resets the agent to its initial state.
         """
+        if position is not None:
+            self._initial_position = position
         self.body.position = pymunk.Vec2d(
             self._initial_position.x, self._initial_position.y
         )
@@ -237,6 +239,9 @@ class Entity:
                 return ObjectType.WALL.value
         else:
             return ObjectType.WALL.value
+
+    def get_radius(self) -> float:
+        return self._radius
 
     def get_id(self) -> str:
         return self._id

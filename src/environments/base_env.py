@@ -14,8 +14,16 @@ from pathlib import Path
 from agents import Cop, Thief
 from agents.entity import Entity
 from maps import Map
-from utils import get_thief_category, get_cop_category, get_termination_radius
-from utils import ObjectType
+from utils import (
+    get_thief_category,
+    get_cop_category,
+    get_termination_radius,
+    sample_spawn_position,
+)
+from environments.observation_spaces import (
+    _init_shared_observation_space,
+    get_shared_observations,
+)
 
 
 class BaseEnv(ParallelEnv):
@@ -98,7 +106,9 @@ class BaseEnv(ParallelEnv):
             agent.get_id(): agent.action_space for agent in (self.cops + self.thieves)
         }
         # We have to define state spaces and shared observation spaces for all agents.
-        shared_obs_space = self._init_shared_observation_space()
+        shared_obs_space = _init_shared_observation_space(
+            map=self.map, cops=self.cops, thieves=self.thieves
+        )
         self.shared_observation_spaces = shared_obs_space
         self._shared_observation_spaces = shared_obs_space
         self.state_space = shared_obs_space
@@ -108,6 +118,15 @@ class BaseEnv(ParallelEnv):
         self.window = None
         self.clock = None
         self._init_rendering()
+
+    def _get_non_colliding_position(self, region, entity: Entity, max_attempts=20):
+        for _ in range(max_attempts):
+            pos = sample_spawn_position(region)
+            if not self.space.point_query_nearest(
+                pos, entity.get_radius(), entity.ray_filter
+            ):
+                return pos
+        return (region["x"] + region["w"] / 2, region["y"] + region["h"] / 2)
 
     def _init_cops(self, group_counter) -> List[Cop]:
         """
@@ -156,57 +175,6 @@ class BaseEnv(ParallelEnv):
             )
             for id in range(self.map.thieves_count)
         ]
-
-    def _init_shared_observation_space(self) -> gym.spaces.Dict:
-        """
-        Initialize the structured observation space for shared team information.
-
-        Creates a hierarchical dictionary of gym spaces where:
-        1. The top level contains agent IDs as keys
-        2. Each agent's space contains five components:
-           - own_obj_types: The agent's original object type observations
-           - own_distances: The agent's original distance observations
-           - object_type_shared: Team-aggregated object type observations
-           - distance_shared: Team-aggregated distance observations
-           - team_positions: 2D coordinates of all team members
-
-        Returns:
-            gym.spaces.Dict: Nested dictionary of observation spaces by agent ID
-        """
-        shared_spaces = {}
-        max_dim = max(self.map.window_dimensions)
-
-        # Process both teams: cops and thieves.
-        for team_agents in [self.cops, self.thieves]:
-            if not team_agents:
-                continue
-
-            # Use the first agent of the team as an example
-            example_obs_space = team_agents[0].observation_space
-            obj_space = example_obs_space["object_type"]
-            dist_space = example_obs_space["distance"]
-
-            team_positions_space = gym.spaces.Box(
-                low=0.0,
-                high=max_dim,
-                shape=(len(team_agents), 2),
-                dtype=np.float16,
-            )
-
-            team_shared_space = gym.spaces.Dict(
-                {
-                    "own_obj_types": obj_space,
-                    "own_distances": dist_space,
-                    "object_type_shared": obj_space,
-                    "distance_shared": dist_space,
-                    "team_positions": team_positions_space,
-                }
-            )
-
-            for agent in team_agents:
-                shared_spaces[agent.get_id()] = team_shared_space
-
-        return gym.spaces.Dict(shared_spaces)
 
     @functools.lru_cache(maxsize=None)
     def observation_space(self, agent: str) -> gym.Space:
@@ -304,7 +272,12 @@ class BaseEnv(ParallelEnv):
 
         self.agents = self.possible_agents[:]
         for agent in self.agents:
-            self.agent_name_mapping[agent].reset()
+            region = self.map.agent_spawn_regions[agent]
+            if region is not None:
+                pos = self._get_non_colliding_position(
+                    region, self.agent_name_mapping[agent]
+                )
+                self.agent_name_mapping[agent].reset(pos)
 
         observations = {
             agent: self.agent_name_mapping[agent].get_observation()
@@ -312,7 +285,9 @@ class BaseEnv(ParallelEnv):
         }
         infos = {agent: {} for agent in self.agents}
 
-        self.shared_observation_spaces = self.get_shared_observations(observations)
+        self.shared_observation_spaces = get_shared_observations(
+            observations, self.cops, self.thieves
+        )
 
         if self.render_mode == "human":
             self._render_frame()
@@ -356,7 +331,9 @@ class BaseEnv(ParallelEnv):
             dict(zip(self.agents, values)) for values in zip(*results)
         ]
 
-        self.shared_observation_spaces = self.get_shared_observations(observations)
+        self.shared_observation_spaces = get_shared_observations(
+            observations, self.cops, self.thieves
+        )
 
         self.space.step(self.time_step)
 
@@ -366,6 +343,8 @@ class BaseEnv(ParallelEnv):
         truncations = {agent: is_terminated[1] for agent in self.agents}
         if any(terminations.values()):
             self.agents = []
+
+        # print(rewards)
 
         return observations, rewards, terminations, truncations, infos
 
@@ -428,6 +407,15 @@ class BaseEnv(ParallelEnv):
 
         if self.render_mode == "human":
             self.window.fill((255, 255, 255))
+
+            if hasattr(self.map, "agent_spawn_regions"):
+                for region in self.map.agent_spawn_regions.values():
+                    x, y, w, h = region["x"], region["y"], region["w"], region["h"]
+                    rect = pygame.Rect(x, y, w, h)
+                    color = (255, 200, 100, 40)  # Light orange, low alpha
+                    s = pygame.Surface((abs(w), abs(h)), pygame.SRCALPHA)
+                    s.fill(color)
+                    self.window.blit(s, (x, y))
 
             if self.map_image:
                 map_image = pygame.image.load(self.map_image)
@@ -498,72 +486,6 @@ class BaseEnv(ParallelEnv):
             return (False, True)
 
         return (False, False)
-
-    def get_shared_observations(self, observations) -> dict:
-        """
-        Create team-based shared observations with appropriate information masking.
-
-        This method aggregates observations across team members according to priority rules:
-        1. Each agent contributes information about object types they can observe
-        2. Higher-priority information overwrites lower-priority information
-        3. Team positions are shared completely among teammates
-
-        The resulting observations preserve individual perception while adding team knowledge.
-
-        Args:
-            observations (dict): Individual agent observations keyed by agent ID
-
-        Returns:
-            dict: Enhanced observations with team-shared information, containing:
-                - own_obj_types: Original individual object type observations
-                - own_distances: Original individual distance measurements
-                - object_type_shared: Team-aggregated object type information
-                - distance_shared: Team-aggregated distance information
-                - team_positions: Positions of all team members
-        """
-        shared_observations = {}
-        cop_positions = np.array(
-            [cop.body.position for cop in self.cops], dtype=np.float16
-        )
-        thief_positions = np.array(
-            [thief.body.position for thief in self.thieves], dtype=np.float16
-        )
-
-        for team_name, team_agents, team_positions in [
-            ("cops", self.cops, cop_positions),
-            ("thieves", self.thieves, thief_positions),
-        ]:
-            if not team_agents:
-                continue
-
-            first_agent = team_agents[0]
-            obj_masked = (
-                np.ones_like(observations[first_agent.get_id()]["object_type"])
-                * ObjectType.EMPTY.value
-            )
-            dist_masked = np.zeros_like(observations[first_agent.get_id()]["distance"])
-
-            for agent in team_agents:
-                obs = observations[agent.get_id()]
-                obj_types = obs["object_type"]
-                distances = obs["distance"]
-
-                for priority_type in agent.observation_priorities:
-                    mask = (obj_types == priority_type.value) & (
-                        obj_masked == ObjectType.EMPTY.value
-                    )
-                    obj_masked[mask] = obj_types[mask]
-                    dist_masked[mask] = distances[mask]
-
-                shared_observations[agent.get_id()] = {
-                    "own_obj_types": obj_types,
-                    "own_distances": distances,
-                    "object_type_shared": obj_masked,
-                    "distance_shared": dist_masked,
-                    "team_positions": team_positions,
-                }
-
-        return shared_observations
 
 
 def raw_env(map: Map, render_mode="rgb_array") -> AECEnv:
