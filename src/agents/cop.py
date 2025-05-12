@@ -62,14 +62,16 @@ class Cop(Entity):
         if is_terminated[0]:
             return 10.0
         elif is_terminated[1]:
-            return -5.0
+            return -10.0
+        reward = 0.0
+        thief_mask = observation["object_type"] == ObjectType.THIEF.value
+        if thief_mask.any():
+            d = observation["distance"][thief_mask].min()
+            reward += 3.0 * np.exp(-d / 100.0)  # Sharper reward for proximity
         else:
-            reward = 0.0
-            thief_mask = observation["object_type"] == ObjectType.THIEF.value
-            thief_distances = observation["distance"][thief_mask]
-            if thief_distances.size > 0:
-                d = thief_distances.min()
-                reward = np.exp(-d / 150.0)
-            else:
-                reward = -0.25  # penalty for not seeing a thief
+            reward -= 0.15  # Smaller penalty for not seeing
+        # Encourage movement
+        # velocity_norm = np.linalg.norm(self.body.velocity)
+        # if velocity_norm < 5.0:
+        #     reward -= 0.05
         return reward

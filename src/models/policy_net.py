@@ -14,14 +14,17 @@ class Policy(CategoricalMixin, Model):
         CategoricalMixin.__init__(self, unnormalized_log_prob)
         self.len_ch = self.num_observations // 2
 
-        self.net = nn.Sequential(
+        self.features_extractor = nn.Sequential(
             nn.Conv1d(2, 64, kernel_size=5, stride=2, padding=0),
             nn.ReLU(),
             nn.Conv1d(64, 32, kernel_size=5, stride=3, padding=0),
             nn.ReLU(),
             nn.Flatten(),
             nn.Linear(32 * 13, 256),
-            nn.ReLU(),
+            nn.Tanh(),
+        )
+
+        self.net = nn.Sequential(
             nn.Linear(256, 128),
             nn.ReLU(),
             nn.Linear(128, 64),
@@ -30,8 +33,11 @@ class Policy(CategoricalMixin, Model):
         )
 
     def compute(self, inputs, role):
+        x = self.features_extractor(
+            inputs["states"].view(inputs["states"].size(0), 2, self.len_ch)
+        )
         return (
-            self.net(inputs["states"].view(inputs["states"].size(0), 2, self.len_ch)),
+            self.net(x),
             {},
         )
 
