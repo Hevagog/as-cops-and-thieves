@@ -53,7 +53,7 @@ class BaseEnv(ParallelEnv):
         map_image: Path = None,
         render_mode=None,
         max_step_count: int = 400,
-        time_step: float = 1 / 60.0,
+        time_step: float = 1 / 15.0,
     ):
         """
         Initialize the cops and thieves environment with map configuration and rendering options.
@@ -290,6 +290,7 @@ class BaseEnv(ParallelEnv):
         )
 
         if self.render_mode == "human":
+            pygame.event.clear()
             self._render_frame()
 
         self.step_count = 0
@@ -315,7 +316,6 @@ class BaseEnv(ParallelEnv):
                 - infos: Additional information for each agent
         """
         self.step_count += 1
-
         # If a user passes in actions with no agents, then just return empty observations, etc.
         if not action:
             self.agents = []
@@ -371,14 +371,25 @@ class BaseEnv(ParallelEnv):
         first time.
         credit: https://gymnasium.farama.org/tutorials/gymnasium_basics/environment_creation/#rendering
         """
+        self.clock = pygame.time.Clock()
         if self.render_mode == "human":
             pygame.init()
             self.window = pygame.display.set_mode((self.width, self.height))
             pygame.display.set_caption("Cops and Robbers")
-            self.clock = pygame.time.Clock()
+            self.overlay = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
+            if hasattr(self.map, "agent_spawn_regions"):
+                for region in self.map.agent_spawn_regions.values():
+                    x, y, w, h = region["x"], region["y"], region["w"], region["h"]
+                    color = (255, 200, 100, 40)
+                    pygame.draw.rect(self.overlay, color, pygame.Rect(x, y, w, h))
+            if self.map_image:
+                self._map_image = pygame.image.load(self.map_image)
+                self._map_image = pygame.transform.scale(
+                    self._map_image, (self.width, self.height)
+                )
+            self.font = pygame.font.Font(None, 36)
         elif self.render_mode == "rgb_array":
             self.window = pygame.Surface((self.width, self.height))
-            self.clock = pygame.time.Clock()
 
     def _get_info(self):
         """
@@ -407,44 +418,31 @@ class BaseEnv(ParallelEnv):
 
         if self.render_mode == "human":
             self.window.fill((255, 255, 255))
-
-            if hasattr(self.map, "agent_spawn_regions"):
-                for region in self.map.agent_spawn_regions.values():
-                    x, y, w, h = region["x"], region["y"], region["w"], region["h"]
-                    rect = pygame.Rect(x, y, w, h)
-                    color = (255, 200, 100, 40)  # Light orange, low alpha
-                    s = pygame.Surface((abs(w), abs(h)), pygame.SRCALPHA)
-                    s.fill(color)
-                    self.window.blit(s, (x, y))
-
+            self.window.blit(self.overlay, (0, 0))
             if self.map_image:
-                map_image = pygame.image.load(self.map_image)
-                map_image.set_alpha(
-                    int(0.75 * 255)
-                )  # Set opacity (0 is fully transparent, 255 is fully opaque)
-                map_image = pygame.transform.scale(map_image, (self.width, self.height))
-                self.window.blit(map_image, (0, 0))
+                self.window.blit(self._map_image, (0, 0))
 
             self.space.debug_draw(draw_options)
 
-            font = pygame.font.Font(None, 36)
             fps = int(self.clock.get_fps())
-            fps_text = font.render(f"FPS: {fps}", True, (0, 0, 0))
+            fps_text = self.font.render(f"FPS: {fps}", True, (0, 0, 0))
             self.window.blit(fps_text, (10, 10))
-            step_text = font.render(f"Step: {self.step_count}", True, (0, 0, 0))
+            step_text = self.font.render(f"Step: {self.step_count}", True, (0, 0, 0))
             self.window.blit(step_text, (10, 50))
 
             pygame.display.flip()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit(0)
             self.clock.tick(60)
 
         elif self.render_mode == "rgb_array":
-            self.space.debug_draw(draw_options)
+            pygame.event.get()
             return pygame.surfarray.array3d(self.window)
 
         else:
             raise ValueError(f"Invalid render mode: {self.render_mode}")
-
-        self.clock.tick(60)
 
     def close(self):
         if self.window is not None:
@@ -474,7 +472,10 @@ class BaseEnv(ParallelEnv):
                     mask=~(thief.filter_category | cop.filter_category) & 0xFFFFFFFF
                 )
                 hit = self.space.segment_query_first(
-                    thief.body.position, cop.body.position, 1, shape_filter=filter
+                    thief.body.position,
+                    cop.body.position,
+                    0.0,
+                    shape_filter=filter,
                 )
                 if hit is None:
                     if (

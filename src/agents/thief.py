@@ -66,7 +66,7 @@ class Thief(Entity):
             return np.tanh((min_cop_distance - 100.0) / 50.0)
             # return np.exp((min_cop_distance - 200.0) / 200.0) - 2.0
         else:
-            return 0.5
+            return 1.5
 
         # TODO: Check validity of this reward scheme:
         #  Small penalty for low velocity to discourage just standing still

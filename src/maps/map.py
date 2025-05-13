@@ -91,7 +91,6 @@ class Map:
             ]
             self.cops_count = len(self.cops_positions)
             self.thieves_count = len(self.thieves_positions)
-            print("spon reg: ", self.agent_spawn_regions)
 
     def populate_space(self, space: pymunk.Space) -> None:
         """
