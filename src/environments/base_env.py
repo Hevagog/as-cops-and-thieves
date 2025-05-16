@@ -341,10 +341,20 @@ class BaseEnv(ParallelEnv):
             self._render_frame()
 
         truncations = {agent: is_terminated[1] for agent in self.agents}
+
+        winner = None
+
         if any(terminations.values()):
             self.agents = []
+            if is_terminated[0]:
+                winner = "cop"
+            else:
+                winner = "thief"
 
         # print(rewards)
+
+        for agent in infos:
+            infos[agent]["winner"] = winner
 
         return observations, rewards, terminations, truncations, infos
 
@@ -462,7 +472,7 @@ class BaseEnv(ParallelEnv):
         and no obstacles are between them.
 
         Returns:
-            tuple[bool, bool]: A tuple containing two boolean values:
+            tuple [bool, bool]: A tuple containing two boolean values:
             - True if cops catch thieves (termination condition met)
             - True if the maximum step count is reached (truncation condition met)
         """

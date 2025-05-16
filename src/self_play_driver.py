@@ -17,6 +17,7 @@ from utils.policy_archive_utils import (
     update_policy_win_rate,
 )
 from utils.model_utils import copy_role_models, initialize_models_for_mappo
+from utils.eval_pfsp_agents import evaluate_agents
 
 # Configuration
 NUM_SELF_PLAY_ITERATIONS = 20  # Total self-play iterations
@@ -26,6 +27,7 @@ TRAINING_TIMESTEPS_PER_ROLE_TRAINING = (
 ARCHIVE_SAVE_INTERVAL = 1  # Save to archive every N self-play iterations for each role
 POLICY_SAMPLE_STRATEGY = "pfsp"  # "latest", "random", or "pfsp"
 WIN_RATE_BUFFER_SIZE = 20  # For PFSP: number of recent games to consider for win rate
+N_TRIAL_EPISODES = 5  # For evaluation in PFSP - selecting winner
 
 COP_ROLE_PREFIX = "cop"
 THIEF_ROLE_PREFIX = "thief"
@@ -109,36 +111,19 @@ def train_role(
             device,
         )
         del temp_opponent_loader_agent  # Free memory
-        torch.cuda.empty_cache() if device.type == "cuda" else None
-        # # --- Freeze opponent policies for Fictitious Play ---
-        # print(f"Freezing policies for opponent role: {opponent_role_prefix}")
-        # for agent_name in training_agent.models:
-        #     if agent_name.startswith(opponent_role_prefix):
-        #         if "policy" in training_agent.models[agent_name]:
-        #             for param in training_agent.models[agent_name][
-        #                 "policy"
-        #             ].parameters():
-        #                 param.requires_grad = False
-        #         if (
-        #             "value" in training_agent.models[agent_name]
-        #         ):  # Also freeze value net if separate
-        #             for param in training_agent.models[agent_name][
-        #                 "value"
-        #             ].parameters():
-        #                 param.requires_grad = False
-        #     elif agent_name.startswith(
-        #         role_to_train_prefix
-        #     ):  # Ensure learning role is trainable
-        #         if "policy" in training_agent.models[agent_name]:
-        #             for param in training_agent.models[agent_name][
-        #                 "policy"
-        #             ].parameters():
-        #                 param.requires_grad = True
-        #         if "value" in training_agent.models[agent_name]:
-        #             for param in training_agent.models[agent_name][
-        #                 "value"
-        #             ].parameters():
-        #                 param.requires_grad = True
+        # torch.cuda.empty_cache() if device.type == "cuda" else None
+
+        # --- Freeze opponent policies for Fictitious Play ---
+        print(f"Freezing policies for opponent role: {opponent_role_prefix}")
+        for agent_name in training_agent.models:
+            if agent_name.startswith(opponent_role_prefix):
+                training_agent.models[agent_name]["policy"].freeze_parameters()
+                training_agent.models[agent_name]["value"].freeze_parameters()
+            elif agent_name.startswith(
+                role_to_train_prefix
+            ):  # Ensure learning role is trainable
+                training_agent.models[agent_name]["policy"].freeze_parameters(False)
+                training_agent.models[agent_name]["value"].freeze_parameters(False)
     else:
         print(
             f"No opponent policy found in archive for {opponent_role_prefix}. Opponents will use their current/initial policies in training_agent."
@@ -153,49 +138,22 @@ def train_role(
     # The path used by trainer's internal checkpointing might not be what we want for archive.
 
     # --- Update win-rate for the opponent policy that was used (if any) ---
-    if (
-        opponent_checkpoint_path
-        and opponent_policy_filename
-        and trainer.evaluation_count > 0
-    ):
-        # Determine winner from evaluation results
-        # Assuming agent names like "cop_0", "thief_0" etc.
-        # And that eval_returns contains average returns for these.
-        cop_score_keys = [
-            k for k in trainer.eval_returns if k.startswith(COP_ROLE_PREFIX)
-        ]
-        thief_score_keys = [
-            k for k in trainer.eval_returns if k.startswith(THIEF_ROLE_PREFIX)
-        ]
+    if opponent_checkpoint_path:
+        avg_cop_return, avg_thief_return = evaluate_agents(
+            env, training_agent, N_TRIAL_EPISODES
+        )
+        print(f"Avg Cop Return: {avg_cop_return}, Avg Thief Return: {avg_thief_return}")
+        if role_to_train_prefix == COP_ROLE_PREFIX:
+            opponent_won = avg_thief_return > avg_cop_return
+        elif role_to_train_prefix == THIEF_ROLE_PREFIX:
+            opponent_won = avg_cop_return > avg_thief_return
 
-        if cop_score_keys and thief_score_keys:
-            # For simplicity, average scores if multiple agents per role (though usually one for eval)
-            avg_cop_return = sum(trainer.eval_returns[k] for k in cop_score_keys) / len(
-                cop_score_keys
-            )
-            avg_thief_return = sum(
-                trainer.eval_returns[k] for k in thief_score_keys
-            ) / len(thief_score_keys)
-
-            opponent_won = False
-            if (
-                opponent_role_prefix == THIEF_ROLE_PREFIX
-            ):  # Current opponent was a thief
-                opponent_won = avg_thief_return > avg_cop_return
-            elif opponent_role_prefix == COP_ROLE_PREFIX:  # Current opponent was a cop
-                opponent_won = avg_cop_return > avg_thief_return
-
-            print(
-                f"Updating win rate for opponent {opponent_policy_filename} (role: {opponent_role_prefix})"
-            )
-            update_policy_win_rate(
-                opponent_role_archive_path,
-                opponent_policy_filename,
-                opponent_won,
-                WIN_RATE_BUFFER_SIZE,
-            )
-        else:
-            print("Could not determine evaluation scores for win-rate update.")
+        update_policy_win_rate(
+            opponent_role_archive_path,
+            opponent_policy_filename,
+            opponent_won,
+            WIN_RATE_BUFFER_SIZE,
+        )
 
     # We need to return a path to the *newly trained* policy for this role.
     # The training_agent now contains the updated policies for role_to_train
@@ -325,7 +283,7 @@ if __name__ == "__main__":
                 current_cop_checkpoint, cop_archive_path, iteration, COP_ROLE_PREFIX
             )
         del mappo_agent_cops  # Clean up
-        torch.cuda.empty_cache() if device.type == "cuda" else None
+        # torch.cuda.empty_cache() if device.type == "cuda" else None
 
         # --- Train Thieves ---
         # Re-initialize models for the agent for this training phase
@@ -373,7 +331,7 @@ if __name__ == "__main__":
                 THIEF_ROLE_PREFIX,
             )
         del mappo_agent_thieves  # Clean up
-        torch.cuda.empty_cache() if device.type == "cuda" else None
+        # torch.cuda.empty_cache() if device.type == "cuda" else None
         # Clean up memory if needed, e.g. del mappo_agent if it's large and re-instantiated fully
         # torch.cuda.empty_cache() # If memory issues persist
 
