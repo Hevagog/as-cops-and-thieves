@@ -20,9 +20,9 @@ from utils.model_utils import copy_role_models, initialize_models_for_mappo
 from utils.eval_pfsp_agents import evaluate_agents
 
 # Configuration
-NUM_SELF_PLAY_ITERATIONS = 20  # Total self-play iterations
+NUM_SELF_PLAY_ITERATIONS = 40  # Total self-play iterations
 TRAINING_TIMESTEPS_PER_ROLE_TRAINING = (
-    50_000  # Timesteps for training one role in one iteration
+    20_000  # Timesteps for training one role in one iteration
 )
 ARCHIVE_SAVE_INTERVAL = 1  # Save to archive every N self-play iterations for each role
 POLICY_SAMPLE_STRATEGY = "pfsp"  # "latest", "random", or "pfsp"
@@ -218,6 +218,7 @@ if __name__ == "__main__":
         "evaluation_interval": TRAINING_TIMESTEPS_PER_ROLE_TRAINING
         // 5,  # Evaluate a few times per role training
         "evaluation_episodes": 5,  # Number of episodes for each evaluation run
+        "opponent_freeze_duration": 5_000,  # How long to freeze opponent policy NOTE: CUSTOM CFG
     }
 
     # Initialize one MAPPO agent instance that will be reconfigured/reloaded.
@@ -231,7 +232,7 @@ if __name__ == "__main__":
             device=device,
         )
 
-    start_iteration = 6
+    start_iteration = 10
     # Main Self-Play Loop
     for iteration in range(start_iteration, NUM_SELF_PLAY_ITERATIONS + start_iteration):
         print(
