@@ -57,16 +57,16 @@ class Thief(Entity):
             float: The reward for the thief agent.
         """
         if is_terminated[0]:
-            return -10.0
+            return -1
         if is_terminated[1]:
-            return 10.0
+            return 1
         cop_mask = observation["object_type"] == ObjectType.COP.value
         if cop_mask.any():
             min_cop_distance = np.min(observation["distance"][cop_mask])
-            return np.tanh((min_cop_distance - 100.0) / 50.0)
+            return np.tanh((min_cop_distance - 100.0) / 50.0) / 10.0
             # return np.exp((min_cop_distance - 200.0) / 200.0) - 2.0
         else:
-            return 1.5
+            return 0.15
 
         # TODO: Check validity of this reward scheme:
         #  Small penalty for low velocity to discourage just standing still

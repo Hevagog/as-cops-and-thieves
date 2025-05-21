@@ -84,8 +84,8 @@ if __name__ == "__main__":
     # Load checkpoint.
     # Note: This loads the entire agent state, including both the learning parameters
     # and the weights of all policy/value networks.
-    cop_checkpoint_path = "policy_archive_self_play\\cop_iter_4_full_agent.pt"
-    thief_checkpoint_path = "policy_archive_self_play\\thief_iter_2_full_agent.pt"
+    cop_checkpoint_path = "policy_archive_self_play\\cop_iter_11_full_agent.pt"
+    thief_checkpoint_path = "policy_archive_self_play\\thief_iter_11_full_agent.pt"
     cop_agent.load(cop_checkpoint_path)
     thief_agent.load(thief_checkpoint_path)
 
