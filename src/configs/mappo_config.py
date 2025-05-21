@@ -28,5 +28,6 @@ CFG_TRAINER = {
     "evaluation_interval": TrainingConfig.training_timesteps_per_role_training
     // 5,  # Evaluate a few times per role training
     "evaluation_episodes": 5,  # Number of episodes for each evaluation run
-    "opponent_freeze_duration": 5_000,  # How long to freeze opponent policy NOTE: CUSTOM CFG
+    "opponent_freeze_duration": 20_000,  # How long to freeze opponent policy and value network NOTE: CUSTOM CFG - see README.md
+    "policy_freeze_duration": 8_000,  # How long to freeze the training agent's policy network NOTE: CUSTOM CFG - see README.md
 }

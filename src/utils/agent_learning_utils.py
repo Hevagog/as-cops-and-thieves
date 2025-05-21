@@ -99,13 +99,16 @@ def train_role(
         print(f"Freezing policies for opponent role: {opponent_role_prefix}")
         for agent_name in training_agent.models:
             if agent_name.startswith(opponent_role_prefix):
-                training_agent.models[agent_name]["policy"].freeze_parameters()
                 training_agent.models[agent_name]["value"].freeze_parameters()
             elif agent_name.startswith(
                 role_to_train_prefix
             ):  # Ensure learning role is trainable
                 training_agent.models[agent_name]["policy"].freeze_parameters(False)
                 training_agent.models[agent_name]["value"].freeze_parameters(False)
+        # --- Freeze policy networks ---
+        for agent_name in training_agent.models:
+            training_agent.models[agent_name]["policy"].freeze_parameters()
+
     else:
         print(
             f"No opponent policy found in archive for {opponent_role_prefix}. Opponents will use their current/initial policies in training_agent."
