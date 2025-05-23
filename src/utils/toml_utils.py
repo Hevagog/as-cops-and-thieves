@@ -12,9 +12,29 @@ def get_unit_velocity() -> int:
         return config["unit_velocity"]
 
 
+def get_max_speed() -> int:
+    with _get_specific_config() as config:
+        return config["max_speed"]
+
+
 def get_unit_mass() -> int:
     with _get_specific_config() as config:
         return config["unit_mass"]
+
+
+def get_cop_category() -> int:
+    with _get_specific_config() as config:
+        return config["pymunk_cop_category"]
+
+
+def get_thief_category() -> int:
+    with _get_specific_config() as config:
+        return config["pymunk_thief_category"]
+
+
+def get_termination_radius() -> float:
+    with _get_specific_config() as config:
+        return config["termination_radius"]
 
 
 @contextmanager

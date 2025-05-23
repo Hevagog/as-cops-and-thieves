@@ -1,11 +1,11 @@
-from typing import Tuple, Dict, List
+from typing import Tuple, List
 import json
-import os
-
+import shapely as shp
 import pymunk
 import pymunk.pygame_util
-
 import pygame
+
+from utils import get_unit_size
 
 
 class Map:
@@ -23,11 +23,42 @@ class Map:
         self.canvas_dimensions: Tuple[int, int]  # width, height
         self._scaling_factor_x: int  # scene can be larger/smaller than the window
         self._scaling_factor_y: int
-        self.blocks = List[
-            Dict[str, int]
-        ]  # I have pytorch installed on python 3.10 so no type T_T
+        self.blocks = List[shp.Polygon]
+        self.cops_count: int
+        self.thieves_count: int
+        self.cops_positions: List[Tuple[int, int]]
+        self.thieves_positions: List[Tuple[int, int]]
+        self.unit_size = get_unit_size()
 
         self._parse_json_map(map_path)
+
+    def _parse_block(self, blk_json):
+        blk_type = blk_json.get("type", "rect")  # default to rect
+        if blk_type == "rect":
+            x, y = blk_json.get("x"), blk_json.get("y")
+            if x is None or y is None:
+                raise ValueError(
+                    "x and y coordinates are required for rectangle blocks."
+                )
+            # w and h are optional, default to 1
+            w = blk_json.get("w") if blk_json.get("w") is not None else 1
+            h = blk_json.get("h") if blk_json.get("h") is not None else 1
+            vs = [
+                (x, y),
+                (x + w, y),
+                (x + w, y + h),
+                (x, y + h),
+                (x, y),
+            ]
+        elif blk_type == "poly":
+            vs = blk_json.get("vs")
+            if vs is None:
+                raise ValueError("Vertices are required for polygon blocks.")
+            # Convert vertices to tuples
+            vs = [(v.get("x"), v.get("y")) for v in vs]
+        else:
+            raise ValueError(f"Unknown block type: {blk_type}")
+        return shp.Polygon(vs)
 
     def _parse_json_map(self, map_path: str) -> None:
         """
@@ -39,28 +70,27 @@ class Map:
             map_data = json.load(f)
             self.window_dimensions = tuple(map_data["window"].values())
             self.canvas_dimensions = tuple(map_data["canvas"].values())
-            self.blocks = map_data["objects"]["blocks"]
+            blocks = map_data["objects"]["blocks"]
+            self.blocks = [self._parse_block(block) for block in blocks]
+            agents = map_data["agents"]
+            self.agent_spawn_regions = {}
+            agent_type_counts = {}
+            for agent in agents:
+                agent_type = agent["type"]
+                count = agent_type_counts.get(agent_type, 0)
+                agent_id = f"{agent_type}_{count}"
+                if "spawn_region" in agent:
+                    self.agent_spawn_regions[agent_id] = agent["spawn_region"]
+                agent_type_counts[agent_type] = count + 1
 
-        self._scaling_factor_x = int(
-            round(self.window_dimensions[0] / self.canvas_dimensions[0])
-        )
-        self._scaling_factor_y = int(
-            round(self.window_dimensions[1] / self.canvas_dimensions[1])
-        )
-
-    def _physics_to_screen(self, x: int, y: int) -> Tuple[int, int]:
-        """
-        Convert physics coordinates (from the canvas) to screen coordinates.
-        This is used ONLY for visualizing objects on the pygame display.
-
-        Args:
-            x (int): The x coordinate in the physics space.
-            y (int): The y coordinate in the physics space.
-
-        Returns:
-            Tuple[int, int]: Rescaled screen coordinates.
-        """
-        return x * self._scaling_factor_x, y * self._scaling_factor_y
+            self.cops_positions = [
+                (agent["x"], agent["y"]) for agent in agents if agent["type"] == "cop"
+            ]
+            self.thieves_positions = [
+                (agent["x"], agent["y"]) for agent in agents if agent["type"] == "thief"
+            ]
+            self.cops_count = len(self.cops_positions)
+            self.thieves_count = len(self.thieves_positions)
 
     def populate_space(self, space: pymunk.Space) -> None:
         """
@@ -69,29 +99,9 @@ class Map:
             space (pymunk.Space): The pymunk space to populate with the map objects.
         """
         for block in self.blocks:
-            x, y = block.get("x"), block.get("y")
-            w = block.get("w") if block.get("w") is not None else 1
-            h = block.get("h") if block.get("h") is not None else 1
-
-            block_segment = pymunk.Segment(space.static_body, (x, y), (x + w, y + h), 1)
+            vs = list(block.exterior.coords)
+            block_segment = pymunk.Poly(space.static_body, vs, radius=1)
             space.add(block_segment)
-
-    def render(self, screen: pygame.Surface) -> None:
-        """
-        Visualize the map objects on the screen using the physics-to-screen coordinate conversion.
-        This affects the display of the map on the pygame window, not the physics objects.
-        Args:
-            screen: The pygame surface to render the map on.
-        """
-        for block in self.blocks:
-            x, y = block.get("x"), block.get("y")
-            w = block.get("w") if block.get("w") is not None else 1
-            h = block.get("h") if block.get("h") is not None else 1
-            screen_x, screen_y = self._physics_to_screen(x, y)
-            screen_w, screen_h = self._physics_to_screen(w, h)
-            pygame.draw.rect(
-                screen, (0, 0, 0), (screen_x, screen_y, screen_w, screen_h), 0
-            )
 
 
 ### For now only for basic tests to showcase the map rendering
@@ -110,6 +120,6 @@ if __name__ == "__main__":
             if event.type == pygame.QUIT:
                 running = False
         screen.fill((255, 255, 255))
-        map.render(screen)
+        map.render(screen, [])
         pygame.display.flip()
         clock.tick(60)

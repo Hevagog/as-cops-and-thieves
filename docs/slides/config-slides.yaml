@@ -1,0 +1,20 @@
+title: Cops and Thieves
+subtitle: Project for the Agent Systems course
+shorttitle: Cops and Thieves
+author: Tomasz Kawiak, Mateusz Mazur
+shortauthor: T. Kawiak, M. Mazur
+institute: |
+  Faculty of Electrical Engineering, Automation, Computer Science and Biomedical Engineering, AGH \
+  Field of study: Computer Science and Intelligent Systems \
+  Specialization: Artificial Intelligence and Data Analysis
+shortinstitute: AIDA, ISI, EAIiIB, AGH
+date: \today
+lang: en-US # pl-PL # sudo apt install texlive-lang-polish
+fontsize: 10pt
+aspectratio: 169
+theme: "AGHMM"
+link-citations: true
+# linkstyle: bold
+section-titles: true
+header-includes:
+  - \setbeamertemplate{frametitle continuation}{}
