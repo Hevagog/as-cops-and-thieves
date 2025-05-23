@@ -67,7 +67,6 @@ class Entity:
         self._mass = get_unit_mass() if mass is None else mass
         self._id = uuid.uuid4().hex if id is None else id
         self._max_speed = get_max_speed()
-        self.action_space = gym.spaces.Discrete(4)
         self._space = space
         self._thief_category = get_thief_category()
         self._initial_position = start_position
@@ -86,6 +85,9 @@ class Entity:
         self._fov = 2 * np.pi  # Field of view in radians.
         self._num_rays = 90  # One ray every ~4 degrees.
 
+        self.action_space = gym.spaces.Discrete(
+            4, start=0
+        )  # 4 discrete actions (left, down, right, up).
         # Observation space includes distance and object type for each ray.
         self.observation_space = gym.spaces.Dict(
             {
@@ -95,12 +97,14 @@ class Entity:
                     shape=(self._num_rays,),
                     dtype=np.float16,
                 ),
-                "object_type": gym.spaces.MultiDiscrete(
-                    [max(item.value for item in ObjectType)] * self._num_rays
+                "object_type": gym.spaces.Box(
+                    low=0,
+                    high=max(item.value for item in ObjectType),
+                    shape=(self._num_rays,),
+                    dtype=np.uint8,
                 ),
             }
         )
-
         # Create the physics body and bounding circle representing the agent.
         self.body = pymunk.Body(
             self._mass,
@@ -129,7 +133,7 @@ class Entity:
         if abs(self.body.velocity) > self._max_speed:
             self.body.velocity = self.body.velocity.normalized() * self._max_speed
 
-    def step(self, action: int, is_terminated: bool):
+    def step(self, action: int, is_terminated: tuple[bool, bool]) -> tuple:
         """
         Performs a step in the environment based on the action taken.
         Args:
@@ -139,16 +143,20 @@ class Entity:
         observations = self.get_observation()
         reward = self.reward(observations, is_terminated)
 
-        return observations, reward, is_terminated, False, {}
+        return observations, reward, is_terminated[0] or is_terminated[1], False, {}
 
-    def reset(self):
+    def reset(self, position: pymunk.Vec2d | None = None) -> None:
         """
         Resets the agent to its initial state.
         """
-        self.body.position = self._initial_position
+        if position is not None:
+            self._initial_position = position
+        self.body.position = pymunk.Vec2d(
+            self._initial_position.x, self._initial_position.y
+        )
         self.body.velocity = pymunk.Vec2d(0, 0)
 
-    def get_observation(self) -> dict[str, np.ndarray]:
+    def get_observation(self) -> gym.spaces.Dict:
         """
         Computes the observation for the agent by performing multiple ray casts within its field of view.
 
@@ -231,6 +239,9 @@ class Entity:
                 return ObjectType.WALL.value
         else:
             return ObjectType.WALL.value
+
+    def get_radius(self) -> float:
+        return self._radius
 
     def get_id(self) -> str:
         return self._id

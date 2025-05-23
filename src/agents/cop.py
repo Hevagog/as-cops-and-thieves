@@ -46,29 +46,32 @@ class Cop(Entity):
             ObjectType.EMPTY,
         ]
 
-    def reward(self, observation: gym.spaces.Dict, is_terminated: bool) -> float:
+    def reward(
+        self, observation: gym.spaces.Dict, is_terminated: tuple[bool, bool]
+    ) -> float:
         """
         Reward function for the cop agent.
         Args:
             observation (gym.spaces.Dict): The observation space of the agent:
                 - distance : A numpy array containing the distances from the agent to the first object hit along each ray.
                 - object_type : A numpy array containing the type of object detected for each ray, based on pre-defined ObjectType values.
-            is_terminated (bool): A function that checks if the cop has captured a thief. TODO: Implement this function.
-
-                This function should return True if the cop is within the capture radius of any thief, and False otherwise.
+            is_terminated (tuple[bool, bool]): A tuple indicating whether the game is terminated for the cop and thief agents.
         Returns:
             float: The reward for the cop agent.
         """
-        # This is a penalty for taking a step without capturing a thief.
-        reward = -0.1
-
-        if is_terminated:
-            reward += 10.0
+        if is_terminated[0]:
+            return 1.0
+        elif is_terminated[1]:
+            return -1.0
+        reward = 0.0
+        thief_mask = observation["object_type"] == ObjectType.THIEF.value
+        if thief_mask.any():
+            d = observation["distance"][thief_mask].min()
+            reward += 3.0 * np.exp(-d / 100.0) / 10.0  # Sharper reward for proximity
         else:
-            thief_mask = observation["object_type"] == ObjectType.THIEF.value
-            if np.any(thief_mask):
-                d = np.min(observation["distance"][thief_mask])
-                reward += self.proximity_coeff * max(
-                    0, (observation["distance"].max() - d)
-                )
+            reward -= 0.015  # Smaller penalty for not seeing
+        # Encourage movement
+        # velocity_norm = np.linalg.norm(self.body.velocity)
+        # if velocity_norm < 5.0:
+        #     reward -= 0.05
         return reward
