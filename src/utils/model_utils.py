@@ -1,7 +1,7 @@
 import torch
 from skrl.multi_agents.torch.mappo import MAPPO
 
-from models import Policy, Value
+from models import Policy, Value, LSTMPolicy, LSTMValue
 
 
 def copy_role_models(
@@ -59,5 +59,33 @@ def initialize_models_for_mappo(
             action_spaces(agent_name),
             device,
             agent_count=len(possible_agents),
+        )
+    return models
+
+
+def initialize_lstm_models_for_mappo(
+    observation_spaces,
+    action_spaces,
+    possible_agents,
+    device,
+    base_obs_space_struct,
+    num_envs=1,
+) -> dict:
+    """Initializes LSTM models for the MAPPO agent."""
+    models = {}
+    for agent_name in possible_agents:
+        models[agent_name] = {}
+        models[agent_name]["policy"] = LSTMPolicy(
+            observation_spaces(agent_name),
+            action_spaces(agent_name),
+            device,
+            num_envs=num_envs,
+        )
+        models[agent_name]["value"] = LSTMValue(
+            base_obs_space_struct,
+            action_spaces(agent_name),
+            device,
+            agent_count=len(possible_agents),
+            num_envs=num_envs,
         )
     return models

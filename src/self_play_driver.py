@@ -14,7 +14,10 @@ from utils.policy_archive_utils import (
     add_policy_to_archive,
     get_latest_policy_from_archive,
 )
-from utils.model_utils import initialize_models_for_mappo
+from utils.model_utils import (
+    initialize_models_for_mappo,
+    initialize_lstm_models_for_mappo,
+)
 from utils.agent_learning_utils import train_role
 from configs import CFG_AGENT, CFG_TRAINER, TrainingConfig
 
@@ -44,7 +47,7 @@ def _orchestrate_training_phase(
         f"\n--- Orchestrating training for {role_to_train_prefix}, Iteration: {iteration + 1} ---"
     )
 
-    models_for_phase = initialize_models_for_mappo(
+    models_for_phase = initialize_lstm_models_for_mappo(
         env.observation_space,
         env.action_space,
         env.possible_agents,
@@ -105,7 +108,7 @@ if __name__ == "__main__":
     env = wrap_env(env, wrapper="pettingzoo")
 
     # Policy Archive Setup
-    base_archive_path = Path("policy_archive_self_play")
+    base_archive_path = Path("lstm_policy_archive_self_play")
     cop_archive_path = base_archive_path / "cops"
     thief_archive_path = base_archive_path / "thieves"
     cop_archive_path.mkdir(parents=True, exist_ok=True)
@@ -132,7 +135,7 @@ if __name__ == "__main__":
             device=device,
         )
 
-    start_iteration = 13
+    start_iteration = 0
     total_iterations_to_run = tc.num_self_play_iterations
     end_iteration = start_iteration + total_iterations_to_run
 

@@ -10,7 +10,11 @@ from utils.policy_archive_utils import (
     sample_policy_from_archive,
     update_policy_win_rate,
 )
-from utils.model_utils import copy_role_models, initialize_models_for_mappo
+from utils.model_utils import (
+    copy_role_models,
+    initialize_models_for_mappo,
+    initialize_lstm_models_for_mappo,
+)
 from utils.eval_pfsp_agents import evaluate_agents
 from configs import CFG_AGENT
 
@@ -63,7 +67,7 @@ def train_role(
             f"Loading opponent ({opponent_role_prefix}) policy from: {opponent_checkpoint_path}"
         )
         # Create a temporary agent to load the opponent's full state
-        temp_opponent_loader_agent_models = initialize_models_for_mappo(
+        temp_opponent_loader_agent_models = initialize_lstm_models_for_mappo(
             env.observation_space,
             env.action_space,
             env.possible_agents,
@@ -235,7 +239,7 @@ def evaluate_agent(
         )
         # Load this additional opponent's policy into the eval_agent
         # Create a temporary agent to load the opponent's full state
-        temp_opponent_loader_agent_models = initialize_models_for_mappo(
+        temp_opponent_loader_agent_models = initialize_lstm_models_for_mappo(
             env.observation_space,
             env.action_space,
             env.possible_agents,
@@ -246,12 +250,15 @@ def evaluate_agent(
             name: RandomMemory(memory_size=1024, num_envs=env.num_envs, device=device)
             for name in env.possible_agents
         }
+        temp_config = CFG_AGENT.copy()
+        temp_config["random_timesteps"] = 0  # No random actions during evaluation
+        temp_config["learning_starts"] = 0  # No learning starts during evaluation
 
         temp_opponent_loader_agent = MAPPO(
             possible_agents=env.possible_agents,
             models=temp_opponent_loader_agent_models,
             memories=temp_memories,
-            cfg=CFG_AGENT.copy(),
+            cfg=temp_config,
             observation_spaces=env.observation_spaces,
             action_spaces=env.action_spaces,
             device=device,
