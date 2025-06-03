@@ -16,7 +16,7 @@ from utils.model_utils import (
     initialize_lstm_models_for_mappo,
 )
 from utils.eval_pfsp_agents import evaluate_agents
-from configs import CFG_AGENT
+from configs import CFG_AGENT, CFG_AGENT_THIEF, CFG_AGENT_COP
 
 
 def train_role(
@@ -28,7 +28,7 @@ def train_role(
     opponent_role_archive_path: Path,
     cfg_trainer: dict,
     training_config: SimpleNamespace,
-    device: torch.device,
+    device: torch.device,  # device is used for initializing temp_opponent_loader_agent
 ):
     """
     Manages a training phase for a specific role.
@@ -79,11 +79,17 @@ def train_role(
             for name in env.possible_agents
         }
 
+        cfg_opponent = (
+            CFG_AGENT_COP
+            if opponent_role_prefix == training_config.cop_role_prefix
+            else CFG_AGENT_THIEF
+        ).copy()
+
         temp_opponent_loader_agent = MAPPO(
             possible_agents=env.possible_agents,
             models=temp_opponent_loader_agent_models,
             memories=temp_memories,
-            cfg=CFG_AGENT.copy(),
+            cfg=cfg_opponent,  # Ensure this CFG is appropriate for a temp loader
             observation_spaces=env.observation_spaces,
             action_spaces=env.action_spaces,
             device=device,
@@ -163,6 +169,67 @@ def train_role(
     return training_agent
 
 
+def train_simultaneously_and_evaluate(
+    env,
+    training_agent: MAPPO,
+    cfg_trainer: dict,
+    training_config: SimpleNamespace,
+    device: torch.device,
+    cop_archive_path: Path,
+    thief_archive_path: Path,
+):
+    """
+    Trains all roles in the training_agent simultaneously, then evaluates them
+    against archived policies of the opposing roles.
+
+    training_agent should already have models initialized for all roles!
+    """
+    print(f"--- Training All Roles Simultaneously ---")
+
+    print(
+        "Freezing all policy parameters for simultaneous training. Unfreezing value functions."
+    )
+    for agent_name in training_agent.models:
+        training_agent.models[agent_name]["policy"].freeze_parameters()
+        training_agent.models[agent_name]["value"].freeze_parameters(False)
+
+    training_agent.set_mode("train")  # Ensure agent is in training mode
+
+    trainer = SequentialTrainer(env=env, cfg=cfg_trainer, agents=training_agent)
+    trainer.train()
+
+    print("\n--- Post-Simultaneous Training Evaluations ---")
+
+    print(
+        f"\nEvaluating newly trained {training_config.cop_role_prefix}s against archived {training_config.thief_role_prefix}s."
+    )
+
+    evaluate_agent(
+        env=env,
+        learned_agent=training_agent,
+        learned_role_prefix=training_config.cop_role_prefix,
+        opponent_role_prefix=training_config.thief_role_prefix,
+        opponent_role_archive_path=thief_archive_path,
+        training_config=training_config,
+        device=device,
+    )
+
+    print(
+        f"\nEvaluating newly trained {training_config.thief_role_prefix}s against archived {training_config.cop_role_prefix}s."
+    )
+    evaluate_agent(
+        env=env,
+        learned_agent=training_agent,
+        learned_role_prefix=training_config.thief_role_prefix,
+        opponent_role_prefix=training_config.cop_role_prefix,
+        opponent_role_archive_path=cop_archive_path,
+        training_config=training_config,
+        device=device,
+    )
+
+    return training_agent
+
+
 def evaluate_agent(
     env,
     learned_agent: MAPPO,  # Agent with the newly trained policy
@@ -179,7 +246,7 @@ def evaluate_agent(
     print(
         f"\n--- Evaluating {learned_role_prefix} against {num_additional_opponents_to_evaluate} additional opponents from {Path(opponent_role_archive_path).parent} ---"
     )
-    opponent_role_archive_path = Path(opponent_role_archive_path).parent
+    # opponent_role_archive_path = Path(opponent_role_archive_path).parent
 
     # Create a working copy of the agent once.
     # This agent has the learned_role_prefix policy already updated from train_role.

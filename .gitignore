@@ -1,3 +1,5 @@
 *.pyc
 runs/
 policy_archive_self_play/
+lstm_policy_archive_self_play/
+lstm_policy_archive_self_play_new/
