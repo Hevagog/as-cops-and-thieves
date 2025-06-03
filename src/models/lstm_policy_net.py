@@ -66,40 +66,47 @@ class LSTMPolicy(CategoricalMixin, Model):
     def compute(self, inputs, role):
         states = inputs["states"]
         terminated = inputs.get("terminated", None)
+        rnn_from_input = "rnn" in inputs
 
-        # Handle missing RNN states on first run
-        if "rnn" in inputs:
+        # Determine initial hidden_states and cell_states
+        if rnn_from_input:
             hidden_states, cell_states = inputs["rnn"][0], inputs["rnn"][1]
         else:
             # Initialize RNN states for first run
-            batch_size = (
-                states.size(0) // self.sequence_length
-                if states.size(0) >= self.sequence_length
-                else 1
-            )
+            # Calculate effective batch size for LSTM input, matching how rnn_input.size(0) will be calculated
+            current_batch_size = states.size(0)
+            if current_batch_size < self.sequence_length:
+                expected_lstm_batch_dim = 1
+            else:
+                # Equivalent to ceil(current_batch_size / self.sequence_length)
+                expected_lstm_batch_dim = (
+                    current_batch_size + self.sequence_length - 1
+                ) // self.sequence_length
+
             hidden_states = torch.zeros(
                 self.num_layers,
-                batch_size,
+                expected_lstm_batch_dim,
                 self.hidden_size,
                 device=self.device,
                 dtype=states.dtype,
             )
             cell_states = torch.zeros(
                 self.num_layers,
-                batch_size,
+                expected_lstm_batch_dim,
                 self.hidden_size,
                 device=self.device,
                 dtype=states.dtype,
             )
 
         # Extract features from observations
-        batch_size = states.size(0)
+        batch_size = states.size(0)  # This is the original inputs["states"].size(0)
         features = self.features_extractor(states.view(batch_size, 2, self.len_ch))
 
-        # Prepare for LSTM
-        # Handle case where batch_size < sequence_length (first few steps)
+        # Prepare features for LSTM input (rnn_input)
+        # rnn_input must have shape (num_sequences, sequence_length, feature_dim)
         if batch_size < self.sequence_length:
-            # Pad the sequence with zeros
+            # If batch_size is less than sequence_length, pad features to sequence_length.
+            # The LSTM will see this as a single sequence.
             pad_size = self.sequence_length - batch_size
             padding = torch.zeros(
                 pad_size,
@@ -107,12 +114,77 @@ class LSTMPolicy(CategoricalMixin, Model):
                 device=features.device,
                 dtype=features.dtype,
             )
-            features_padded = torch.cat([features, padding], dim=0)
-            rnn_input = features_padded.unsqueeze(0)  # Add batch dimension
-        else:
-            rnn_input = features.view(-1, self.sequence_length, features.shape[-1])
+            # features_for_lstm shape: (sequence_length, feature_dim)
+            features_for_lstm = torch.cat([features, padding], dim=0)
+            # rnn_input shape: (1, sequence_length, feature_dim)
+            rnn_input = features_for_lstm.unsqueeze(0)
+        else:  # batch_size >= self.sequence_length
+            # If batch_size is greater or equal, features might need padding
+            # to make its first dimension a multiple of sequence_length.
+            features_for_lstm = features  # Initialize with original features
+            if batch_size % self.sequence_length != 0:
+                # Calculate padding needed to make features.size(0) a multiple of sequence_length
+                num_sequences_to_form = (
+                    batch_size + self.sequence_length - 1
+                ) // self.sequence_length
+                required_total_rows = num_sequences_to_form * self.sequence_length
+                padding_rows_needed = required_total_rows - batch_size
 
-        # Handle RNN states dimensions
+                # padding_rows_needed will be > 0 here because batch_size % self.sequence_length != 0
+                padding = torch.zeros(
+                    padding_rows_needed,
+                    features.shape[-1],
+                    device=features.device,
+                    dtype=features.dtype,
+                )
+                # features_for_lstm shape: (required_total_rows, feature_dim)
+                features_for_lstm = torch.cat([features, padding], dim=0)
+            # else: batch_size is already a multiple of sequence_length. No padding needed.
+            # features_for_lstm remains as original features.
+
+            # Reshape features_for_lstm into sequences for LSTM
+            # features_for_lstm.size(0) is now guaranteed to be a multiple of self.sequence_length
+            # rnn_input shape: (N, sequence_length, feature_dim), where N = features_for_lstm.size(0) / sequence_length
+            rnn_input = features_for_lstm.view(
+                -1, self.sequence_length, features_for_lstm.shape[-1]
+            )
+
+        actual_lstm_input_batch_dim = rnn_input.size(0)
+
+        # Adjust hidden_states if they came from input and mismatch rnn_input's batch dim
+        if rnn_from_input:
+            if hidden_states.size(1) != actual_lstm_input_batch_dim:
+                # This warning can be helpful for debugging configuration issues
+                # print(f"Warning: LSTMPolicy.compute: Mismatch between hidden_state batch_dim {hidden_states.size(1)} "
+                #       f"and rnn_input batch_dim {actual_lstm_input_batch_dim}. Adjusting hidden_state.")
+
+                h_current_bs = hidden_states.size(1)
+                if h_current_bs < actual_lstm_input_batch_dim:
+                    # Pad hidden_states
+                    h_padding_needed = actual_lstm_input_batch_dim - h_current_bs
+                    h_pad_tensor = torch.zeros(
+                        hidden_states.size(0),
+                        h_padding_needed,
+                        hidden_states.size(2),
+                        device=hidden_states.device,
+                        dtype=hidden_states.dtype,
+                    )
+                    hidden_states = torch.cat((hidden_states, h_pad_tensor), dim=1)
+
+                    c_pad_tensor = torch.zeros(
+                        cell_states.size(0),
+                        h_padding_needed,
+                        cell_states.size(2),
+                        device=cell_states.device,
+                        dtype=cell_states.dtype,
+                    )
+                    cell_states = torch.cat((cell_states, c_pad_tensor), dim=1)
+                else:  # h_current_bs > actual_lstm_input_batch_dim
+                    # Truncate hidden_states
+                    hidden_states = hidden_states[:, :actual_lstm_input_batch_dim, :]
+                    cell_states = cell_states[:, :actual_lstm_input_batch_dim, :]
+
+        # Handle RNN states dimensions (e.g. if 4D from skrl)
         if hidden_states.dim() == 4:  # If states have sequence dimension
             sequence_index = 1 if role == "target_policy" else 0
             hidden_states = hidden_states[:, :, sequence_index, :].contiguous()
@@ -150,8 +222,8 @@ class LSTMPolicy(CategoricalMixin, Model):
                     rnn_input[:, i0:i1, :], (hidden_states, cell_states)
                 )
                 if i1 - 1 < terminated.size(1):
-                    hidden_states[:, (terminated[:, i1 - 1]), :] = 0
-                    cell_states[:, (terminated[:, i1 - 1]), :] = 0
+                    hidden_states[:, (terminated[:, i1 - 1]).bool(), :] = 0
+                    cell_states[:, (terminated[:, i1 - 1]).bool(), :] = 0
                 rnn_outputs.append(rnn_output)
 
             rnn_states = (hidden_states, cell_states)
