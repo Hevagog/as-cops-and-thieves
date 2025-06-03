@@ -12,7 +12,7 @@ date: \today
 lang: en-US # pl-PL # sudo apt install texlive-lang-polish
 fontsize: 10pt
 aspectratio: 169
-theme: "AGHMM"
+theme: "AGHMD"
 link-citations: true
 # linkstyle: bold
 section-titles: true
