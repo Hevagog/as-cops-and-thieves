@@ -44,8 +44,8 @@ Sample usage:
 
 ```bash
 python src/driver.py \  
-    maps_templates/map-latest.json \    
-    --map-image maps_templates/map-latest.png \
+    maps_templates/agh-map.json \    
+    --map-image maps_templates/agh-map.png \
     --keep-alive
 ```
 

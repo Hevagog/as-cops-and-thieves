@@ -79,7 +79,6 @@ class Map:
                 agent_type = agent["type"]
                 count = agent_type_counts.get(agent_type, 0)
                 agent_id = f"{agent_type}_{count}"
-
                 if "spawn_regions" in agent:  # Check for plural "spawn_regions" first
                     spawn_data = agent["spawn_regions"]
                     if isinstance(spawn_data, list) and all(

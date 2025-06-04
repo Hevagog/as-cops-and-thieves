@@ -60,7 +60,7 @@ class Cop(Entity):
             float: The reward for the cop agent.
         """
         time_penalty_per_step = -0.02
-
+    
         if is_terminated[0]:
             return 1.0
         elif is_terminated[1]:

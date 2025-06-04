@@ -4,5 +4,5 @@
     Remember to manually change the language to the one you are using 
 -->
 
-<!-- # Bibliography {.allowframebreaks}  -->
+# Bibliography {.allowframebreaks} 
 
