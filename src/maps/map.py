@@ -79,8 +79,32 @@ class Map:
                 agent_type = agent["type"]
                 count = agent_type_counts.get(agent_type, 0)
                 agent_id = f"{agent_type}_{count}"
-                if "spawn_region" in agent:
-                    self.agent_spawn_regions[agent_id] = agent["spawn_region"]
+                if "spawn_regions" in agent:  # Check for plural "spawn_regions" first
+                    spawn_data = agent["spawn_regions"]
+                    if isinstance(spawn_data, list) and all(
+                        isinstance(item, dict) for item in spawn_data
+                    ):
+                        self.agent_spawn_regions[agent_id] = spawn_data
+                    elif isinstance(
+                        spawn_data, dict
+                    ):  # Handle if spawn_regions is accidentally a single dict
+                        self.agent_spawn_regions[agent_id] = [spawn_data]
+                        print(
+                            f"Warning: Agent {agent_id} 'spawn_regions' is a single dict. Converting to list."
+                        )
+                    else:
+                        print(
+                            f"Warning: Agent {agent_id} 'spawn_regions' has invalid format. Ignored. Data: {spawn_data}"
+                        )
+                elif "spawn_region" in agent:  # Fallback for singular "spawn_region"
+                    spawn_data = agent["spawn_region"]
+                    if isinstance(spawn_data, dict):
+                        self.agent_spawn_regions[agent_id] = [spawn_data]
+                    else:
+                        print(
+                            f"Warning: Agent {agent_id} 'spawn_region' has invalid format. Ignored. Data: {spawn_data}"
+                        )
+
                 agent_type_counts[agent_type] = count + 1
 
             self.cops_positions = [
