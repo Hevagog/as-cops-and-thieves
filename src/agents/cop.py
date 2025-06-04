@@ -59,19 +59,17 @@ class Cop(Entity):
         Returns:
             float: The reward for the cop agent.
         """
+        time_penalty_per_step = -0.02
+    
         if is_terminated[0]:
             return 1.0
         elif is_terminated[1]:
             return -1.0
-        reward = 0.0
+        reward = time_penalty_per_step
         thief_mask = observation["object_type"] == ObjectType.THIEF.value
         if thief_mask.any():
             d = observation["distance"][thief_mask].min()
-            reward += 3.0 * np.exp(-d / 100.0) / 10.0  # Sharper reward for proximity
+            reward += 1.5 * np.exp(-d / 50.0)  # Sharper reward for proximity
         else:
-            reward -= 0.015  # Smaller penalty for not seeing
-        # Encourage movement
-        # velocity_norm = np.linalg.norm(self.body.velocity)
-        # if velocity_norm < 5.0:
-        #     reward -= 0.05
+            reward -= 0.02
         return reward

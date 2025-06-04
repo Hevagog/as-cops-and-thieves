@@ -1,0 +1,111 @@
+@startuml
+!theme reddress-lightred
+skinparam backgroundColor white
+skinparam defaultFontSize 10
+skinparam classAttributeIconSize 0
+skinparam packageStyle rect
+hide emptymembers
+
+
+package "src.agents" <<Folder>> {
+  class Entity {
+    # _initial_position: Pymunk_Vec2d
+    # _space: Pymunk_Space
+    # _radius: float
+    # _id: str
+    # body: Pymunk_Body
+    # _b_box: Pymunk_Circle
+    # observation_space: Gym_Space
+    # action_space: Gym_Space
+    + reset(position: Pymunk_Vec2d)
+    + step(action, is_terminated)
+    + get_observation(): dict
+    + get_id(): str
+    + render(surface: Pygame_Surface)
+    # _query_body(hit_shape): ObjectType
+  }
+  Entity *-- Gym_Space
+  Entity ..> Pygame_Surface : "renders on"
+  Entity ..> "src.utils.ObjectType" : "uses"
+
+  class Cop extends Entity {
+    ' Cop-specific attributes/methods
+  }
+
+  class Thief extends Entity {
+    ' Thief-specific attributes/methods
+  }
+}
+
+package "src.maps" <<Folder>> {
+  class Map {
+    # window_dimensions: Tuple[int, int]
+    # canvas_dimensions: Tuple[int, int]
+    # blocks: List[Shp_Polygon]
+    # agent_spawn_regions: dict
+    # cops_positions: List[Tuple[int,int]]
+    # thieves_positions: List[Tuple[int,int]]
+    + __init__(map_path: str)
+    # _parse_json_map(map_path: str)
+    # _parse_block(blk_json): Shp_Polygon
+    + populate_space(space: Pymunk_Space)
+    + render(screen: Pygame_Surface, agents: List[Entity])
+  }
+  Map "1" *-- "0..*" Shp_Polygon : "contains blocks"
+  Map ..> Pymunk_Space : "populates"
+  Map ..> Pygame_Surface : "renders on"
+  Map ..> Entity : "renders"
+}
+
+package "src.environments" <<Folder>> {
+  class BaseEnv extends PZ_ParallelEnv {
+    # map: Map
+    # space: Pymunk_Space
+    # cops: List[Cop]
+    # thieves: List[Thief]
+    # possible_agents: List[str]
+    # agent_name_mapping: dict
+    # observation_spaces: dict
+    # action_spaces: dict
+    # render_mode: str
+    # window: Pygame_Surface
+    # clock: Pygame_Clock
+    + __init__(map: Map, render_mode: str)
+    + reset(): Tuple[dict, dict]
+    + step(action: dict): Tuple[dict, dict, dict, dict, dict]
+    + state(): dict
+    + render()
+    + close()
+    # _init_cops(): List[Cop]
+    # _init_thieves(): List[Thief]
+    # _get_non_colliding_position(regions, entity): Pymunk_Vec2d
+    # _init_rendering()
+    # _render_frame()
+  }
+  BaseEnv "1" *-- "1" Map : "uses"
+  BaseEnv "1" *-- "1" Pymunk_Space : "manages"
+  BaseEnv "1" *-- "0..*" Cop : "has"
+  BaseEnv "1" *-- "0..*" Thief : "has"
+  BaseEnv ..> Pygame_Surface : "renders on"
+  BaseEnv ..> Pygame_Clock
+
+  class SimpleEnv extends BaseEnv {
+    ' SimpleEnv-specific overrides/additions
+  }
+}
+
+package "src.utils" <<Folder>> {
+  enum ObjectType {
+    WALL
+    COP
+    THIEF
+    MOVABLE
+    EMPTY
+  }
+
+
+}
+
+
+BaseEnv ..> "src.utils.ObjectType" : "uses for observations"
+@enduml

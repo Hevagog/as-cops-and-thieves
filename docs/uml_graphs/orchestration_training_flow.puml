@@ -1,0 +1,81 @@
+@startuml
+package "Observation Spaces" {
+    [Shared Obs Space] as SharedObs
+    [Nested Agent Obs Spaces] as NestedObs
+    BaseEnv --> SharedObs : uses
+    BaseEnv --> NestedObs : uses
+}
+
+package "Models" {
+    [Policy (MLP)] as Policy
+    [Value (MLP)] as Value
+    [LSTMPolicy (CNN+LSTM)] as LSTMPolicy
+    [LSTMValue (CNN+LSTM)] as LSTMValue
+}
+
+package "MAPPO_Agent" {
+    [MAPPO (skrl)] as MAPPO
+    [MultiAgent (skrl)] as MultiAgent
+    MAPPO --> MultiAgent
+    MAPPO ..> Policy : uses
+    MAPPO ..> Value : uses
+    MAPPO ..> LSTMPolicy : uses
+    MAPPO ..> LSTMValue : uses
+}
+
+package "Training_Utils" {
+    [train_role]
+    [train_simultaneously_and_evaluate]
+    [copy_role_models]
+    [initialize_lstm_models_for_mappo]
+    [initialize_models_for_mappo]
+    [evaluate_agents]
+    [evaluate_agent]
+    [policy_archive_utils]
+}
+
+package "PFSP & Archive" {
+    [Policy Archive]
+    [sample_policy_from_archive]
+    [update_policy_win_rate]
+    [add_policy_to_archive]
+}
+
+package "Orchestration" {
+    [_orchestrate_training_phase]
+    [_orchestrate_simultaneous_training_iteration]
+}
+
+BaseEnv --> MAPPO : step/reset
+MAPPO --> BaseEnv : actions
+
+[copy_role_models] --> MAPPO
+[initialize_lstm_models_for_mappo] --> MAPPO
+[initialize_models_for_mappo] --> MAPPO
+[evaluate_agents] --> MAPPO
+[evaluate_agent] --> MAPPO
+
+[train_role] --> [copy_role_models]
+[train_role] --> [initialize_lstm_models_for_mappo]
+[train_role] --> [evaluate_agents]
+[train_role] --> [policy_archive_utils]
+[train_role] --> [sample_policy_from_archive]
+[train_role] --> [update_policy_win_rate]
+
+[train_simultaneously_and_evaluate] --> [initialize_lstm_models_for_mappo]
+[train_simultaneously_and_evaluate] --> [evaluate_agents]
+[train_simultaneously_and_evaluate] --> [evaluate_agent]
+
+[_orchestrate_training_phase] --> [train_role]
+[_orchestrate_training_phase] --> [add_policy_to_archive]
+[_orchestrate_simultaneous_training_iteration] --> [train_simultaneously_and_evaluate]
+[_orchestrate_simultaneous_training_iteration] --> [add_policy_to_archive]
+
+[policy_archive_utils] --> [Policy Archive]
+[sample_policy_from_archive] --> [Policy Archive]
+[update_policy_win_rate] --> [Policy Archive]
+[add_policy_to_archive] --> [Policy Archive]
+
+[train_role] ..> [PFSP & Archive] : uses PFSP
+[train_role] ..> [evaluate_agent] : evaluation
+@enduml

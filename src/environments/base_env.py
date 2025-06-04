@@ -8,6 +8,7 @@ import itertools
 from pettingzoo import ParallelEnv, AECEnv
 from pettingzoo.utils import parallel_to_aec
 from gymnasium.utils import seeding
+import random  # Add random for region selection if np_random is not yet available
 
 from pathlib import Path
 
@@ -119,14 +120,50 @@ class BaseEnv(ParallelEnv):
         self.clock = None
         self._init_rendering()
 
-    def _get_non_colliding_position(self, region, entity: Entity, max_attempts=20):
+    def _get_non_colliding_position(
+        self, regions: List[dict], entity: Entity, max_attempts=20
+    ):
+        if not regions:
+            print(
+                f"Error: No spawn regions provided for agent {entity.get_id()}. Cannot find position."
+            )
+            # Fallback: return a default position or raise an error.
+            # For now, let's attempt to use the entity's current position or a map center.
+            # This case should ideally be prevented by ensuring agents always have valid spawn regions.
+            return (
+                entity.body.position
+                if entity.body
+                else (self.width / 2, self.height / 2)
+            )
+
+        # Randomly select one region from the list
+        if hasattr(self, "_np_random") and self._np_random:
+            # Create a new list of regions for choice because NumPy's choice
+            # might have issues with lists of dictionaries directly depending on version/usage.
+            # Or, more simply, choose an index.
+            selected_region_index = self._np_random.integers(len(regions))
+            selected_region = regions[selected_region_index]
+        else:
+            selected_region = random.choice(
+                regions
+            )  # Fallback if np_random not initialized
+
         for _ in range(max_attempts):
-            pos = sample_spawn_position(region)
-            if not self.space.point_query_nearest(
+            pos = sample_spawn_position(selected_region)
+            # Check if the entity's bounding box would collide at the sampled position
+            query_info = self.space.point_query_nearest(
                 pos, entity.get_radius(), entity.ray_filter
-            ):
+            )
+            if not query_info:  # No collision detected
                 return pos
-        return (region["x"] + region["w"] / 2, region["y"] + region["h"] / 2)
+
+        print(
+            f"Warning: Could not find non-colliding position for {entity.get_id()} in selected region {selected_region} after {max_attempts} attempts. Defaulting to region center."
+        )
+        return (
+            selected_region["x"] + selected_region["w"] / 2,
+            selected_region["y"] + selected_region["h"] / 2,
+        )
 
     def _init_cops(self, group_counter) -> List[Cop]:
         """
@@ -269,21 +306,38 @@ class BaseEnv(ParallelEnv):
         # Copied from gym.Env.reset method
         if seed is not None:
             self._np_random, self._np_random_seed = seeding.np_random(seed)
+        else:  # Ensure _np_random is initialized even if seed is None
+            if not hasattr(self, "_np_random") or self._np_random is None:
+                self._np_random, self._np_random_seed = seeding.np_random(None)
 
         self.agents = self.possible_agents[:]
-        for agent in self.agents:
-            region = self.map.agent_spawn_regions[agent]
-            if region is not None:
-                pos = self._get_non_colliding_position(
-                    region, self.agent_name_mapping[agent]
+        for agent_id in self.agents:
+            agent_entity = self.agent_name_mapping[agent_id]
+            if agent_id in self.map.agent_spawn_regions:
+                spawn_regions_for_agent = self.map.agent_spawn_regions[agent_id]
+                if spawn_regions_for_agent:  # Ensure the list is not empty
+                    pos = self._get_non_colliding_position(
+                        spawn_regions_for_agent, agent_entity
+                    )
+                    agent_entity.reset(pos)
+                else:
+                    print(
+                        f"Warning: Agent {agent_id} has an empty list of spawn regions. Using default reset (current position or initial)."
+                    )
+                    agent_entity.reset()  # Agent resets to its own default
+            else:
+                print(
+                    f"Warning: No spawn regions defined in map for agent {agent_id}. Using default reset (current position or initial)."
                 )
-                self.agent_name_mapping[agent].reset(pos)
+                agent_entity.reset()  # Agent resets to its own default
 
         observations = {
-            agent: self.agent_name_mapping[agent].get_observation()
-            for agent in self.agents
+            agent_id: self.agent_name_mapping[
+                agent_id
+            ].get_observation()  # Use agent_id
+            for agent_id in self.agents
         }
-        infos = {agent: {} for agent in self.agents}
+        infos = {agent_id: {} for agent_id in self.agents}  # Use agent_id
 
         self.shared_observation_spaces = get_shared_observations(
             observations, self.cops, self.thieves
@@ -388,10 +442,11 @@ class BaseEnv(ParallelEnv):
             pygame.display.set_caption("Cops and Robbers")
             self.overlay = pygame.Surface((self.width, self.height), pygame.SRCALPHA)
             if hasattr(self.map, "agent_spawn_regions"):
-                for region in self.map.agent_spawn_regions.values():
-                    x, y, w, h = region["x"], region["y"], region["w"], region["h"]
-                    color = (255, 200, 100, 40)
-                    pygame.draw.rect(self.overlay, color, pygame.Rect(x, y, w, h))
+                for regions_list in self.map.agent_spawn_regions.values():
+                    for region in regions_list:
+                        x, y, w, h = region["x"], region["y"], region["w"], region["h"]
+                        color = (255, 200, 100, 40)
+                        pygame.draw.rect(self.overlay, color, pygame.Rect(x, y, w, h))
             if self.map_image:
                 self._map_image = pygame.image.load(self.map_image)
                 self._map_image = pygame.transform.scale(

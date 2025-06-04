@@ -1,0 +1,42 @@
+@startuml
+!theme plain
+skinparam backgroundColor white
+skinparam defaultFontSize 10
+skinparam classAttributeIconSize 0
+skinparam packageStyle rect
+hide emptymembers
+
+package "src.models" <<Folder>> {
+  abstract class _BaseTorchModel extends SKRL_Model {
+    + __init__(observation_space, action_space, device)
+    + compute(inputs, role)
+  }
+  _BaseTorchModel .up.|> Torch_Module : "extends (implicitly)"
+
+  class Policy extends _BaseTorchModel, SKRL_CategoricalMixin {
+    # features_extractor: Torch_Module
+    # net: Torch_Module
+    + act(inputs, role)
+  }
+
+  class Value extends _BaseTorchModel {
+    # features_extractor: Torch_Module
+    # net: Torch_Module
+  }
+
+  class LSTMPolicy extends _BaseTorchModel, SKRL_CategoricalMixin {
+    # lstm: Torch_Module
+    # net: Torch_Module
+    + get_specification()
+    + act(inputs, role)
+  }
+
+  class LSTMValue extends _BaseTorchModel {
+    # lstm: Torch_Module
+    # net: Torch_Module
+    + get_specification()
+  }
+}
+
+
+@enduml
