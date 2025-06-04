@@ -1,0 +1,36 @@
+@startwbs
+!theme cerulean
+* src
+** driver.py
+** eval.py
+** self_play_driver.py
+** self_play_eval.py
+** agents
+*** cop.py
+*** entity.py
+*** thief.py
+** configs
+*** mappo_config.py
+*** training_config.py
+** environments
+*** base_env.py
+*** observation_spaces.py
+*** simple_env.py
+** maps
+*** map.py
+** models
+*** lstm_policy_net.py
+*** lstm_value_net.py
+*** policy_net.py
+*** value_net.py
+** training
+*** orchestration.py
+** utils
+*** agent_learning_utils.py
+*** eval_pfsp_agents.py
+*** map_utils.py
+*** model_utils.py
+*** object_types.py
+*** policy_archive_utils.py
+*** toml_utils.py
+@endwbs

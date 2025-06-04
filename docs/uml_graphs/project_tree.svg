@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="WBS" height="324px" preserveAspectRatio="none" style="width:1501px;height:324px;background:#FFFFFF;" version="1.1" viewBox="0 0 1501 324" width="1501px" zoomAndPan="magnify">
+  <defs />
+  <g>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="46.918" x2="46.918" y1="63.9688" y2="83.9688" />
+    <rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:1.5;" width="73.8359" x="10" y="83.9688" />
+    <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="53.8359" x="20" y="105.1074">driver.py</text>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="135.6885" x2="135.6885" y1="63.9688" y2="83.9688" />
+    <rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:1.5;" width="63.7051" x="103.8359" y="83.9688" />
+    <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="43.7051" x="113.8359" y="105.1074">eval.py</text>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="253.7588" x2="253.7588" y1="63.9688" y2="83.9688" />
+    <rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:1.5;" width="132.4355" x="187.541" y="83.9688" />
+    <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="112.4355" x="197.541" y="105.1074">self_play_driver.py</text>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="401.1289" x2="401.1289" y1="63.9688" y2="83.9688" />
+    <rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:1.5;" width="122.3047" x="339.9766" y="83.9688" />
+    <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="102.3047" x="349.9766" y="105.1074">self_play_eval.py</text>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="512.7393" x2="512.7393" y1="63.9688" y2="83.9688" />
+    <rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:1.5;" width="60.916" x="482.2813" y="83.9688" />
+    <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="40.916" x="492.2813" y="105.1074">agents</text>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="512.7393" x2="522.7393" y1="149.9219" y2="149.9219" />
+    <rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:1.5;" width="60.0898" x="522.7393" y="132.9375" />
+    <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="40.0898" x="532.7393" y="154.0762">cop.py</text>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="512.7393" x2="522.7393" y1="198.8906" y2="198.8906" />
+    <rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:1.5;" width="73.3672" x="522.7393" y="181.9063" />
+    <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="53.3672" x="532.7393" y="203.0449">entity.py</text>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="512.7393" x2="522.7393" y1="247.8594" y2="247.8594" />
+    <rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:1.5;" width="65.7852" x="522.7393" y="230.875" />
+    <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="45.7852" x="532.7393" y="252.0137">thief.py</text>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="512.7393" x2="512.7393" y1="117.9375" y2="247.8594" />
+    <line style="stroke:#181818;stroke-width:1.5;" x1="647.5928" x2="647.5928" y1="63.9688" y2="83.9688" />
+    <rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:1.5;" width="62.9727" x="616.1064" y="83.9688" />
+    <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="42.9727" x="626.1064" y="105.1074">configs</text>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="647.5928" x2="657.5928" y1="149.9219" y2="149.9219" />
+    <rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:1.5;" width="122.873" x="657.5928" y="132.9375" />
+    <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="102.873" x="667.5928" y="154.0762">mappo_config.py</text>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="647.5928" x2="657.5928" y1="198.8906" y2="198.8906" />
+    <rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:1.5;" width="127.7422" x="657.5928" y="181.9063" />
+    <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="107.7422" x="667.5928" y="203.0449">training_config.py</text>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="647.5928" x2="647.5928" y1="117.9375" y2="198.8906" />
+    <line style="stroke:#181818;stroke-width:1.5;" x1="856.8047" x2="856.8047" y1="63.9688" y2="83.9688" />
+    <rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:1.5;" width="102.9395" x="805.335" y="83.9688" />
+    <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="82.9395" x="815.335" y="105.1074">environments</text>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="856.8047" x2="866.8047" y1="149.9219" y2="149.9219" />
+    <rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:1.5;" width="95.2285" x="866.8047" y="132.9375" />
+    <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="75.2285" x="876.8047" y="154.0762">base_env.py</text>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="856.8047" x2="866.8047" y1="198.8906" y2="198.8906" />
+    <rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:1.5;" width="156.957" x="866.8047" y="181.9063" />
+    <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="136.957" x="876.8047" y="203.0449">observation_spaces.py</text>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="856.8047" x2="866.8047" y1="247.8594" y2="247.8594" />
+    <rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:1.5;" width="106.2324" x="866.8047" y="230.875" />
+    <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="86.2324" x="876.8047" y="252.0137">simple_env.py</text>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="856.8047" x2="856.8047" y1="117.9375" y2="247.8594" />
+    <line style="stroke:#181818;stroke-width:1.5;" x1="1070.2178" x2="1070.2178" y1="63.9688" y2="83.9688" />
+    <rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:1.5;" width="52.9121" x="1043.7617" y="83.9688" />
+    <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="32.9121" x="1053.7617" y="105.1074">maps</text>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="1070.2178" x2="1080.2178" y1="149.9219" y2="149.9219" />
+    <rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:1.5;" width="65.1934" x="1080.2178" y="132.9375" />
+    <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="45.1934" x="1090.2178" y="154.0762">map.py</text>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="1070.2178" x2="1070.2178" y1="117.9375" y2="149.9219" />
+    <line style="stroke:#181818;stroke-width:1.5;" x1="1197.2197" x2="1197.2197" y1="63.9688" y2="83.9688" />
+    <rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:1.5;" width="63.6172" x="1165.4111" y="83.9688" />
+    <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="43.6172" x="1175.4111" y="105.1074">models</text>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="1197.2197" x2="1207.2197" y1="149.9219" y2="149.9219" />
+    <rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:1.5;" width="131.5332" x="1207.2197" y="132.9375" />
+    <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="111.5332" x="1217.2197" y="154.0762">lstm_policy_net.py</text>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="1197.2197" x2="1207.2197" y1="198.8906" y2="198.8906" />
+    <rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:1.5;" width="128.9844" x="1207.2197" y="181.9063" />
+    <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="108.9844" x="1217.2197" y="203.0449">lstm_value_net.py</text>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="1197.2197" x2="1207.2197" y1="247.8594" y2="247.8594" />
+    <rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:1.5;" width="99.5527" x="1207.2197" y="230.875" />
+    <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="79.5527" x="1217.2197" y="252.0137">policy_net.py</text>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="1197.2197" x2="1207.2197" y1="296.8281" y2="296.8281" />
+    <rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:1.5;" width="97.0039" x="1207.2197" y="279.8438" />
+    <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="77.0039" x="1217.2197" y="300.9824">value_net.py</text>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="1197.2197" x2="1197.2197" y1="117.9375" y2="296.8281" />
+    <line style="stroke:#181818;stroke-width:1.5;" x1="1391.9971" x2="1391.9971" y1="63.9688" y2="83.9688" />
+    <rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:1.5;" width="66.4883" x="1358.7529" y="83.9688" />
+    <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="46.4883" x="1368.7529" y="105.1074">training</text>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="1467.8564" x2="1467.8564" y1="63.9688" y2="83.9688" />
+    <rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:1.5;" width="45.2305" x="1445.2412" y="83.9688" />
+    <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="25.2305" x="1455.2412" y="105.1074">utils</text>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="46.918" x2="1467.8564" y1="63.9688" y2="63.9688" />
+    <rect fill="#F1F1F1" height="33.9688" style="stroke:#181818;stroke-width:1.5;" width="37.7832" x="738.4956" y="10" />
+    <text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="17.7832" x="748.4956" y="31.1387">src</text>
+    <line style="stroke:#181818;stroke-width:1.5;" x1="757.3872" x2="757.3872" y1="43.9688" y2="63.9688" />
+    <!--SRC=[PP5DJy9048Rl-olsA2GG8MWC9wAe2K8a8boRRJkj4xUxczrfIV-zKqiBw6tssNVU-Le4KfwESH136NmYXaEPUgp0ZrtTFA1I-XG6q5dajAgZAyKPNsXL3eROayF4kXQocI6akdlH5q9sqYVMP9Yt2OLopaOjwRLUeK6JNs7sgz1RK_IrOXKWOjgbsJY0hnIXDL5mAe7G_GGidBxGDbNxyXsoAUWMwa15vAp6f8uCKEVoYtdg4YxfVzqVIJzE4vU4N6G19csk8BPQ6Tflrf8t7BXlEHbFRwTturaCf2OtU_DjxD7mmWg76YHX0GDnyxfTos1Bdu1CCP37k6o67eYLgfJyA4sZcyjt1sQrVEk0V3ulKAmEcxFWVZPwH98xtXvuUTY89MIgrCGPYKsvyxdSVxwC7iHQcRpaQy_v6EB9ig-l-M_t0m00]-->
+  </g>
+</svg>
