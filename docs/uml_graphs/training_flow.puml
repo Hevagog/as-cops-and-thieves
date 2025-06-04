@@ -1,0 +1,86 @@
+@startuml
+!theme minty
+skinparam backgroundColor white
+skinparam defaultFontSize 10
+skinparam Padding 10  // Changed from boxPadding to Padding for better compatibility
+
+title MAPPO Multi-Agent Reinforcement Learning Training Flow
+
+start
+
+:Initialize Environment\n[`SimpleEnv`](src/environments/simple_env.py) with [`Map`](src/maps/map.py);
+note right
+        **Core Architectural Pillars:**
+        * **Simulation Bed:**
+            [`BaseEnv`](src/environments/base_env.py)
+            (Cops & Thieves Scenario)
+        * **Agent Intelligence:**
+            LSTM Policy/Value Networks
+            (Per Agent)
+        * **Learning Strategy:**
+            MAPPO Algorithm
+            (Role-Based or Co-Training)
+        * **Performance Benchmarking:**
+            Cross-Evaluation vs.
+            Archived Policies (PFSP)
+        * **Knowledge Repository:**
+            Policy Archive with
+            Win-Rate Metrics
+    end note
+
+:Initialize LSTM Models\nfor all agents;
+note right: Uses [`initialize_lstm_models_for_mappo`](src/utils/model_utils.py)
+
+:Create MAPPO Agent\nwith all role models;
+
+partition "Training Modes" {
+    if (Training Mode?) then (Role-Based)
+        :Train Role Function;
+        partition "Role Training" {
+            :Load latest checkpoint\nfor training role;
+            
+            :Sample opponent policy\nfrom archive (PFSP);
+            note right: [`sample_policy_from_archive`](src/utils/policy_archive_utils.py)
+            
+            :Freeze opponent policies\nUnfreeze training role;
+            
+            :Run SequentialTrainer;
+            
+            :Evaluate against opponent;
+            note right: [`evaluate_agents`](src/utils/eval_pfsp_agents.py)
+            
+            :Update opponent win-rate;
+            note right: [`update_policy_win_rate`](src/utils/policy_archive_utils.py)
+            
+            :Additional opponent\nevaluations (5x);
+        }
+        
+    else (Simultaneous)
+        :Train Simultaneously Function;
+        partition "Simultaneous Training" {
+            :Freeze all policy networks\nUnfreeze all value networks;
+
+            :Sample opponent policies\nfrom archive (PFSP);
+            note right: [`sample_policy_from_archive`](src/utils/policy_archive_utils.py)
+            
+            :Run SequentialTrainer\n(co-training);
+            
+            :Evaluate Cops vs\nArchived Thieves;
+            
+            :Evaluate Thieves vs\nArchived Cops;
+        }
+    endif
+}
+
+:Save trained models\nto checkpoint;
+
+:Archive policies\nwith metadata;
+
+:Update training statistics;
+
+if (Training Complete?) then (no)
+    :Switch roles or\ncontinue simultaneous;
+else (yes)
+    stop
+endif
+@enduml

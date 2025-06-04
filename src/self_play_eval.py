@@ -76,7 +76,7 @@ if __name__ == "__main__":
     # Note: This loads the entire agent state, including both the learning parameters
     # and the weights of all policy/value networks.
     cop_checkpoint_path = (
-        "lstm_policy_archive_self_play_new\\joint_iter_14_full_agent.pt"
+        "lstm_policy_archive_self_play_new\\joint_iter_19_full_agent.pt"
     )
     thief_checkpoint_path = (
         "lstm_policy_archive_self_play_new\\thieves\\thief_iter_1.pt"
