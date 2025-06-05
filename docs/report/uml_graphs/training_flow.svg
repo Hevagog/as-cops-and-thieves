@@ -1,0 +1,615 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="1297.9167px" preserveAspectRatio="none" style="width:1121px;height:1297px;background:#FFFFFF;" version="1.1" viewBox="0 0 1121 1297" width="1121.875px" zoomAndPan="magnify"><defs/><g><rect fill="#FFFFFF" height="36.7513" id="_title" rx="4.1667" ry="4.1667" style="stroke:#DB878B;stroke-width:1.0416666666666667;" width="705.2083" x="207.0313" y="20.8333"/><text fill="#6CAF9C" font-family="&quot;Verdana&quot;" font-size="20.8333" font-weight="bold" lengthAdjust="spacing" textLength="692.7083" x="213.2813" y="46.4213">MAPPO Multi-Agent Reinforcement Learning Training Flow</text><ellipse cx="381.7708" cy="79.4596" fill="#6CC3D5" rx="10.4167" ry="10.4167" style="stroke:#6CAF9C;stroke-width:1.0416666666666667;"/><path d="M612.5,100.293 L612.5,198.3398 L591.6667,202.5065 L612.5,206.6732 L612.5,304.7201 A0,0 0 0 0 612.5,304.7201 L872.9167,304.7201 A0,0 0 0 0 872.9167,304.7201 L872.9167,110.7096 L862.5,100.293 L612.5,100.293 A0,0 0 0 0 612.5,100.293 " fill="#6CC3D5" style="stroke:#6CAF9C;stroke-width:1.0416666666666667;"/><path d="M862.5,100.293 L862.5,110.7096 L872.9167,110.7096 L862.5,100.293 " fill="#6CC3D5" style="stroke:#6CAF9C;stroke-width:1.0416666666666667;"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" font-weight="bold" lengthAdjust="spacing" textLength="151.0417" x="618.75" y="115.1703">Core Architectural Pillars:</text><ellipse cx="624.4792" cy="121.9401" fill="#FFFFFF" rx="2.6042" ry="2.6042" style="stroke:#FFFFFF;stroke-width:0.0;"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" font-weight="bold" lengthAdjust="spacing" textLength="91.6667" x="628.125" y="127.2959">Simulation Bed:</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="226.0417" x="631.25" y="139.4216">[`BaseEnv`](src/environments/base_env.py)</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="134.375" x="631.25" y="151.5472">(Cops &amp; Thieves Scenario)</text><ellipse cx="624.4792" cy="158.3171" fill="#FFFFFF" rx="2.6042" ry="2.6042" style="stroke:#FFFFFF;stroke-width:0.0;"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" font-weight="bold" lengthAdjust="spacing" textLength="111.4583" x="628.125" y="163.6729">Agent Intelligence:</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="142.7083" x="631.25" y="175.7985">LSTM Policy/Value Networks</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="59.375" x="631.25" y="187.9242">(Per Agent)</text><ellipse cx="624.4792" cy="194.694" fill="#FFFFFF" rx="2.6042" ry="2.6042" style="stroke:#FFFFFF;stroke-width:0.0;"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" font-weight="bold" lengthAdjust="spacing" textLength="110.4167" x="628.125" y="200.0498">Learning Strategy:</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="91.6667" x="631.25" y="212.1755">MAPPO Algorithm</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="139.5833" x="631.25" y="224.3011">(Role-Based or Co-Training)</text><ellipse cx="624.4792" cy="231.071" fill="#FFFFFF" rx="2.6042" ry="2.6042" style="stroke:#FFFFFF;stroke-width:0.0;"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" font-weight="bold" lengthAdjust="spacing" textLength="167.7083" x="628.125" y="236.4268">Performance Benchmarking:</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="104.1667" x="631.25" y="248.5524">Cross-Evaluation vs.</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="122.9167" x="631.25" y="260.6781">Archived Policies (PFSP)</text><ellipse cx="624.4792" cy="267.4479" fill="#FFFFFF" rx="2.6042" ry="2.6042" style="stroke:#FFFFFF;stroke-width:0.0;"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" font-weight="bold" lengthAdjust="spacing" textLength="135.4167" x="628.125" y="272.8038">Knowledge Repository:</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="93.75" x="631.25" y="284.9294">Policy Archive with</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="85.4167" x="631.25" y="297.0551">Win-Rate Metrics</text><rect fill="#86C8B5" height="36.7513" rx="4.1667" ry="4.1667" style="stroke:#78C2AD;stroke-width:1.0416666666666667;" width="419.7917" x="171.875" y="184.1309"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="108.3333" x="178.125" y="200.0498">Initialize Environment</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="407.2917" x="178.125" y="212.1755">[`SimpleEnv`](src/environments/simple_env.py) with [`Map`](src/maps/map.py)</text><path d="M463.5417,332.6579 L463.5417,339.7624 L442.7083,343.929 L463.5417,348.0957 L463.5417,355.2002 A0,0 0 0 0 463.5417,355.2002 L820.8333,355.2002 A0,0 0 0 0 820.8333,355.2002 L820.8333,343.0745 L810.4167,332.6579 L463.5417,332.6579 A0,0 0 0 0 463.5417,332.6579 " fill="#6CC3D5" style="stroke:#6CAF9C;stroke-width:1.0416666666666667;"/><path d="M810.4167,332.6579 L810.4167,343.0745 L820.8333,343.0745 L810.4167,332.6579 " fill="#6CC3D5" style="stroke:#6CAF9C;stroke-width:1.0416666666666667;"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="335.4167" x="469.7917" y="347.5352">Uses [`initialize_lstm_models_for_mappo`](src/utils/model_utils.py)</text><rect fill="#86C8B5" height="36.7513" rx="4.1667" ry="4.1667" style="stroke:#78C2AD;stroke-width:1.0416666666666667;" width="121.875" x="320.8333" y="325.5534"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="109.375" x="327.0833" y="341.4724">Initialize LSTM Models</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="65.625" x="327.0833" y="353.598">for all agents</text><rect fill="#86C8B5" height="36.7513" rx="4.1667" ry="4.1667" style="stroke:#78C2AD;stroke-width:1.0416666666666667;" width="123.9583" x="319.7917" y="383.138"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="111.4583" x="326.0417" y="399.057">Create MAPPO Agent</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="95.8333" x="326.0417" y="411.1827">with all role models</text><rect fill="none" height="566.2598" rx="4.1667" ry="4.1667" style="stroke:#78C2AD;stroke-width:1.0416666666666667;" width="1099.4792" x="11.4583" y="430.306"/><path d="M96.875,430.306 L96.875,435.14 L86.4583,445.5566 L11.4583,445.5566 " fill="none" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><text fill="#78C2AD" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="75" x="14.5833" y="441.0166">Training Modes</text><polygon fill="#F4A1A4" points="344.2708,463.265,419.2708,463.265,431.7708,475.765,419.2708,488.265,344.2708,488.265,331.7708,475.765,344.2708,463.265" style="stroke:#DB878B;stroke-width:1.0416666666666667;"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="75" x="344.2708" y="479.3711">Training Mode?</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="57.2917" x="274.4792" y="473.3083">Role-Based</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="68.75" x="431.7708" y="473.3083">Simultaneous</text><rect fill="#86C8B5" height="24.6257" rx="4.1667" ry="4.1667" style="stroke:#78C2AD;stroke-width:1.0416666666666667;" width="107.2917" x="54.6875" y="498.6816"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="94.7917" x="60.9375" y="514.6006">Train Role Function</text><rect fill="none" height="419.0918" rx="4.1667" ry="4.1667" style="stroke:#78C2AD;stroke-width:1.0416666666666667;" width="523.9583" x="23.9583" y="533.724"/><path d="M97.9167,533.724 L97.9167,538.5579 L87.5,548.9746 L23.9583,548.9746 " fill="none" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><text fill="#78C2AD" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="63.5417" x="27.0833" y="544.4346">Role Training</text><rect fill="#86C8B5" height="36.7513" rx="4.1667" ry="4.1667" style="stroke:#78C2AD;stroke-width:1.0416666666666667;" width="125" x="45.8333" y="566.6829"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="112.5" x="52.0833" y="582.6019">Load latest checkpoint</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="77.0833" x="52.0833" y="594.7276">for training role</text><path d="M195.8333,631.3721 L195.8333,638.4766 L175,642.6432 L195.8333,646.8099 L195.8333,653.9144 A0,0 0 0 0 195.8333,653.9144 L537.5,653.9144 A0,0 0 0 0 537.5,653.9144 L537.5,641.7887 L527.0833,631.3721 L195.8333,631.3721 A0,0 0 0 0 195.8333,631.3721 " fill="#6CC3D5" style="stroke:#6CAF9C;stroke-width:1.0416666666666667;"/><path d="M527.0833,631.3721 L527.0833,641.7887 L537.5,641.7887 L527.0833,631.3721 " fill="#6CC3D5" style="stroke:#6CAF9C;stroke-width:1.0416666666666667;"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="319.7917" x="202.0833" y="646.2494">[`sample_policy_from_archive`](src/utils/policy_archive_utils.py)</text><rect fill="#86C8B5" height="36.7513" rx="4.1667" ry="4.1667" style="stroke:#78C2AD;stroke-width:1.0416666666666667;" width="133.3333" x="41.6667" y="624.2676"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="120.8333" x="47.9167" y="640.1866">Sample opponent policy</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="104.1667" x="47.9167" y="652.3122">from archive (PFSP)</text><rect fill="#86C8B5" height="36.7513" rx="4.1667" ry="4.1667" style="stroke:#78C2AD;stroke-width:1.0416666666666667;" width="136.4583" x="40.1042" y="681.8522"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="123.9583" x="46.3542" y="697.7712">Freeze opponent policies</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="109.375" x="46.3542" y="709.8969">Unfreeze training role</text><rect fill="#86C8B5" height="24.6257" rx="4.1667" ry="4.1667" style="stroke:#78C2AD;stroke-width:1.0416666666666667;" width="122.9167" x="46.875" y="739.4368"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="110.4167" x="53.125" y="755.3558">Run SequentialTrainer</text><path d="M203.125,798.0632 L203.125,805.1676 L182.2917,809.3343 L203.125,813.501 L203.125,820.6055 A0,0 0 0 0 203.125,820.6055 L479.1667,820.6055 A0,0 0 0 0 479.1667,820.6055 L479.1667,808.4798 L468.75,798.0632 L203.125,798.0632 A0,0 0 0 0 203.125,798.0632 " fill="#6CC3D5" style="stroke:#6CAF9C;stroke-width:1.0416666666666667;"/><path d="M468.75,798.0632 L468.75,808.4798 L479.1667,808.4798 L468.75,798.0632 " fill="#6CC3D5" style="stroke:#6CAF9C;stroke-width:1.0416666666666667;"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="254.1667" x="209.375" y="812.9405">[`evaluate_agents`](src/utils/eval_pfsp_agents.py)</text><rect fill="#86C8B5" height="24.6257" rx="4.1667" ry="4.1667" style="stroke:#78C2AD;stroke-width:1.0416666666666667;" width="147.9167" x="34.375" y="797.0215"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="135.4167" x="40.625" y="812.9405">Evaluate against opponent</text><path d="M202.0833,859.1471 L202.0833,866.2516 L181.25,870.4183 L202.0833,874.585 L202.0833,881.6895 A0,0 0 0 0 202.0833,881.6895 L518.75,881.6895 A0,0 0 0 0 518.75,881.6895 L518.75,869.5638 L508.3333,859.1471 L202.0833,859.1471 A0,0 0 0 0 202.0833,859.1471 " fill="#6CC3D5" style="stroke:#6CAF9C;stroke-width:1.0416666666666667;"/><path d="M508.3333,859.1471 L508.3333,869.5638 L518.75,869.5638 L508.3333,859.1471 " fill="#6CC3D5" style="stroke:#6CAF9C;stroke-width:1.0416666666666667;"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="294.7917" x="208.3333" y="874.0245">[`update_policy_win_rate`](src/utils/policy_archive_utils.py)</text><rect fill="#86C8B5" height="24.6257" rx="4.1667" ry="4.1667" style="stroke:#78C2AD;stroke-width:1.0416666666666667;" width="145.8333" x="35.4167" y="858.1055"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="133.3333" x="41.6667" y="874.0245">Update opponent win-rate</text><rect fill="#86C8B5" height="36.7513" rx="4.1667" ry="4.1667" style="stroke:#78C2AD;stroke-width:1.0416666666666667;" width="112.5" x="52.0833" y="903.5645"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="100" x="58.3333" y="919.4834">Additional opponent</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="81.25" x="58.3333" y="931.6091">evaluations (5x)</text><rect fill="#86C8B5" height="24.6257" rx="4.1667" ry="4.1667" style="stroke:#78C2AD;stroke-width:1.0416666666666667;" width="162.5" x="573.9583" y="498.6816"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="150" x="580.2083" y="514.6006">Train Simultaneously Function</text><rect fill="none" height="333.0078" rx="4.1667" ry="4.1667" style="stroke:#78C2AD;stroke-width:1.0416666666666667;" width="529.6875" x="568.75" y="533.724"/><path d="M689.5833,533.724 L689.5833,538.5579 L679.1667,548.9746 L568.75,548.9746 " fill="none" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><text fill="#78C2AD" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="110.4167" x="571.875" y="544.4346">Simultaneous Training</text><rect fill="#86C8B5" height="36.7513" rx="4.1667" ry="4.1667" style="stroke:#78C2AD;stroke-width:1.0416666666666667;" width="152.0833" x="579.1667" y="566.6829"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="128.125" x="585.4167" y="582.6019">Freeze all policy networks</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="139.5833" x="585.4167" y="594.7276">Unfreeze all value networks</text><path d="M746.3542,631.3721 L746.3542,638.4766 L725.5208,642.6432 L746.3542,646.8099 L746.3542,653.9144 A0,0 0 0 0 746.3542,653.9144 L1088.0208,653.9144 A0,0 0 0 0 1088.0208,653.9144 L1088.0208,641.7887 L1077.6042,631.3721 L746.3542,631.3721 A0,0 0 0 0 746.3542,631.3721 " fill="#6CC3D5" style="stroke:#6CAF9C;stroke-width:1.0416666666666667;"/><path d="M1077.6042,631.3721 L1077.6042,641.7887 L1088.0208,641.7887 L1077.6042,631.3721 " fill="#6CC3D5" style="stroke:#6CAF9C;stroke-width:1.0416666666666667;"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="319.7917" x="752.6042" y="646.2494">[`sample_policy_from_archive`](src/utils/policy_archive_utils.py)</text><rect fill="#86C8B5" height="36.7513" rx="4.1667" ry="4.1667" style="stroke:#78C2AD;stroke-width:1.0416666666666667;" width="140.625" x="584.8958" y="624.2676"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="128.125" x="591.1458" y="640.1866">Sample opponent policies</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="104.1667" x="591.1458" y="652.3122">from archive (PFSP)</text><rect fill="#86C8B5" height="36.7513" rx="4.1667" ry="4.1667" style="stroke:#78C2AD;stroke-width:1.0416666666666667;" width="122.9167" x="593.75" y="681.8522"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="110.4167" x="600" y="697.7712">Run SequentialTrainer</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="61.4583" x="600" y="709.8969">(co-training)</text><rect fill="#86C8B5" height="36.7513" rx="4.1667" ry="4.1667" style="stroke:#78C2AD;stroke-width:1.0416666666666667;" width="101.0417" x="604.6875" y="739.4368"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="88.5417" x="610.9375" y="755.3558">Evaluate Cops vs</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="84.375" x="610.9375" y="767.4815">Archived Thieves</text><rect fill="#86C8B5" height="36.7513" rx="4.1667" ry="4.1667" style="stroke:#78C2AD;stroke-width:1.0416666666666667;" width="112.5" x="598.9583" y="809.1471"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="100" x="605.2083" y="825.0661">Evaluate Thieves vs</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="72.9167" x="605.2083" y="837.1918">Archived Cops</text><polygon fill="#F4A1A4" points="381.7708,959.0658,394.2708,971.5658,381.7708,984.0658,369.2708,971.5658,381.7708,959.0658" style="stroke:#DB878B;stroke-width:1.0416666666666667;"/><rect fill="#86C8B5" height="36.7513" rx="4.1667" ry="4.1667" style="stroke:#78C2AD;stroke-width:1.0416666666666667;" width="116.6667" x="323.4375" y="1017.3991"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="104.1667" x="329.6875" y="1033.3181">Save trained models</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="66.6667" x="329.6875" y="1045.4437">to checkpoint</text><rect fill="#86C8B5" height="36.7513" rx="4.1667" ry="4.1667" style="stroke:#78C2AD;stroke-width:1.0416666666666667;" width="88.5417" x="337.5" y="1074.9837"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="76.0417" x="343.75" y="1090.9027">Archive policies</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="73.9583" x="343.75" y="1103.0284">with metadata</text><rect fill="#86C8B5" height="24.6257" rx="4.1667" ry="4.1667" style="stroke:#78C2AD;stroke-width:1.0416666666666667;" width="137.5" x="313.0208" y="1132.5684"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="125" x="319.2708" y="1148.4873">Update training statistics</text><rect fill="#86C8B5" height="36.7513" rx="4.1667" ry="4.1667" style="stroke:#78C2AD;stroke-width:1.0416666666666667;" width="125" x="319.2708" y="1228.0273"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="73.9583" x="325.5208" y="1243.9463">Switch roles or</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="112.5" x="325.5208" y="1256.072">continue simultaneous</text><polygon fill="#F4A1A4" points="333.3333,1178.0273,430.2083,1178.0273,442.7083,1190.5273,430.2083,1203.0273,333.3333,1203.0273,320.8333,1190.5273,333.3333,1178.0273" style="stroke:#DB878B;stroke-width:1.0416666666666667;"/><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="12.5" x="385.9375" y="1212.6963">no</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="96.875" x="333.3333" y="1194.1335">Training Complete?</text><text fill="#FFFFFF" font-family="&quot;Verdana&quot;" font-size="10.4167" lengthAdjust="spacing" textLength="17.7083" x="442.7083" y="1188.0707">yes</text><ellipse cx="483.3333" cy="1190.5273" fill="none" rx="11.4583" ry="11.4583" style="stroke:#6CAF9C;stroke-width:1.0416666666666667;"/><ellipse cx="483.3333" cy="1190.5273" fill="#6CAF9C" rx="6.25" ry="6.25" style="stroke:#36574E;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="381.7708" x2="381.7708" y1="89.8763" y2="184.1309"/><polygon fill="#78C2AD" points="377.6042,173.7142,381.7708,184.1309,385.9375,173.7142,381.7708,177.8809" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="381.7708" x2="381.7708" y1="220.8822" y2="325.5534"/><polygon fill="#78C2AD" points="377.6042,315.1367,381.7708,325.5534,385.9375,315.1367,381.7708,319.3034" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="381.7708" x2="381.7708" y1="362.3047" y2="383.138"/><polygon fill="#78C2AD" points="377.6042,372.7214,381.7708,383.138,385.9375,372.7214,381.7708,376.888" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="108.3333" x2="108.3333" y1="603.4342" y2="624.2676"/><polygon fill="#78C2AD" points="104.1667,613.8509,108.3333,624.2676,112.5,613.8509,108.3333,618.0176" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="108.3333" x2="108.3333" y1="661.0189" y2="681.8522"/><polygon fill="#78C2AD" points="104.1667,671.4355,108.3333,681.8522,112.5,671.4355,108.3333,675.6022" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="108.3333" x2="108.3333" y1="718.6035" y2="739.4368"/><polygon fill="#78C2AD" points="104.1667,729.0202,108.3333,739.4368,112.5,729.0202,108.3333,733.1868" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="108.3333" x2="108.3333" y1="764.0625" y2="797.0215"/><polygon fill="#78C2AD" points="104.1667,786.6048,108.3333,797.0215,112.5,786.6048,108.3333,790.7715" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="108.3333" x2="108.3333" y1="821.6471" y2="858.1055"/><polygon fill="#78C2AD" points="104.1667,847.6888,108.3333,858.1055,112.5,847.6888,108.3333,851.8555" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="108.3333" x2="108.3333" y1="882.7311" y2="903.5645"/><polygon fill="#78C2AD" points="104.1667,893.1478,108.3333,903.5645,112.5,893.1478,108.3333,897.3145" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="108.3333" x2="108.3333" y1="523.3073" y2="566.6829"/><polygon fill="#78C2AD" points="104.1667,556.2663,108.3333,566.6829,112.5,556.2663,108.3333,560.4329" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="655.2083" x2="655.2083" y1="603.4342" y2="624.2676"/><polygon fill="#78C2AD" points="651.0417,613.8509,655.2083,624.2676,659.375,613.8509,655.2083,618.0176" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="655.2083" x2="655.2083" y1="661.0189" y2="681.8522"/><polygon fill="#78C2AD" points="651.0417,671.4355,655.2083,681.8522,659.375,671.4355,655.2083,675.6022" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="655.2083" x2="655.2083" y1="718.6035" y2="739.4368"/><polygon fill="#78C2AD" points="651.0417,729.0202,655.2083,739.4368,659.375,729.0202,655.2083,733.1868" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="655.2083" x2="655.2083" y1="776.1882" y2="809.1471"/><polygon fill="#78C2AD" points="651.0417,798.7305,655.2083,809.1471,659.375,798.7305,655.2083,802.8971" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="655.2083" x2="655.2083" y1="523.3073" y2="566.6829"/><polygon fill="#78C2AD" points="651.0417,556.2663,655.2083,566.6829,659.375,556.2663,655.2083,560.4329" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="331.7708" x2="108.3333" y1="475.765" y2="475.765"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="108.3333" x2="108.3333" y1="475.765" y2="498.6816"/><polygon fill="#78C2AD" points="104.1667,488.265,108.3333,498.6816,112.5,488.265,108.3333,492.4316" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="431.7708" x2="655.2083" y1="475.765" y2="475.765"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="655.2083" x2="655.2083" y1="475.765" y2="498.6816"/><polygon fill="#78C2AD" points="651.0417,488.265,655.2083,498.6816,659.375,488.265,655.2083,492.4316" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="108.3333" x2="108.3333" y1="940.3158" y2="971.5658"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="108.3333" x2="369.2708" y1="971.5658" y2="971.5658"/><polygon fill="#78C2AD" points="358.8542,967.3991,369.2708,971.5658,358.8542,975.7324,363.0208,971.5658" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="655.2083" x2="655.2083" y1="845.8984" y2="971.5658"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="655.2083" x2="394.2708" y1="971.5658" y2="971.5658"/><polygon fill="#78C2AD" points="404.6875,967.3991,394.2708,971.5658,404.6875,975.7324,400.5208,971.5658" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="381.7708" x2="381.7708" y1="419.8893" y2="463.265"/><polygon fill="#78C2AD" points="377.6042,452.8483,381.7708,463.265,385.9375,452.8483,381.7708,457.015" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="381.7708" x2="381.7708" y1="984.0658" y2="1017.3991"/><polygon fill="#78C2AD" points="377.6042,1006.9824,381.7708,1017.3991,385.9375,1006.9824,381.7708,1011.1491" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="381.7708" x2="381.7708" y1="1054.1504" y2="1074.9837"/><polygon fill="#78C2AD" points="377.6042,1064.5671,381.7708,1074.9837,385.9375,1064.5671,381.7708,1068.7337" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="381.7708" x2="381.7708" y1="1111.735" y2="1132.5684"/><polygon fill="#78C2AD" points="377.6042,1122.1517,381.7708,1132.5684,385.9375,1122.1517,381.7708,1126.3184" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="381.7708" x2="381.7708" y1="1203.0273" y2="1228.0273"/><polygon fill="#78C2AD" points="377.6042,1217.6107,381.7708,1228.0273,385.9375,1217.6107,381.7708,1221.7773" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="442.7083" x2="471.875" y1="1190.5273" y2="1190.5273"/><polygon fill="#78C2AD" points="461.4583,1186.3607,471.875,1190.5273,461.4583,1194.694,465.625,1190.5273" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="381.7708" x2="381.7708" y1="1264.7786" y2="1285.612"/><polygon fill="#78C2AD" points="377.6042,1275.1953,381.7708,1285.612,385.9375,1275.1953,381.7708,1279.362" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><line style="stroke:#78C2AD;stroke-width:3.125;" x1="381.7708" x2="381.7708" y1="1157.194" y2="1178.0273"/><polygon fill="#78C2AD" points="377.6042,1167.6107,381.7708,1178.0273,385.9375,1167.6107,381.7708,1171.7773" style="stroke:#78C2AD;stroke-width:1.0416666666666667;"/><!--MD5=[166a49125830e82b221a300b479aa780]
+@startuml
+!theme minty
+skinparam backgroundColor white
+skinparam defaultFontSize 10
+skinparam Padding 10  // Changed from boxPadding to Padding for better compatibility
+
+title MAPPO Multi-Agent Reinforcement Learning Training Flow
+
+start
+
+:Initialize Environment\n[`SimpleEnv`](src/environments/simple_env.py) with [`Map`](src/maps/map.py);
+note right
+        **Core Architectural Pillars:**
+        * **Simulation Bed:**
+            [`BaseEnv`](src/environments/base_env.py)
+            (Cops & Thieves Scenario)
+        * **Agent Intelligence:**
+            LSTM Policy/Value Networks
+            (Per Agent)
+        * **Learning Strategy:**
+            MAPPO Algorithm
+            (Role-Based or Co-Training)
+        * **Performance Benchmarking:**
+            Cross-Evaluation vs.
+            Archived Policies (PFSP)
+        * **Knowledge Repository:**
+            Policy Archive with
+            Win-Rate Metrics
+    end note
+
+:Initialize LSTM Models\nfor all agents;
+note right: Uses [`initialize_lstm_models_for_mappo`](src/utils/model_utils.py)
+
+:Create MAPPO Agent\nwith all role models;
+
+partition "Training Modes" {
+    if (Training Mode?) then (Role-Based)
+        :Train Role Function;
+        partition "Role Training" {
+            :Load latest checkpoint\nfor training role;
+            
+            :Sample opponent policy\nfrom archive (PFSP);
+            note right: [`sample_policy_from_archive`](src/utils/policy_archive_utils.py)
+            
+            :Freeze opponent policies\nUnfreeze training role;
+            
+            :Run SequentialTrainer;
+            
+            :Evaluate against opponent;
+            note right: [`evaluate_agents`](src/utils/eval_pfsp_agents.py)
+            
+            :Update opponent win-rate;
+            note right: [`update_policy_win_rate`](src/utils/policy_archive_utils.py)
+            
+            :Additional opponent\nevaluations (5x);
+        }
+        
+    else (Simultaneous)
+        :Train Simultaneously Function;
+        partition "Simultaneous Training" {
+            :Freeze all policy networks\nUnfreeze all value networks;
+
+            :Sample opponent policies\nfrom archive (PFSP);
+            note right: [`sample_policy_from_archive`](src/utils/policy_archive_utils.py)
+            
+            :Run SequentialTrainer\n(co-training);
+            
+            :Evaluate Cops vs\nArchived Thieves;
+            
+            :Evaluate Thieves vs\nArchived Cops;
+        }
+    endif
+}
+
+:Save trained models\nto checkpoint;
+
+:Archive policies\nwith metadata;
+
+:Update training statistics;
+
+if (Training Complete?) then (no)
+    :Switch roles or\ncontinue simultaneous;
+else (yes)
+    stop
+endif
+@enduml
+
+@startuml
+
+
+
+skinparam backgroundColor transparent
+skinparam useBetaStyle false
+
+
+
+
+
+
+<style>
+  root {
+    BackgroundColor transparent
+    FontColor #fff
+    HyperLinkColor #fd7e14
+    LineColor #6caf9c
+    LineThickness 1
+    Margin 10
+    Padding 6
+    Shadowing 0.0
+  }
+  node {
+   Padding 15
+   roundcorner 20
+   BackgroundColor #78c2ad-#6caf9c
+  }
+  caption {
+    LineThickness 0
+  }
+  footer {
+    LineThickness 0
+  }
+  groupHeader {
+    BackgroundColor #f3969a
+    FontColor #6cc3d5
+    FontStyle bold
+  }
+  header {
+    LineThickness 0
+  }
+  referenceHeader {
+    BackgroundColor transparent
+    FontColor #343a40
+    FontStyle bold
+  }
+  separator {
+    BackgroundColor #fff
+    FontColor transparent
+    FontStyle bold
+  }
+  title {
+	FontSize 20
+	BorderRoundCorner            8
+	BorderThickness 	         1
+	BackgroundColor  #f4a1a4-#f3969a
+	FontColor #78c2ad
+	BorderColor #f3969a
+  }
+  nwdiagDiagram {
+	network {
+			FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5    
+		LineColor #78c2ad
+		LineThickness 1.0
+		FontColor #6caf9c
+	}
+	server {
+			FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+	}
+	arrow {
+		FontColor #6caf9c
+		LineColor #6caf9c
+	}
+	group {
+		BackGroundColor #f8f9fa
+		LineColor #dfe0e1
+		LineThickness 2.0
+		Margin 5
+		Padding 5
+	}
+  }
+  ganttDiagram {
+	task {
+			FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+		LineColor #78c2ad
+		Margin 10
+		Padding 6
+	}
+	note {
+		FontColor #fff
+		LineColor #61b0c0
+		BackGroundColor #6cc3d5
+	}
+	separator {
+		LineColor #f3969a
+		BackGroundColor #f3969a-#db878b
+		FontColor #fff
+	}
+	milestone {
+		FontColor #6cc3d5
+		FontSize 16
+		FontStyle italic
+		BackGroundColor #f3969a
+		LineColor #db878b
+	}
+	timeline {
+		BackgroundColor #f3969a
+		FontColor #fff
+	}
+	closed {
+		BackgroundColor #e6b95d
+		FontColor #fff
+	}
+  }
+</style>
+skinparam defaultFontName       "Verdana"
+skinparam defaultFontSize       12
+skinparam dpi                   100
+skinparam shadowing             false
+skinparam roundcorner           8
+skinparam ParticipantPadding    40
+skinparam BoxPadding            40
+skinparam Padding               5
+skinparam ArrowColor            #343a40
+skinparam stereotype {
+    CBackgroundColor #f4a1a4
+    CBorderColor #db878b
+    ABackgroundColor #67d1a7
+    ABorderColor #4db88d
+    IBackgroundColor #ff8662
+    IBorderColor #e66c49
+    EBackgroundColor #ffd376
+    EBorderColor #e6b95d
+    NBackgroundColor #7bc9d9
+    NBorderColor #61b0c0
+}
+skinparam title {
+	FontColor	                 #6caf9c
+	BorderColor	                 #db878b
+	FontSize	    	         20
+	BorderRoundCorner            8
+	BorderThickness 	         1
+	BackgroundColor              #f4a1a4-#f3969a
+}
+
+skinparam legend {
+	BackgroundColor #f3969a
+	BorderColor #db878b
+	FontColor #f8f9fa
+}
+
+skinparam swimlane {
+	BorderColor #6cc3d5
+	BorderThickness 2
+	TitleBackgroundColor  #f4a1a4-#f3969a
+	TitleFontColor #78c2ad
+}
+
+
+skinparam activity {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+	BarColor #56cc9d
+	StartColor #6cc3d5
+	EndColor #6cc3d5
+	DiamondBackgroundColor #f4a1a4
+  	DiamondBorderColor #db878b
+  	DiamondFontColor #fff
+}
+
+
+skinparam participant {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+	ParticipantBorderThickness 2
+}
+
+
+skinparam actor {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+}
+
+
+skinparam arrow {
+	Thickness 3
+	Color #78c2ad
+	FontColor #fff
+}
+
+
+skinparam sequence {
+	BorderColor #78c2ad
+	TitleFontColor #78c2ad
+	BackgroundColor transparent
+	StartColor #78c2ad
+	EndColor #78c2ad
+	BoxBackgroundColor transparent
+	BoxBorderColor #343a40
+	BoxFontColor #343a40
+	DelayFontColor #343a40
+	LifeLineBorderColor #f3969a
+	LifeLineBorderThickness 2
+	LifeLineBackgroundColor #db878b
+	GroupBorderColor #343a40
+	GroupFontColor #343a40
+	GroupHeaderFontColor #6cc3d5
+	GroupBackgroundColor #f3969a
+	GroupHeaderBackgroundColor transparent
+	DividerBackgroundColor #343a40
+    DividerBorderColor #343a40
+    DividerBorderThickness 2
+    DividerFontColor #f8f9fa
+	ReferenceBackgroundColor transparent
+	ReferenceBorderColor #343a40
+	ReferenceFontColor #343a40
+	ReferenceHeaderFontColor #6cc3d5
+	ReferenceHeaderBackgroundColor #f3969a
+	StereotypeFontColor #fff
+}
+
+
+skinparam partition {
+	BorderColor #78c2ad
+	FontColor #78c2ad
+	BackgroundColor transparent
+}
+
+
+skinparam collections {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+}
+
+
+skinparam control {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+}
+
+
+skinparam entity {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+}
+
+
+skinparam boundary {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+}
+
+
+skinparam agent {
+	BackgroundColor #ffce67
+	BorderColor #ffd376
+	FontColor #343a40
+}
+
+
+skinparam note {
+	BorderThickness 1
+	BackgroundColor #6cc3d5
+	BorderColor #61b0c0
+	FontColor #fff
+}
+
+
+skinparam artifact {
+	BackgroundColor #343a40
+	BorderColor #2f343a
+	FontColor #f8f9fa
+}
+
+
+skinparam component {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+}
+
+
+skinparam interface {
+	BackgroundColor  #e66c49
+	BorderColor  #ff7851
+	FontColor #343a40
+}
+
+
+skinparam storage {
+	BackgroundColor #ffce67
+  	BorderColor #e6b95d
+	FontColor #fff
+}
+
+
+skinparam node {
+	BackgroundColor  #f3969a
+	BorderColor #f8f9fa
+	FontColor #f8f9fa
+}
+
+
+skinparam cloud {
+	BackgroundColor #F2FCFE-#eeeeee
+	BorderColor #F2FCFE
+	FontColor #343a40
+}
+
+
+skinparam database {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+}
+
+
+skinparam class {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+	HeaderBackgroundColor #86c8b5
+	StereotypeFontColor #343a40
+	BorderThickness 1
+	AttributeFontColor #343a40
+	AttributeFontSize 11
+}
+
+
+skinparam object {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+	StereotypeFontColor #343a40
+	BorderThickness 1
+	AttributeFontColor #fff
+	AttributeFontSize 11
+}
+
+
+skinparam usecase {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+	BorderThickness 2
+	StereotypeFontColor #78c2ad
+}
+
+
+skinparam rectangle {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+	BackgroundColor #f4a1a4
+	BorderThickness 2
+	StereotypeFontColor #78c2ad
+}
+
+
+skinparam package {
+	BackgroundColor #f3969a
+  	BorderColor #78c2ad
+	FontColor #78c2ad
+	BorderThickness 2
+}
+
+
+skinparam folder {
+	BackgroundColor #f4a1a4
+  	BorderColor #ffce67
+	FontColor #ffce67
+	BorderThickness 2
+}
+
+
+skinparam frame {
+	BackgroundColor #f4a1a4
+  	BorderColor #6cc3d5
+	FontColor #6cc3d5
+	BorderThickness 2
+}
+
+
+skinparam state {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+	StartColor #6cc3d5
+	EndColor #6cc3d5
+	AttributeFontColor #fff
+	AttributeFontSize 11
+}
+
+
+skinparam queue {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+}
+
+
+skinparam card {
+	BackgroundColor #6cc3d5
+	BorderColor #61b0c0
+	FontColor #fff
+}
+
+
+skinparam file {
+	BackgroundColor #db878b
+	BorderColor #f8f9fa
+	FontColor #f8f9fa
+}
+
+
+skinparam stack {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+}
+skinparam backgroundColor white
+skinparam defaultFontSize 10
+skinparam Padding 10  // Changed from boxPadding to Padding for better compatibility
+
+title MAPPO Multi-Agent Reinforcement Learning Training Flow
+
+start
+
+:Initialize Environment\n[`SimpleEnv`](src/environments/simple_env.py) with [`Map`](src/maps/map.py);
+note right
+        **Core Architectural Pillars:**
+        * **Simulation Bed:**
+            [`BaseEnv`](src/environments/base_env.py)
+            (Cops & Thieves Scenario)
+        * **Agent Intelligence:**
+            LSTM Policy/Value Networks
+            (Per Agent)
+        * **Learning Strategy:**
+            MAPPO Algorithm
+            (Role-Based or Co-Training)
+        * **Performance Benchmarking:**
+            Cross-Evaluation vs.
+            Archived Policies (PFSP)
+        * **Knowledge Repository:**
+            Policy Archive with
+            Win-Rate Metrics
+    end note
+
+:Initialize LSTM Models\nfor all agents;
+note right: Uses [`initialize_lstm_models_for_mappo`](src/utils/model_utils.py)
+
+:Create MAPPO Agent\nwith all role models;
+
+partition "Training Modes" {
+    if (Training Mode?) then (Role-Based)
+        :Train Role Function;
+        partition "Role Training" {
+            :Load latest checkpoint\nfor training role;
+            
+            :Sample opponent policy\nfrom archive (PFSP);
+            note right: [`sample_policy_from_archive`](src/utils/policy_archive_utils.py)
+            
+            :Freeze opponent policies\nUnfreeze training role;
+            
+            :Run SequentialTrainer;
+            
+            :Evaluate against opponent;
+            note right: [`evaluate_agents`](src/utils/eval_pfsp_agents.py)
+            
+            :Update opponent win-rate;
+            note right: [`update_policy_win_rate`](src/utils/policy_archive_utils.py)
+            
+            :Additional opponent\nevaluations (5x);
+        }
+        
+    else (Simultaneous)
+        :Train Simultaneously Function;
+        partition "Simultaneous Training" {
+            :Freeze all policy networks\nUnfreeze all value networks;
+
+            :Sample opponent policies\nfrom archive (PFSP);
+            note right: [`sample_policy_from_archive`](src/utils/policy_archive_utils.py)
+            
+            :Run SequentialTrainer\n(co-training);
+            
+            :Evaluate Cops vs\nArchived Thieves;
+            
+            :Evaluate Thieves vs\nArchived Cops;
+        }
+    endif
+}
+
+:Save trained models\nto checkpoint;
+
+:Archive policies\nwith metadata;
+
+:Update training statistics;
+
+if (Training Complete?) then (no)
+    :Switch roles or\ncontinue simultaneous;
+else (yes)
+    stop
+endif
+@enduml
+
+PlantUML version 1.2022.7(Mon Aug 22 17:01:30 UTC 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>

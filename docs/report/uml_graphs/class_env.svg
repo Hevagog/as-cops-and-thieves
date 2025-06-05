@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="1202px" preserveAspectRatio="none" style="width:1382px;height:1202px;background:#FFFFFF;" version="1.1" viewBox="0 0 1382 1202" width="1382px" zoomAndPan="magnify"><defs/><g><!--MD5=[8271fac29acbb3130e90dbaf17aceddb]
+cluster src.agents--><g id="cluster_src.agents"><path d="M813.5,755 L874.5,755 A3.75,3.75 0 0 1 877,757.5 L884,772.6406 L1236.5,772.6406 A2.5,2.5 0 0 1 1239,775.1406 L1239,1163.5 A2.5,2.5 0 0 1 1236.5,1166 L813.5,1166 A2.5,2.5 0 0 1 811,1163.5 L811,757.5 A2.5,2.5 0 0 1 813.5,755 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="811" x2="884" y1="772.6406" y2="772.6406"/><text fill="#000000" font-family="sans-serif" font-size="10" font-weight="bold" lengthAdjust="spacing" textLength="60" x="815" y="766.2822">src.agents</text></g><!--MD5=[3a4552ac89ae8fdcbc8c766f4326c5a5]
+cluster src.utils--><g id="cluster_src.utils"><path d="M1265.5,1049 L1311.5,1049 A3.75,3.75 0 0 1 1314,1051.5 L1321,1066.6406 L1372.5,1066.6406 A2.5,2.5 0 0 1 1375,1069.1406 L1375,1192.5 A2.5,2.5 0 0 1 1372.5,1195 L1265.5,1195 A2.5,2.5 0 0 1 1263,1192.5 L1263,1051.5 A2.5,2.5 0 0 1 1265.5,1049 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="1263" x2="1321" y1="1066.6406" y2="1066.6406"/><text fill="#000000" font-family="sans-serif" font-size="10" font-weight="bold" lengthAdjust="spacing" textLength="45" x="1267" y="1060.2822">src.utils</text></g><!--MD5=[69de287366216f7bbd96410f0685d90f]
+cluster src.maps--><g id="cluster_src.maps"><path d="M475.5,496 L528.5,496 A3.75,3.75 0 0 1 531,498.5 L538,513.6406 L784.5,513.6406 A2.5,2.5 0 0 1 787,516.1406 L787,922 A2.5,2.5 0 0 1 784.5,924.5 L475.5,924.5 A2.5,2.5 0 0 1 473,922 L473,498.5 A2.5,2.5 0 0 1 475.5,496 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="473" x2="538" y1="513.6406" y2="513.6406"/><text fill="#000000" font-family="sans-serif" font-size="10" font-weight="bold" lengthAdjust="spacing" textLength="52" x="477" y="507.2822">src.maps</text></g><!--MD5=[c243520b014c02a01dae8613e3e0d2d0]
+cluster src.environments--><g id="cluster_src.environments"><path d="M41.5,6 L142.5,6 A3.75,3.75 0 0 1 145,8.5 L152,23.6406 L374.5,23.6406 A2.5,2.5 0 0 1 377,26.1406 L377,645.5 A2.5,2.5 0 0 1 374.5,648 L41.5,648 A2.5,2.5 0 0 1 39,645.5 L39,8.5 A2.5,2.5 0 0 1 41.5,6 " fill="none" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="39" x2="152" y1="23.6406" y2="23.6406"/><text fill="#000000" font-family="sans-serif" font-size="10" font-weight="bold" lengthAdjust="spacing" textLength="100" x="43" y="17.2822">src.environments</text></g><!--MD5=[be996cdb8e6bf2fc7cb89c555f2cd144]
+class Entity--><g id="elem_Entity"><rect codeLine="10" fill="#CCCCCC" height="204.9688" id="Entity" rx="2.5" ry="2.5" style="stroke:#AAAAAA;stroke-width:0.5;" width="196" x="929" y="785"/><ellipse cx="1009" cy="798" fill="#ADD1B2" rx="8" ry="8" style="stroke:#181818;stroke-width:1.0;"/><path d="M1011.125,801.5625 Q1010.5469,801.8594 1009.9219,802 Q1009.3125,802.1563 1008.6406,802.1563 Q1006.6406,802.1563 1005.4688,801.0469 Q1004.2969,799.9219 1004.2969,798 Q1004.2969,796.0781 1005.4688,794.9531 Q1006.6406,793.8281 1008.6406,793.8281 Q1009.3125,793.8281 1009.9219,793.9844 Q1010.5469,794.1406 1011.125,794.4375 L1011.125,796.0938 Q1010.5469,795.7031 1009.9844,795.5156 Q1009.4219,795.3281 1008.8125,795.3281 Q1007.7031,795.3281 1007.0625,796.0469 Q1006.4375,796.75 1006.4375,798 Q1006.4375,799.2344 1007.0625,799.9531 Q1007.7031,800.6563 1008.8125,800.6563 Q1009.4219,800.6563 1009.9844,800.4844 Q1010.5469,800.2969 1011.125,799.9063 L1011.125,801.5625 Z " fill="#000000"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="29" x="1025" y="801.4619">Entity</text><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="930" x2="1124" y1="811" y2="811"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="160" x="935" y="824.2822">#_initial_position: Pymunk_Vec2d</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="122" x="935" y="835.9229">#_space: Pymunk_Space</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="70" x="935" y="847.5635">#_radius: float</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="40" x="935" y="859.2041">#_id: str</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="108" x="935" y="870.8447">#body: Pymunk_Body</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="120" x="935" y="882.4854">#_b_box: Pymunk_Circle</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="163" x="935" y="894.126">#observation_space: Gym_Space</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="135" x="935" y="905.7666">#action_space: Gym_Space</text><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="930" x2="1124" y1="912.125" y2="912.125"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="159" x="935" y="925.4072">+reset(position: Pymunk_Vec2d)</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="138" x="935" y="937.0479">+step(action, is_terminated)</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="117" x="935" y="948.6885">+get_observation(): dict</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="64" x="935" y="960.3291">+get_id(): str</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="174" x="935" y="971.9697">+render(surface: Pygame_Surface)</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="184" x="935" y="983.6104">#_query_body(hit_shape): ObjectType</text></g><!--MD5=[d0dc2bb2ce3e44438ed2dcaec283c897]
+class Gym_Space--><g id="elem_Gym_Space"><rect fill="#CCCCCC" height="42" id="Gym_Space" rx="2.5" ry="2.5" style="stroke:#AAAAAA;stroke-width:0.5;" width="85" x="1053.5" y="1108"/><ellipse cx="1065.5" cy="1121" fill="#ADD1B2" rx="8" ry="8" style="stroke:#181818;stroke-width:1.0;"/><path d="M1067.625,1124.5625 Q1067.0469,1124.8594 1066.4219,1125 Q1065.8125,1125.1563 1065.1406,1125.1563 Q1063.1406,1125.1563 1061.9688,1124.0469 Q1060.7969,1122.9219 1060.7969,1121 Q1060.7969,1119.0781 1061.9688,1117.9531 Q1063.1406,1116.8281 1065.1406,1116.8281 Q1065.8125,1116.8281 1066.4219,1116.9844 Q1067.0469,1117.1406 1067.625,1117.4375 L1067.625,1119.0938 Q1067.0469,1118.7031 1066.4844,1118.5156 Q1065.9219,1118.3281 1065.3125,1118.3281 Q1064.2031,1118.3281 1063.5625,1119.0469 Q1062.9375,1119.75 1062.9375,1121 Q1062.9375,1122.2344 1063.5625,1122.9531 Q1064.2031,1123.6563 1065.3125,1123.6563 Q1065.9219,1123.6563 1066.4844,1123.4844 Q1067.0469,1123.2969 1067.625,1122.9063 L1067.625,1124.5625 Z " fill="#000000"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="59" x="1076.5" y="1124.4619">Gym_Space</text><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="1054.5" x2="1137.5" y1="1134" y2="1134"/><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="1054.5" x2="1137.5" y1="1142" y2="1142"/></g><!--MD5=[089f1886904326087d64b3e8ea6b31e3]
+class Pygame_Surface--><g id="elem_Pygame_Surface"><rect fill="#CCCCCC" height="42" id="Pygame_Surface" rx="2.5" ry="2.5" style="stroke:#AAAAAA;stroke-width:0.5;" width="110" x="827" y="1108"/><ellipse cx="839" cy="1121" fill="#ADD1B2" rx="8" ry="8" style="stroke:#181818;stroke-width:1.0;"/><path d="M841.125,1124.5625 Q840.5469,1124.8594 839.9219,1125 Q839.3125,1125.1563 838.6406,1125.1563 Q836.6406,1125.1563 835.4688,1124.0469 Q834.2969,1122.9219 834.2969,1121 Q834.2969,1119.0781 835.4688,1117.9531 Q836.6406,1116.8281 838.6406,1116.8281 Q839.3125,1116.8281 839.9219,1116.9844 Q840.5469,1117.1406 841.125,1117.4375 L841.125,1119.0938 Q840.5469,1118.7031 839.9844,1118.5156 Q839.4219,1118.3281 838.8125,1118.3281 Q837.7031,1118.3281 837.0625,1119.0469 Q836.4375,1119.75 836.4375,1121 Q836.4375,1122.2344 837.0625,1122.9531 Q837.7031,1123.6563 838.8125,1123.6563 Q839.4219,1123.6563 839.9844,1123.4844 Q840.5469,1123.2969 841.125,1122.9063 L841.125,1124.5625 Z " fill="#000000"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="84" x="850" y="1124.4619">Pygame_Surface</text><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="828" x2="936" y1="1134" y2="1134"/><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="828" x2="936" y1="1142" y2="1142"/></g><!--MD5=[7cfcbe3564002521c1b8ff2c4c2e2812]
+class Cop--><g id="elem_Cop"><rect codeLine="30" fill="#CCCCCC" height="42" id="Cop" rx="2.5" ry="2.5" style="stroke:#AAAAAA;stroke-width:0.5;" width="46" x="972" y="1108"/><ellipse cx="984" cy="1121" fill="#ADD1B2" rx="8" ry="8" style="stroke:#181818;stroke-width:1.0;"/><path d="M986.125,1124.5625 Q985.5469,1124.8594 984.9219,1125 Q984.3125,1125.1563 983.6406,1125.1563 Q981.6406,1125.1563 980.4688,1124.0469 Q979.2969,1122.9219 979.2969,1121 Q979.2969,1119.0781 980.4688,1117.9531 Q981.6406,1116.8281 983.6406,1116.8281 Q984.3125,1116.8281 984.9219,1116.9844 Q985.5469,1117.1406 986.125,1117.4375 L986.125,1119.0938 Q985.5469,1118.7031 984.9844,1118.5156 Q984.4219,1118.3281 983.8125,1118.3281 Q982.7031,1118.3281 982.0625,1119.0469 Q981.4375,1119.75 981.4375,1121 Q981.4375,1122.2344 982.0625,1122.9531 Q982.7031,1123.6563 983.8125,1123.6563 Q984.4219,1123.6563 984.9844,1123.4844 Q985.5469,1123.2969 986.125,1122.9063 L986.125,1124.5625 Z " fill="#000000"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="20" x="995" y="1124.4619">Cop</text><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="973" x2="1017" y1="1134" y2="1134"/><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="973" x2="1017" y1="1142" y2="1142"/></g><!--MD5=[e488f30d657d483c52777ed1e30a40c3]
+class Thief--><g id="elem_Thief"><rect codeLine="34" fill="#CCCCCC" height="42" id="Thief" rx="2.5" ry="2.5" style="stroke:#AAAAAA;stroke-width:0.5;" width="49" x="1173.5" y="1108"/><ellipse cx="1185.5" cy="1121" fill="#ADD1B2" rx="8" ry="8" style="stroke:#181818;stroke-width:1.0;"/><path d="M1187.625,1124.5625 Q1187.0469,1124.8594 1186.4219,1125 Q1185.8125,1125.1563 1185.1406,1125.1563 Q1183.1406,1125.1563 1181.9688,1124.0469 Q1180.7969,1122.9219 1180.7969,1121 Q1180.7969,1119.0781 1181.9688,1117.9531 Q1183.1406,1116.8281 1185.1406,1116.8281 Q1185.8125,1116.8281 1186.4219,1116.9844 Q1187.0469,1117.1406 1187.625,1117.4375 L1187.625,1119.0938 Q1187.0469,1118.7031 1186.4844,1118.5156 Q1185.9219,1118.3281 1185.3125,1118.3281 Q1184.2031,1118.3281 1183.5625,1119.0469 Q1182.9375,1119.75 1182.9375,1121 Q1182.9375,1122.2344 1183.5625,1122.9531 Q1184.2031,1123.6563 1185.3125,1123.6563 Q1185.9219,1123.6563 1186.4844,1123.4844 Q1187.0469,1123.2969 1187.625,1122.9063 L1187.625,1124.5625 Z " fill="#000000"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="23" x="1196.5" y="1124.4619">Thief</text><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="1174.5" x2="1221.5" y1="1134" y2="1134"/><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="1174.5" x2="1221.5" y1="1142" y2="1142"/></g><!--MD5=[0712d3283d6b93527860f9e4a6daefdc]
+class src.utils.ObjectType--><g id="elem_src.utils.ObjectType"><rect codeLine="97" fill="#CCCCCC" height="100.2031" id="src.utils.ObjectType" rx="2.5" ry="2.5" style="stroke:#AAAAAA;stroke-width:0.5;" width="80" x="1279" y="1079"/><ellipse cx="1291" cy="1092" fill="#EB937F" rx="8" ry="8" style="stroke:#181818;stroke-width:1.0;"/><path d="M1288.0156,1087.9844 L1293.5938,1087.9844 L1293.5938,1089.5469 L1290.0781,1089.5469 L1290.0781,1091.0313 L1293.375,1091.0313 L1293.375,1092.5938 L1290.0781,1092.5938 L1290.0781,1094.4375 L1293.7031,1094.4375 L1293.7031,1096 L1288.0156,1096 L1288.0156,1087.9844 Z " fill="#000000"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="54" x="1302" y="1095.4619">ObjectType</text><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="1280" x2="1358" y1="1105" y2="1105"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="28" x="1285" y="1118.2822">WALL</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="23" x="1285" y="1129.9229">COP</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="29" x="1285" y="1141.5635">THIEF</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="51" x="1285" y="1153.2041">MOVABLE</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="35" x="1285" y="1164.8447">EMPTY</text><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="1280" x2="1358" y1="1171.2031" y2="1171.2031"/></g><!--MD5=[4dfc6a72b8dd60daa1b635d583ff79da]
+class Map--><g id="elem_Map"><rect codeLine="40" fill="#CCCCCC" height="170.0469" id="Map" rx="2.5" ry="2.5" style="stroke:#AAAAAA;stroke-width:0.5;" width="281" x="489.5" y="526"/><ellipse cx="616" cy="539" fill="#ADD1B2" rx="8" ry="8" style="stroke:#181818;stroke-width:1.0;"/><path d="M618.125,542.5625 Q617.5469,542.8594 616.9219,543 Q616.3125,543.1563 615.6406,543.1563 Q613.6406,543.1563 612.4688,542.0469 Q611.2969,540.9219 611.2969,539 Q611.2969,537.0781 612.4688,535.9531 Q613.6406,534.8281 615.6406,534.8281 Q616.3125,534.8281 616.9219,534.9844 Q617.5469,535.1406 618.125,535.4375 L618.125,537.0938 Q617.5469,536.7031 616.9844,536.5156 Q616.4219,536.3281 615.8125,536.3281 Q614.7031,536.3281 614.0625,537.0469 Q613.4375,537.75 613.4375,539 Q613.4375,540.2344 614.0625,540.9531 Q614.7031,541.6563 615.8125,541.6563 Q616.4219,541.6563 616.9844,541.4844 Q617.5469,541.2969 618.125,540.9063 L618.125,542.5625 Z " fill="#000000"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="21" x="632" y="542.4619">Map</text><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="490.5" x2="769.5" y1="552" y2="552"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="172" x="495.5" y="565.2822">#window_dimensions: Tuple[int, int]</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="170" x="495.5" y="576.9229">#canvas_dimensions: Tuple[int, int]</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="131" x="495.5" y="588.5635">#blocks: List[Shp_Polygon]</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="135" x="495.5" y="600.2041">#agent_spawn_regions: dict</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="168" x="495.5" y="611.8447">#cops_positions: List[Tuple[int,int]]</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="181" x="495.5" y="623.4854">#thieves_positions: List[Tuple[int,int]]</text><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="490.5" x2="769.5" y1="629.8438" y2="629.8438"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="118" x="495.5" y="643.126">+__init__(map_path: str)</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="167" x="495.5" y="654.7666">#_parse_json_map(map_path: str)</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="183" x="495.5" y="666.4072">#_parse_block(blk_json): Shp_Polygon</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="200" x="495.5" y="678.0479">+populate_space(space: Pymunk_Space)</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="269" x="495.5" y="689.6885">+render(screen: Pygame_Surface, agents: List[Entity])</text></g><!--MD5=[5865cd92242c68bc9211ff3b7a361f3d]
+class Shp_Polygon--><g id="elem_Shp_Polygon"><rect fill="#CCCCCC" height="42" id="Shp_Polygon" rx="2.5" ry="2.5" style="stroke:#AAAAAA;stroke-width:0.5;" width="89" x="682.5" y="866.5"/><ellipse cx="694.5" cy="879.5" fill="#ADD1B2" rx="8" ry="8" style="stroke:#181818;stroke-width:1.0;"/><path d="M696.625,883.0625 Q696.0469,883.3594 695.4219,883.5 Q694.8125,883.6563 694.1406,883.6563 Q692.1406,883.6563 690.9688,882.5469 Q689.7969,881.4219 689.7969,879.5 Q689.7969,877.5781 690.9688,876.4531 Q692.1406,875.3281 694.1406,875.3281 Q694.8125,875.3281 695.4219,875.4844 Q696.0469,875.6406 696.625,875.9375 L696.625,877.5938 Q696.0469,877.2031 695.4844,877.0156 Q694.9219,876.8281 694.3125,876.8281 Q693.2031,876.8281 692.5625,877.5469 Q691.9375,878.25 691.9375,879.5 Q691.9375,880.7344 692.5625,881.4531 Q693.2031,882.1563 694.3125,882.1563 Q694.9219,882.1563 695.4844,881.9844 Q696.0469,881.7969 696.625,881.4063 L696.625,883.0625 Z " fill="#000000"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="63" x="705.5" y="882.9619">Shp_Polygon</text><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="683.5" x2="770.5" y1="892.5" y2="892.5"/><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="683.5" x2="770.5" y1="900.5" y2="900.5"/></g><!--MD5=[5b905b04a55c3197bd1782c9cfb362c3]
+class Pymunk_Space--><g id="elem_Pymunk_Space"><rect fill="#CCCCCC" height="42" id="Pymunk_Space" rx="2.5" ry="2.5" style="stroke:#AAAAAA;stroke-width:0.5;" width="101" x="546.5" y="866.5"/><ellipse cx="558.5" cy="879.5" fill="#ADD1B2" rx="8" ry="8" style="stroke:#181818;stroke-width:1.0;"/><path d="M560.625,883.0625 Q560.0469,883.3594 559.4219,883.5 Q558.8125,883.6563 558.1406,883.6563 Q556.1406,883.6563 554.9688,882.5469 Q553.7969,881.4219 553.7969,879.5 Q553.7969,877.5781 554.9688,876.4531 Q556.1406,875.3281 558.1406,875.3281 Q558.8125,875.3281 559.4219,875.4844 Q560.0469,875.6406 560.625,875.9375 L560.625,877.5938 Q560.0469,877.2031 559.4844,877.0156 Q558.9219,876.8281 558.3125,876.8281 Q557.2031,876.8281 556.5625,877.5469 Q555.9375,878.25 555.9375,879.5 Q555.9375,880.7344 556.5625,881.4531 Q557.2031,882.1563 558.3125,882.1563 Q558.9219,882.1563 559.4844,881.9844 Q560.0469,881.7969 560.625,881.4063 L560.625,883.0625 Z " fill="#000000"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="75" x="569.5" y="882.9619">Pymunk_Space</text><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="547.5" x2="646.5" y1="892.5" y2="892.5"/><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="547.5" x2="646.5" y1="900.5" y2="900.5"/></g><!--MD5=[8c810589661a2c549707138464536110]
+class BaseEnv--><g id="elem_BaseEnv"><rect codeLine="60" fill="#CCCCCC" height="298.0938" id="BaseEnv" rx="2.5" ry="2.5" style="stroke:#AAAAAA;stroke-width:0.5;" width="306" x="55" y="139"/><ellipse cx="183" cy="152" fill="#ADD1B2" rx="8" ry="8" style="stroke:#181818;stroke-width:1.0;"/><path d="M185.125,155.5625 Q184.5469,155.8594 183.9219,156 Q183.3125,156.1563 182.6406,156.1563 Q180.6406,156.1563 179.4688,155.0469 Q178.2969,153.9219 178.2969,152 Q178.2969,150.0781 179.4688,148.9531 Q180.6406,147.8281 182.6406,147.8281 Q183.3125,147.8281 183.9219,147.9844 Q184.5469,148.1406 185.125,148.4375 L185.125,150.0938 Q184.5469,149.7031 183.9844,149.5156 Q183.4219,149.3281 182.8125,149.3281 Q181.7031,149.3281 181.0625,150.0469 Q180.4375,150.75 180.4375,152 Q180.4375,153.2344 181.0625,153.9531 Q181.7031,154.6563 182.8125,154.6563 Q183.4219,154.6563 183.9844,154.4844 Q184.5469,154.2969 185.125,153.9063 L185.125,155.5625 Z " fill="#000000"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="43" x="199" y="155.4619">BaseEnv</text><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="56" x2="360" y1="165" y2="165"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="57" x="61" y="178.2822">#map: Map</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="117" x="61" y="189.9229">#space: Pymunk_Space</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="81" x="61" y="201.5635">#cops: List[Cop]</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="97" x="61" y="213.2041">#thieves: List[Thief]</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="128" x="61" y="224.8447">#possible_agents: List[str]</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="139" x="61" y="236.4854">#agent_name_mapping: dict</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="126" x="61" y="248.126">#observation_spaces: dict</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="98" x="61" y="259.7666">#action_spaces: dict</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="92" x="61" y="271.4072">#render_mode: str</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="134" x="61" y="283.0479">#window: Pygame_Surface</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="109" x="61" y="294.6885">#clock: Pygame_Clock</text><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="56" x2="360" y1="301.0469" y2="301.0469"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="189" x="61" y="314.3291">+__init__(map: Map, render_mode: str)</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="120" x="61" y="325.9697">+reset(): Tuple[dict, dict]</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="237" x="61" y="337.6104">+step(action: dict): Tuple[dict, dict, dict, dict, dict]</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="64" x="61" y="349.251">+state(): dict</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="48" x="61" y="360.8916">+render()</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="40" x="61" y="372.5322">+close()</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="113" x="61" y="384.1729">#_init_cops(): List[Cop]</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="129" x="61" y="395.8135">#_init_thieves(): List[Thief]</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="294" x="61" y="407.4541">#_get_non_colliding_position(regions, entity): Pymunk_Vec2d</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="86" x="61" y="419.0947">#_init_rendering()</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="88" x="61" y="430.7354">#_render_frame()</text></g><!--MD5=[53c7a6491bb95b66025f7ae020108ea7]
+class PZ_ParallelEnv--><g id="elem_PZ_ParallelEnv"><rect fill="#CCCCCC" height="42" id="PZ_ParallelEnv" rx="2.5" ry="2.5" style="stroke:#AAAAAA;stroke-width:0.5;" width="98" x="159" y="36"/><ellipse cx="171" cy="49" fill="#ADD1B2" rx="8" ry="8" style="stroke:#181818;stroke-width:1.0;"/><path d="M173.125,52.5625 Q172.5469,52.8594 171.9219,53 Q171.3125,53.1563 170.6406,53.1563 Q168.6406,53.1563 167.4688,52.0469 Q166.2969,50.9219 166.2969,49 Q166.2969,47.0781 167.4688,45.9531 Q168.6406,44.8281 170.6406,44.8281 Q171.3125,44.8281 171.9219,44.9844 Q172.5469,45.1406 173.125,45.4375 L173.125,47.0938 Q172.5469,46.7031 171.9844,46.5156 Q171.4219,46.3281 170.8125,46.3281 Q169.7031,46.3281 169.0625,47.0469 Q168.4375,47.75 168.4375,49 Q168.4375,50.2344 169.0625,50.9531 Q169.7031,51.6563 170.8125,51.6563 Q171.4219,51.6563 171.9844,51.4844 Q172.5469,51.2969 173.125,50.9063 L173.125,52.5625 Z " fill="#000000"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="72" x="182" y="52.4619">PZ_ParallelEnv</text><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="160" x2="256" y1="62" y2="62"/><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="160" x2="256" y1="70" y2="70"/></g><!--MD5=[cef43fc6b62fad3d3e7ac858560fab38]
+class Pygame_Clock--><g id="elem_Pygame_Clock"><rect fill="#CCCCCC" height="42" id="Pygame_Clock" rx="2.5" ry="2.5" style="stroke:#AAAAAA;stroke-width:0.5;" width="98" x="55" y="590"/><ellipse cx="67" cy="603" fill="#ADD1B2" rx="8" ry="8" style="stroke:#181818;stroke-width:1.0;"/><path d="M69.125,606.5625 Q68.5469,606.8594 67.9219,607 Q67.3125,607.1563 66.6406,607.1563 Q64.6406,607.1563 63.4688,606.0469 Q62.2969,604.9219 62.2969,603 Q62.2969,601.0781 63.4688,599.9531 Q64.6406,598.8281 66.6406,598.8281 Q67.3125,598.8281 67.9219,598.9844 Q68.5469,599.1406 69.125,599.4375 L69.125,601.0938 Q68.5469,600.7031 67.9844,600.5156 Q67.4219,600.3281 66.8125,600.3281 Q65.7031,600.3281 65.0625,601.0469 Q64.4375,601.75 64.4375,603 Q64.4375,604.2344 65.0625,604.9531 Q65.7031,605.6563 66.8125,605.6563 Q67.4219,605.6563 67.9844,605.4844 Q68.5469,605.2969 69.125,604.9063 L69.125,606.5625 Z " fill="#000000"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="72" x="78" y="606.4619">Pygame_Clock</text><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="56" x2="152" y1="616" y2="616"/><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="56" x2="152" y1="624" y2="624"/></g><!--MD5=[6cccd51423f048c7d08e02e20e12cf6e]
+class SimpleEnv--><g id="elem_SimpleEnv"><rect codeLine="91" fill="#CCCCCC" height="42" id="SimpleEnv" rx="2.5" ry="2.5" style="stroke:#AAAAAA;stroke-width:0.5;" width="78" x="188" y="590"/><ellipse cx="200" cy="603" fill="#ADD1B2" rx="8" ry="8" style="stroke:#181818;stroke-width:1.0;"/><path d="M202.125,606.5625 Q201.5469,606.8594 200.9219,607 Q200.3125,607.1563 199.6406,607.1563 Q197.6406,607.1563 196.4688,606.0469 Q195.2969,604.9219 195.2969,603 Q195.2969,601.0781 196.4688,599.9531 Q197.6406,598.8281 199.6406,598.8281 Q200.3125,598.8281 200.9219,598.9844 Q201.5469,599.1406 202.125,599.4375 L202.125,601.0938 Q201.5469,600.7031 200.9844,600.5156 Q200.4219,600.3281 199.8125,600.3281 Q198.7031,600.3281 198.0625,601.0469 Q197.4375,601.75 197.4375,603 Q197.4375,604.2344 198.0625,604.9531 Q198.7031,605.6563 199.8125,605.6563 Q200.4219,605.6563 200.9844,605.4844 Q201.5469,605.2969 202.125,604.9063 L202.125,606.5625 Z " fill="#000000"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="52" x="211" y="606.4619">SimpleEnv</text><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="189" x2="265" y1="616" y2="616"/><line style="stroke:#AAAAAA;stroke-width:0.5;" x1="189" x2="265" y1="624" y2="624"/></g><!--MD5=[fa83027c3125d6645406a03d2289f380]
+reverse link Entity to Gym_Space--><g id="link_Entity_Gym_Space"><path codeLine="26" d="M1049.7,1003.04 C1052.29,1013.23 1055.06,1023.34 1058,1033 C1066.09,1059.51 1078.43,1088.99 1086.84,1107.97 " fill="none" id="Entity-backto-Gym_Space" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="1046.53,990.12,1044.0757,996.9006,1049.3908,1001.774,1051.8451,994.9934,1046.53,990.12" style="stroke:#000000;stroke-width:1.0;"/></g><!--MD5=[9335b14336cd20286ba8f654d928f774]
+link Entity to Pygame_Surface--><g id="link_Entity_Pygame_Surface"><path codeLine="27" d="M964.04,990.34 C957.92,1000.35 951.83,1010.36 946,1020 C928.85,1048.39 909.48,1081.19 896.58,1103.12 " fill="none" id="Entity-to-Pygame_Surface" style="stroke:#000000;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#000000" points="893.93,1107.63,901.9401,1101.8995,896.4645,1103.32,895.044,1097.8443,893.93,1107.63" style="stroke:#000000;stroke-width:1.0;"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="52" x="947" y="1030.2822">renders on</text></g><!--MD5=[2b63c4918de66009d017a65d9fbd0e4a]
+link Entity to src.utils.ObjectType--><g id="link_Entity_src.utils.ObjectType"><path codeLine="28" d="M1125.16,952.86 C1162.12,978.68 1203.72,1009.72 1239,1041 C1251.39,1051.98 1263.91,1064.68 1275.25,1076.92 " fill="none" id="Entity-to-src.utils.ObjectType" style="stroke:#000000;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#000000" points="1278.73,1080.7,1275.5692,1071.3721,1275.3404,1077.0243,1269.6882,1076.7955,1278.73,1080.7" style="stroke:#000000;stroke-width:1.0;"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="22" x="1229" y="1030.2822">uses</text></g><!--MD5=[3d34aea6a7b04edebd7114091e6223b6]
+reverse link Entity to Cop--><g id="link_Entity_Cop"><path d="M1010.76,1010.12 C1005.7,1047.98 1000.67,1085.6 997.7,1107.82 " fill="none" id="Entity-backto-Cop" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="none" points="1003.85,1008.97,1013.43,990.07,1017.72,1010.82,1003.85,1008.97" style="stroke:#000000;stroke-width:1.0;"/></g><!--MD5=[014468336fdbc8ecdd30904eb61c46d0]
+reverse link Entity to Thief--><g id="link_Entity_Thief"><path d="M1061.57,1007.71 C1068.08,1017.32 1075.82,1026.01 1085,1033 C1110.27,1052.23 1130.1,1022.64 1156,1041 C1178.17,1056.71 1189.1,1087.38 1194.14,1107.78 " fill="none" id="Entity-backto-Thief" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="none" points="1055.38,1011,1051.42,990.18,1067.5,1003.98,1055.38,1011" style="stroke:#000000;stroke-width:1.0;"/></g><!--MD5=[6f996c2ad49140d00a462a4bc40643d0]
+reverse link Map to Shp_Polygon--><g id="link_Map_Shp_Polygon"><path codeLine="53" d="M664.16,708.64 C684.39,765.91 708.29,833.53 719.92,866.46 " fill="none" id="Map-backto-Shp_Polygon" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="659.77,696.22,657.9962,703.2095,663.7659,707.5352,665.5397,700.5456,659.77,696.22" style="stroke:#000000;stroke-width:1.0;"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="72" x="673" y="736.2822">contains blocks</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="6" x="656.0705" y="713.324">1</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="17" x="697.7591" y="856.057">0..*</text></g><!--MD5=[8343ece869b4d9f398a5fa7723a7f8af]
+link Map to Pymunk_Space--><g id="link_Map_Pymunk_Space"><path codeLine="54" d="M607.21,696.28 C605.14,706.24 603.33,716.31 602,726 C595.52,773.39 595.48,829.35 596.16,861.11 " fill="none" id="Map-to-Pymunk_Space" style="stroke:#000000;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#000000" points="596.29,866.37,600.0833,857.2809,596.1757,861.3713,592.0854,857.4638,596.29,866.37" style="stroke:#000000;stroke-width:1.0;"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="47" x="603" y="736.2822">populates</text></g><!--MD5=[74346455c51a4c7d9b4dae294e062b97]
+link Map to Pygame_Surface--><g id="link_Map_Pygame_Surface"><path codeLine="55" d="M509.91,696.34 C495.79,711.52 483.43,728.49 475,747 C430.26,845.3 412.08,902.22 475,990 C554.78,1101.29 729.36,1123.94 821.8,1127.84 " fill="none" id="Map-to-Pygame_Surface" style="stroke:#000000;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#000000" points="826.96,1128.04,818.1271,1123.6835,821.964,1127.8402,817.8073,1131.6771,826.96,1128.04" style="stroke:#000000;stroke-width:1.0;"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="52" x="476" y="891.2822">renders on</text></g><!--MD5=[a297f122ff9522e4af97ce21ab7cc28b]
+link Map to Entity--><g id="link_Map_Entity"><path codeLine="56" d="M751.55,696.04 C806.87,734.29 871.63,779.07 924.46,815.6 " fill="none" id="Map-to-Entity" style="stroke:#000000;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#000000" points="928.88,818.66,923.7495,810.253,924.7665,815.8177,919.2018,816.8346,928.88,818.66" style="stroke:#000000;stroke-width:1.0;"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="37" x="805" y="736.2822">renders</text></g><!--MD5=[50400de7b9cfdacba6db908bfd1d471b]
+reverse link PZ_ParallelEnv to BaseEnv--><g id="link_PZ_ParallelEnv_BaseEnv"><path d="M208,98.61 C208,110.49 208,124.23 208,138.76 " fill="none" id="PZ_ParallelEnv-backto-BaseEnv" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="none" points="201,98.32,208,78.32,215,98.32,201,98.32" style="stroke:#000000;stroke-width:1.0;"/></g><!--MD5=[40b4a32e639754ab7442ad676b007760]
+reverse link BaseEnv to Map--><g id="link_BaseEnv_Map"><path codeLine="84" d="M371.74,413.55 C421.19,451.16 474.28,491.55 519.39,525.86 " fill="none" id="BaseEnv-backto-Map" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="361.25,405.57,363.6021,412.3867,370.7991,412.8374,368.447,406.0206,361.25,405.57" style="stroke:#000000;stroke-width:1.0;"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="22" x="457" y="477.2822">uses</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="6" x="368.8184" y="409.2939">1</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="6" x="502.5615" y="515.5314">1</text></g><!--MD5=[ffaa392d5dd6e707407282e05452fc97]
+reverse link BaseEnv to Pymunk_Space--><g id="link_BaseEnv_Pymunk_Space"><path codeLine="85" d="M334.33,448.35 C338.07,454.56 341.64,460.78 345,467 C396.32,561.82 352.33,616.37 425,696 C461.88,736.4 498.74,707.92 537,747 C570.39,781.1 586.56,836.71 593.17,866.38 " fill="none" id="BaseEnv-backto-Pymunk_Space" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="327.43,437.2,327.1794,444.4067,333.7354,447.4099,333.986,440.2032,327.43,437.2" style="stroke:#000000;stroke-width:1.0;"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="45" x="426" y="614.7822">manages</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="6" x="327.4334" y="454.473">1</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="6" x="584.9929" y="856.2792">1</text></g><!--MD5=[0fd9b232e3fa1da186b436802fb8b155]
+reverse link BaseEnv to Cop--><g id="link_BaseEnv_Cop"><path codeLine="86" d="M270.71,449.51 C275.35,462.49 279.84,475.43 284,488 C356.99,708.08 248.01,841.41 426,990 C448.67,1008.92 930.94,1023.89 955,1041 C976.95,1056.6 987.14,1087.3 991.66,1107.74 " fill="none" id="BaseEnv-backto-Cop" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="266.22,437.08,264.4948,444.0817,270.2944,448.3671,272.0196,441.3654,266.22,437.08" style="stroke:#000000;stroke-width:1.0;"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="17" x="315" y="736.2822">has</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="6" x="263.0673" y="454.3469">1</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="17" x="970.886" y="1097.5946">0..*</text></g><!--MD5=[2eb80da436768d0aec442072ca7e7eb0]
+reverse link BaseEnv to Thief--><g id="link_BaseEnv_Thief"><path codeLine="87" d="M374.45,314.95 C595.78,359.46 978.17,473.63 1143,747 C1215.65,867.47 1206.01,1047.43 1200.29,1107.59 " fill="none" id="BaseEnv-backto-Thief" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="#000000" points="361.42,312.37,366.5333,317.4547,373.1935,314.6904,368.0802,309.6057,361.42,312.37" style="stroke:#000000;stroke-width:1.0;"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="17" x="1138" y="736.2822">has</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="6" x="368.9966" y="311.5795">1</text><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="17" x="1181.3882" y="1097.7291">0..*</text></g><!--MD5=[b9ecfa01dcf43693277162910f40f9cd]
+link BaseEnv to Pygame_Surface--><g id="link_BaseEnv_Pygame_Surface"><path codeLine="88" d="M63.52,437.04 C53.3,453.33 44.49,470.42 38,488 C6,574.73 8.58,608.36 38,696 C97.78,874.06 132.05,936.2 293,1033 C381.54,1086.25 689.74,1114.19 821.51,1123.94 " fill="none" id="BaseEnv-to-Pygame_Surface" style="stroke:#000000;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#000000" points="826.88,1124.33,818.1888,1119.6972,821.8928,1123.9727,817.6172,1127.6767,826.88,1124.33" style="stroke:#000000;stroke-width:1.0;"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="52" x="53" y="736.2822">renders on</text></g><!--MD5=[338b88af3bf8c833d67132f897612df8]
+link BaseEnv to Pygame_Clock--><g id="link_BaseEnv_Pygame_Clock"><path codeLine="89" d="M159.96,437.28 C141.62,493.89 122.62,552.53 112.16,584.83 " fill="none" id="BaseEnv-to-Pygame_Clock" style="stroke:#000000;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#000000" points="110.55,589.78,117.1314,582.453,112.0925,585.0239,109.5217,579.985,110.55,589.78" style="stroke:#000000;stroke-width:1.0;"/></g><!--MD5=[cbd88cbd966a4d69d3477ab4c1ab4a1a]
+reverse link BaseEnv to SimpleEnv--><g id="link_BaseEnv_SimpleEnv"><path d="M217.98,457.59 C221.12,510.54 224.18,562.32 225.81,589.78 " fill="none" id="BaseEnv-backto-SimpleEnv" style="stroke:#000000;stroke-width:1.0;"/><polygon fill="none" points="210.98,457.66,216.78,437.28,224.95,456.84,210.98,457.66" style="stroke:#000000;stroke-width:1.0;"/></g><!--MD5=[fdfc84cf7f18cdee65163b70f1c1fd3d]
+link BaseEnv to src.utils.ObjectType--><g id="link_BaseEnv_src.utils.ObjectType"><path codeLine="109" d="M361.18,299.67 C530.93,317.42 807.55,364.39 1011,488 C1142.07,567.63 1170.32,609.88 1239,747 C1292.88,854.55 1310.51,996.71 1316.25,1073.37 " fill="none" id="BaseEnv-to-src.utils.ObjectType" style="stroke:#000000;stroke-width:1.0;stroke-dasharray:7.0,7.0;"/><polygon fill="#000000" points="1316.65,1078.78,1319.9703,1069.5077,1316.2785,1073.7938,1311.9924,1070.102,1316.65,1078.78" style="stroke:#000000;stroke-width:1.0;"/><text fill="#333333" font-family="Verdana" font-size="10" lengthAdjust="spacing" textLength="104" x="1235" y="736.2822">uses for observations</text></g><!--MD5=[991ebfb7569c60da6ce42164d497d459]
+@startuml
+!theme reddress-lightred
+skinparam backgroundColor white
+skinparam defaultFontSize 10
+skinparam classAttributeIconSize 0
+skinparam packageStyle rect
+hide emptymembers
+
+
+package "src.agents" <<Folder>> {
+  class Entity {
+    # _initial_position: Pymunk_Vec2d
+    # _space: Pymunk_Space
+    # _radius: float
+    # _id: str
+    # body: Pymunk_Body
+    # _b_box: Pymunk_Circle
+    # observation_space: Gym_Space
+    # action_space: Gym_Space
+    + reset(position: Pymunk_Vec2d)
+    + step(action, is_terminated)
+    + get_observation(): dict
+    + get_id(): str
+    + render(surface: Pygame_Surface)
+    # _query_body(hit_shape): ObjectType
+  }
+  Entity *- - Gym_Space
+  Entity ..> Pygame_Surface : "renders on"
+  Entity ..> "src.utils.ObjectType" : "uses"
+
+  class Cop extends Entity {
+    ' Cop-specific attributes/methods
+  }
+
+  class Thief extends Entity {
+    ' Thief-specific attributes/methods
+  }
+}
+
+package "src.maps" <<Folder>> {
+  class Map {
+    # window_dimensions: Tuple[int, int]
+    # canvas_dimensions: Tuple[int, int]
+    # blocks: List[Shp_Polygon]
+    # agent_spawn_regions: dict
+    # cops_positions: List[Tuple[int,int]]
+    # thieves_positions: List[Tuple[int,int]]
+    + __init__(map_path: str)
+    # _parse_json_map(map_path: str)
+    # _parse_block(blk_json): Shp_Polygon
+    + populate_space(space: Pymunk_Space)
+    + render(screen: Pygame_Surface, agents: List[Entity])
+  }
+  Map "1" *- - "0..*" Shp_Polygon : "contains blocks"
+  Map ..> Pymunk_Space : "populates"
+  Map ..> Pygame_Surface : "renders on"
+  Map ..> Entity : "renders"
+}
+
+package "src.environments" <<Folder>> {
+  class BaseEnv extends PZ_ParallelEnv {
+    # map: Map
+    # space: Pymunk_Space
+    # cops: List[Cop]
+    # thieves: List[Thief]
+    # possible_agents: List[str]
+    # agent_name_mapping: dict
+    # observation_spaces: dict
+    # action_spaces: dict
+    # render_mode: str
+    # window: Pygame_Surface
+    # clock: Pygame_Clock
+    + __init__(map: Map, render_mode: str)
+    + reset(): Tuple[dict, dict]
+    + step(action: dict): Tuple[dict, dict, dict, dict, dict]
+    + state(): dict
+    + render()
+    + close()
+    # _init_cops(): List[Cop]
+    # _init_thieves(): List[Thief]
+    # _get_non_colliding_position(regions, entity): Pymunk_Vec2d
+    # _init_rendering()
+    # _render_frame()
+  }
+  BaseEnv "1" *- - "1" Map : "uses"
+  BaseEnv "1" *- - "1" Pymunk_Space : "manages"
+  BaseEnv "1" *- - "0..*" Cop : "has"
+  BaseEnv "1" *- - "0..*" Thief : "has"
+  BaseEnv ..> Pygame_Surface : "renders on"
+  BaseEnv ..> Pygame_Clock
+
+  class SimpleEnv extends BaseEnv {
+    ' SimpleEnv-specific overrides/additions
+  }
+}
+
+package "src.utils" <<Folder>> {
+  enum ObjectType {
+    WALL
+    COP
+    THIEF
+    MOVABLE
+    EMPTY
+  }
+
+
+}
+
+
+BaseEnv ..> "src.utils.ObjectType" : "uses for observations"
+@enduml
+
+@startuml
+
+
+
+skinparam stereotypeCBackgroundColor AA0033
+skinparam backgroundColor fff
+
+
+
+
+
+
+
+skinparam circledCharacter {
+  radius 8
+  fontSize 11
+  fontName Verdana
+}
+
+skinparam class {
+    backgroundColor ccc
+  borderColor aaa
+    fontColor 000
+  fontName Verdana
+  fontSize 11
+  stereotypeFontColor 333
+  stereotypeFontSize 11
+    arrowColor 000
+  arrowFontName Verdana
+  arrowFontColor 333
+  arrowFontSize 11
+
+  attributeFontColor 333
+  attributeFontSize 11
+  attributeIconSize 11
+}
+
+
+skinparam actor {
+    backgroundColor CC0033
+  borderColor AA0033
+    fontColor 000
+  fontName Verdana
+  fontSize 11
+  stereotypeFontColor 333
+  stereotypeFontSize 11
+}
+
+skinparam participant {
+    backgroundColor ccc
+  borderColor aaa
+    fontColor 000
+  fontName Verdana
+  fontSize 11
+  stereotypeFontColor 333
+  stereotypeFontSize 11
+}
+
+skinparam collections {
+    backgroundColor ccc
+  borderColor aaa
+    fontColor 000
+  fontName Verdana
+  fontSize 11
+  stereotypeFontColor 333
+  stereotypeFontSize 11
+}
+
+skinparam SequenceBox{
+    backgroundColor e0e0e0
+  borderColor cccccc
+    fontColor 000
+  fontName Verdana
+  fontSize 11
+  stereotypeFontColor 333
+  stereotypeFontSize 11
+}
+
+
+skinparam interface {
+    backgroundColor CC0033
+  borderColor AA0033
+    fontColor 000
+  fontName Verdana
+  fontSize 11
+  stereotypeFontColor 333
+  stereotypeFontSize 11
+}
+
+skinparam component {
+    backgroundColor ccc
+  borderColor aaa
+    fontColor 000
+  fontName Verdana
+  fontSize 11
+  stereotypeFontColor 333
+  stereotypeFontSize 11
+}
+
+skinparam node {
+    backgroundColor ccc
+  borderColor aaa
+    fontColor 000
+  fontName Verdana
+  fontSize 11
+  stereotypeFontColor 333
+  stereotypeFontSize 11
+}
+
+skinparam database {
+    backgroundColor ccc
+  borderColor aaa
+    fontColor 000
+  fontName Verdana
+  fontSize 11
+  stereotypeFontColor 333
+  stereotypeFontSize 11
+}
+
+skinparam queue {
+    backgroundColor ccc
+  borderColor aaa
+    fontColor 000
+  fontName Verdana
+  fontSize 11
+  stereotypeFontColor 333
+  stereotypeFontSize 11
+}
+
+
+skinparam usecase {
+    backgroundColor ccc
+  borderColor aaa
+    fontColor 000
+  fontName Verdana
+  fontSize 11
+  stereotypeFontColor 333
+  stereotypeFontSize 11
+    arrowColor 000
+  arrowFontName Verdana
+  arrowFontColor 333
+  arrowFontSize 11
+}
+
+skinparam activity {
+    backgroundColor ccc
+  borderColor aaa
+    fontColor 000
+  fontName Verdana
+  fontSize 11
+  stereotypeFontColor 333
+  stereotypeFontSize 11
+    arrowColor 000
+  arrowFontName Verdana
+  arrowFontColor 333
+  arrowFontSize 11
+}
+
+skinparam sequence {
+    fontColor 000
+  fontName Verdana
+  fontSize 11
+  stereotypeFontColor 333
+  stereotypeFontSize 11
+    arrowColor 000
+  arrowFontName Verdana
+  arrowFontColor 333
+  arrowFontSize 11
+
+  lifeLineBorderColor CC0033
+  lifeLineBackgroundColor e0e0e0
+}
+
+skinparam boundary {
+    backgroundColor CC0033
+  borderColor AA0033
+    fontColor 000
+  fontName Verdana
+  fontSize 11
+  stereotypeFontColor 333
+  stereotypeFontSize 11
+}
+
+skinparam control {
+    backgroundColor CC0033
+  borderColor AA0033
+    fontColor 000
+  fontName Verdana
+  fontSize 11
+  stereotypeFontColor 333
+  stereotypeFontSize 11
+}
+
+skinparam entity {
+    backgroundColor CC0033
+  borderColor AA0033
+    fontColor 000
+  fontName Verdana
+  fontSize 11
+  stereotypeFontColor 333
+  stereotypeFontSize 11
+}
+
+
+skinparam state {
+    backgroundColor ccc
+  borderColor aaa
+    fontColor 000
+  fontName Verdana
+  fontSize 11
+  stereotypeFontColor 333
+  stereotypeFontSize 11
+    arrowColor 000
+  arrowFontName Verdana
+  arrowFontColor 333
+  arrowFontSize 11
+  startColor CC0033
+  endColor AA0033
+}
+
+
+skinparam object {
+    backgroundColor ccc
+  borderColor aaa
+    fontColor 000
+  fontName Verdana
+  fontSize 11
+  stereotypeFontColor 333
+  stereotypeFontSize 11
+    arrowColor 000
+  arrowFontName Verdana
+  arrowFontColor 333
+  arrowFontSize 11
+}
+
+
+skinparam note {
+    backgroundColor CC0033
+  borderColor AA0033
+    fontColor 000
+  fontName Verdana
+  fontSize 11
+  stereotypeFontColor 333
+  stereotypeFontSize 11
+}
+
+skinparam cloud {
+    backgroundColor ccc
+  borderColor aaa
+    fontColor 000
+  fontName Verdana
+  fontSize 11
+  stereotypeFontColor 333
+  stereotypeFontSize 11
+    arrowColor 000
+  arrowFontName Verdana
+  arrowFontColor 333
+  arrowFontSize 11
+}
+
+skinparam rectangle {
+    backgroundColor ccc
+  borderColor aaa
+    fontColor 000
+  fontName Verdana
+  fontSize 11
+  stereotypeFontColor 333
+  stereotypeFontSize 11
+}
+
+skinparam storage {
+    backgroundColor ccc
+  borderColor aaa
+    fontColor 000
+  fontName Verdana
+  fontSize 11
+  stereotypeFontColor 333
+  stereotypeFontSize 11
+}
+skinparam backgroundColor white
+skinparam defaultFontSize 10
+skinparam classAttributeIconSize 0
+skinparam packageStyle rect
+hide emptymembers
+
+
+package "src.agents" <<Folder>> {
+  class Entity {
+    # _initial_position: Pymunk_Vec2d
+    # _space: Pymunk_Space
+    # _radius: float
+    # _id: str
+    # body: Pymunk_Body
+    # _b_box: Pymunk_Circle
+    # observation_space: Gym_Space
+    # action_space: Gym_Space
+    + reset(position: Pymunk_Vec2d)
+    + step(action, is_terminated)
+    + get_observation(): dict
+    + get_id(): str
+    + render(surface: Pygame_Surface)
+    # _query_body(hit_shape): ObjectType
+  }
+  Entity *- - Gym_Space
+  Entity ..> Pygame_Surface : "renders on"
+  Entity ..> "src.utils.ObjectType" : "uses"
+
+  class Cop extends Entity {
+  }
+
+  class Thief extends Entity {
+  }
+}
+
+package "src.maps" <<Folder>> {
+  class Map {
+    # window_dimensions: Tuple[int, int]
+    # canvas_dimensions: Tuple[int, int]
+    # blocks: List[Shp_Polygon]
+    # agent_spawn_regions: dict
+    # cops_positions: List[Tuple[int,int]]
+    # thieves_positions: List[Tuple[int,int]]
+    + __init__(map_path: str)
+    # _parse_json_map(map_path: str)
+    # _parse_block(blk_json): Shp_Polygon
+    + populate_space(space: Pymunk_Space)
+    + render(screen: Pygame_Surface, agents: List[Entity])
+  }
+  Map "1" *- - "0..*" Shp_Polygon : "contains blocks"
+  Map ..> Pymunk_Space : "populates"
+  Map ..> Pygame_Surface : "renders on"
+  Map ..> Entity : "renders"
+}
+
+package "src.environments" <<Folder>> {
+  class BaseEnv extends PZ_ParallelEnv {
+    # map: Map
+    # space: Pymunk_Space
+    # cops: List[Cop]
+    # thieves: List[Thief]
+    # possible_agents: List[str]
+    # agent_name_mapping: dict
+    # observation_spaces: dict
+    # action_spaces: dict
+    # render_mode: str
+    # window: Pygame_Surface
+    # clock: Pygame_Clock
+    + __init__(map: Map, render_mode: str)
+    + reset(): Tuple[dict, dict]
+    + step(action: dict): Tuple[dict, dict, dict, dict, dict]
+    + state(): dict
+    + render()
+    + close()
+    # _init_cops(): List[Cop]
+    # _init_thieves(): List[Thief]
+    # _get_non_colliding_position(regions, entity): Pymunk_Vec2d
+    # _init_rendering()
+    # _render_frame()
+  }
+  BaseEnv "1" *- - "1" Map : "uses"
+  BaseEnv "1" *- - "1" Pymunk_Space : "manages"
+  BaseEnv "1" *- - "0..*" Cop : "has"
+  BaseEnv "1" *- - "0..*" Thief : "has"
+  BaseEnv ..> Pygame_Surface : "renders on"
+  BaseEnv ..> Pygame_Clock
+
+  class SimpleEnv extends BaseEnv {
+  }
+}
+
+package "src.utils" <<Folder>> {
+  enum ObjectType {
+    WALL
+    COP
+    THIEF
+    MOVABLE
+    EMPTY
+  }
+
+
+}
+
+
+BaseEnv ..> "src.utils.ObjectType" : "uses for observations"
+@enduml
+
+PlantUML version 1.2022.7(Mon Aug 22 17:01:30 UTC 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: null
+--></g></svg>
