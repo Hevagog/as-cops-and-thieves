@@ -1,25 +1,29 @@
 ---
-title: "Report on the Project"
-author: Mateusz Mazur, Tomasz Kawiak
+title: "Cops and Thieves"
+subtitle: "Project report for the Agent Systems course"
+author: 
+  - Tomasz Kawiak 
+  - Mateusz Mazur
 geometry: margin=2cm
+colorlinks: true
 header-includes:
   - \usepackage{xcolor}
   - \usepackage{sectsty}
-  - \sectionfont{\color{violet}}
-  - \usepackage{fancyhdr}
   - \usepackage{titlesec}
-  - \subsectionfont{\color{green}}
-  - \pagenumbering{gobble}
   - \usepackage{titling}
   - \usepackage{geometry}
 ---
 
-## Introduction
+# Introduction
+
 This report provides an overview of the project, including its objectives, methodology, and results. The project aims to develop environment-agnostic agents for a "Cops and Thieves" pursuit-evasion game, leveraging advanced multi-agent reinforcement learning techniques.
 
-## 1. Goal of the project 
+**Code repository**: [github.com/Hevagog/as-cops-and-thieves](https://github.com/Hevagog/as-cops-and-thieves)
+
+# Goal of the project 
 
 The main goal of this project is to train *environment-agnostic* agents:
+
 -   ***Cops***: To search and chase thieves. If multiple cops are present, they should exhibit cooperative behavior.
 -   ***Thief***: To hide and evade capture efficiently.
 
@@ -27,19 +31,19 @@ A key aspect for both agent types is their ability to analyze their surroundings
 
 The research question revolves around achieving intelligent pursuit and evasion behaviors in a multi-agent system through reinforcement learning, specifically addressing how agents can learn to adapt to dynamic environments and opponent strategies.
 
-## 2. State of the art description, literature research
+# State of the art description, literature review, and related work
 
-The project draws inspiration from existing research in multi-agent reinforcement learning (MARL) and self-play mechanisms. [cite: 874] MARL extends single-agent reinforcement learning to scenarios with multiple agents, introducing challenges such as non-stationarity of the environment from each agent's perspective, coordination, communication, and equilibrium selection. [cite: 2700, 2701, 2702] Self-play, where an agent learns by interacting with copies or past versions of itself, has emerged as a powerful technique to address some of these challenges, promising more stable and manageable learning processes. [cite: 2690, 2708, 2709]
+The project draws inspiration from existing research in multi-agent reinforcement learning (MARL) and self-play mechanisms (e.g. [@lin2023tizeromasteringmultiagentfootball; @selfplay_survey]). MARL extends single-agent reinforcement learning to scenarios with multiple agents, introducing challenges such as non-stationarity of the environment from each agent's perspective, coordination, communication, and equilibrium selection. Self-play, where an agent learns by interacting with copies or past versions of itself, has emerged as a powerful technique to address some of these challenges, promising more stable and manageable learning processes. [cite: 2690, 2708, 2709]
 
-Notably, the work by OpenAI on emergent tool use in multi-agent environments [@baker2020emergenttoolusemultiagent] serves as a benchmark, highlighting the potential for complex behaviors to arise from learned policies. [cite: 875] In their hide-and-seek game within a 3D physics-based environment, agents developed a self-supervised autocurriculum leading to multiple distinct rounds of emergent strategies, including sophisticated tool use and coordination. [cite: 1008, 1009] For instance, hiders learned to build shelters using movable boxes, and seekers, in turn, discovered how to use ramps to overcome these obstacles. [cite: 1010] Their approach utilized agent policies composed of two separate networks (a policy network and a critic network) optimized using Proximal Policy Optimization (PPO) and Generalized Advantage Estimation (GAE). [cite: 1095, 1096] The policy architecture was entity-centric, using self-attention mechanisms to process observations of other entities and the environment. [cite: 1106, 1107] This work demonstrated that multi-agent competition can lead to human-relevant skills emerging without explicit incentives for tool interaction. [cite: 1113]
+Notably, the work by OpenAI on emergent tool use in multi-agent environments [@baker2020emergenttoolusemultiagent] serves as a benchmark, highlighting the potential for complex behaviors to arise from learned policies. In their hide-and-seek game within a 3D physics-based environment, agents developed a self-supervised autocurriculum leading to multiple distinct rounds of emergent strategies, including sophisticated tool use and coordination. For instance, hiders learned to build shelters using movable boxes, and seekers, in turn, discovered how to use ramps to overcome these obstacles. Their approach utilized agent policies composed of two separate networks (a policy network and a critic network) optimized using Proximal Policy Optimization (PPO) and Generalized Advantage Estimation (GAE). The policy architecture was entity-centric, using self-attention mechanisms to process observations of other entities and the environment. This work demonstrated that multi-agent competition can lead to human-relevant skills emerging without explicit incentives for tool interaction. [cite: 1113]
 
-Our approach incorporates Fictitious Self-Play (FSP), a technique where agents train against a distribution of past policies of their opponents, rather than just the latest version. This method is designed to improve training efficiency and stability in games. [cite: 877, 2209] This contrasts with simpler self-play methods, like vanilla self-play where agents train only against their most recent version, or training against a fixed opponent. [cite: 878, 2205] More advanced self-play strategies, such as Prioritized Fictitious Self-Play (PFSP), select opponents from a pool based on specific criteria, like their perceived strength, to further enhance training. [cite: 2212, 3614, 3950]
+Our approach incorporates Fictitious Self-Play (FSP) [@FictitiousSelfPlay], a technique where agents train against a distribution of past policies of their opponents, rather than just the latest version. This method is designed to improve training efficiency and stability in games. This contrasts with simpler self-play methods, like vanilla self-play where agents train only against their most recent version, or training against a fixed opponent. More advanced self-play strategies, such as Prioritized Fictitious Self-Play (PFSP), select opponents from a pool based on specific criteria, like their perceived strength, to further enhance training. [cite: 2212, 3614, 3950]
 
-The Multi-Agent Proximal Policy Optimization (MAPPO) algorithm [@mappo] is a key component in our project, known for its effectiveness in cooperative multi-agent settings. [cite: 879] MAPPO, an on-policy algorithm, has demonstrated surprisingly strong performance and sample efficiency compared to popular off-policy methods in various cooperative multi-agent benchmarks like the StarCraft multi-agent challenge (SMAC), Google Research Football (GRF), and the Hanabi challenge. [cite: 419, 420] It typically employs a centralized training with decentralized execution (CTDE) paradigm, where a centralized value function (critic) has access to global information during training, while individual agent policies (actors) operate based on local observations during execution. [cite: 51, 53, 30, 31] Parameter sharing among homogeneous agents is a common practice with MAPPO, shown to improve learning efficiency. [cite: 56, 57] The MAPPO paper also highlights several implementation factors crucial for its performance, such as value normalization, appropriate input representation for the value function (including both global and local agent-specific features), careful management of training data usage (e.g., number of epochs and mini-batches), PPO clipping parameters, and batch size. [cite: 130, 143, 158, 588, 601, 612, 613, 175, 185, 186, 190] These findings suggest that well-configured PPO-based methods can serve as strong baselines in cooperative MARL. [cite: 7]
+The Multi-Agent Proximal Policy Optimization (MAPPO) algorithm [@mappo] is a key component in our project, known for its effectiveness in cooperative multi-agent settings. MAPPO, an on-policy algorithm, has demonstrated surprisingly strong performance and sample efficiency compared to popular off-policy methods in various cooperative multi-agent benchmarks like the StarCraft multi-agent challenge (SMAC), Google Research Football (GRF), and the Hanabi challenge. It typically employs a centralized training with decentralized execution (CTDE) paradigm, where a centralized value function (critic) has access to global information during training, while individual agent policies (actors) operate based on local observations during execution. Parameter sharing among homogeneous agents is a common practice with MAPPO, shown to improve learning efficiency. The MAPPO paper also highlights several implementation factors crucial for its performance, such as value normalization, appropriate input representation for the value function (including both global and local agent-specific features), careful management of training data usage (e.g., number of epochs and mini-batches), PPO clipping parameters, and batch size. These findings suggest that well-configured PPO-based methods can serve as strong baselines in cooperative MARL. [cite: 7]
 
-## 3. Used model, methods, tools, and techniques
+# Used model, methods, tools, and techniques
 
-### Types of agents
+## Types of agents
 
 -   **Agent Types**:
     -   *Cops*: Seek to find and "arrest" thieves.
@@ -48,11 +52,11 @@ The Multi-Agent Proximal Policy Optimization (MAPPO) algorithm [@mappo] is a key
 -   **Model Characteristics**:
     -   **Initial Models**: Multi-Layer Perceptrons (MLPs) were used for both policy and value networks.
     -   **CNN Integration**: Recognizing the spatial nature of observations, Convolutional Neural Networks (CNNs) were introduced for the policy network, with distinct channels for agent-specific and shared observations. This CNN typically acts as a `features_extractor`.
-    -   **LSTM Implementation**: To incorporate memory and allow agents to act based on past observations, Long Short-Term Memory (LSTM) networks were integrated into the policy and value networks. The policy network utilizes `CategoricalMixin` from `skrl` for stochastic, categorical actions, while the value network uses `DeterministicMixin`.
+    -   **LSTM Implementation**: To incorporate memory and allow agents to act based on past observations, Long Short-Term Memory (LSTM) networks were integrated into the policy and value networks. The policy network utilizes `CategoricalMixin` from `skrl` [@skrl] for stochastic, categorical actions, while the value network uses `DeterministicMixin`.
 
-    The neural network architectures for agent policies and value functions are structured as follows, all inheriting from a base model class which itself is an extension of `skrl.models.torch.Model` and implicitly `torch.nn.Module`:
+    The neural network architectures for agent policies and value functions are structured as follows, all inheriting from a base model class which itself is an extension of `skrl.models.torch.Model` and implicitly `torch.nn.Module`. Our solution, presented in [@fig:class-model], includes the following key classes:
 
-    ![](uml_graphs/class_model.svg){width=60%}
+    ![Project class model](uml_graphs/class_model.svg){#fig:class-model width=60%}
 
     *   **`_BaseTorchModel`**: An abstract base class that standardizes the interface for all policy and value network models. It inherits from `skrl.models.torch.Model`, providing fundamental compatibility with the skrl framework, and by extension, `torch.nn.Module` for PyTorch functionalities. It defines a common `compute` method for forward passes and an `__init__` method to handle observation and action spaces.
 
@@ -64,23 +68,23 @@ The Multi-Agent Proximal Policy Optimization (MAPPO) algorithm [@mappo] is a key
 
     *   **`LSTMValue`**: An extension of the `Value` model incorporating recurrent layers. It extends `_BaseTorchModel` and, as implemented in `lstm_value_net.py`, `skrl.models.torch.DeterministicMixin`. It features an `lstm` layer and a subsequent `net` (MLP) to output the state-value. Similar to `LSTMPolicy`, a CNN-based `features_extractor` typically preprocesses observations before LSTM input. It also implements `get_specification` for RNN configuration.
 
-### Model characteristics
+## Model characteristics
 
-The project's environment and agent architecture are depicted in the class diagram below. The core components are organized into several packages: `src.agents`, `src.maps`, `src.environments`, and `src.utils`.
+The project's environment and agent architecture are depicted in the class diagram [@fig:class-env]. The core components are organized into several packages: `src.agents`, `src.maps`, `src.environments`, and `src.utils`.
 
-![](uml_graphs/class_env.svg){width=60%}
+![Project environment and agent architecture](uml_graphs/class_env.svg){#fig:class-env width=100%}
 
-#### **Agent (`src.agents`)**
+### **Agent (`src.agents`)**
 
 *   **`Entity`**: This is the base class for all agents within the simulation. It encapsulates common functionalities such as physics-based movement (via a `Pymunk.Body` and `Pymunk.Circle` for collision), definition of `action_space` and `observation_space` (using `gym.spaces`), and methods for agent lifecycle management like `reset()` to initial or specified positions, `step()` to process an action and return observations/rewards, and `get_observation()` which performs raycasting to perceive the environment. It also interacts with `src.utils.ObjectType` to classify detected objects.
 *   **`Cop`**: This class extends `Entity` and represents the pursuing agents. It inherits the base functionalities and can have specialized behaviors or reward structures tailored for chasing and capturing thieves.
 *   **`Thief`**: This class also extends `Entity` and represents the evading agents. Similar to `Cop`, it inherits from `Entity` and can implement specific logic for evasion and survival.
 
-#### **Map (`src.maps`)**
+### **Map (`src.maps`)**
 
 *   **`Map`**: This class is responsible for loading and defining the game world. It parses map configurations from JSON files, which include details about `window_dimensions`, `canvas_dimensions`, static obstacles (`blocks` represented as `Shp_Polygon`), and initial agent positions (`cops_positions`, `thieves_positions`) as well as `agent_spawn_regions`. Its `populate_space()` method adds these static elements to the Pymunk physics `space`. It also includes a `render()` method for visualization.
 
-#### **Environment (`src.environments`)**
+### **Environment (`src.environments`)**
 
 *   **`BaseEnv`**: This is the central class orchestrating the multi-agent simulation, inheriting from PettingZoo's `ParallelEnv` to ensure compatibility with MARL frameworks. It initializes and manages the `Map`, the Pymunk `space`, and lists of `Cop` and `Thief` agents. Key responsibilities include:
     *   Initializing agents at appropriate, non-colliding positions using `_get_non_colliding_position()`.
@@ -90,11 +94,11 @@ The project's environment and agent architecture are depicted in the class diagr
     *   Providing the overall `state()` of the environment.
 *   **`SimpleEnv`**: This class extends `BaseEnv`, likely providing a specific configuration or a simpler version of the environment, though its specific overrides are not detailed in the diagram.
 
-#### **Utilities (`src.utils`)**
+### **Utilities (`src.utils`)**
 
 *   **`ObjectType`**: An enumeration used by agents (specifically within the `Entity` class's `_query_body()` method) to classify objects detected through raycasting, such as `WALL`, `COP`, `THIEF`, `MOVABLE`, or `EMPTY`. This is crucial for agents to understand their surroundings.
 
-#### **Interactions and Dependencies:**
+### **Interactions and Dependencies:**
 
 The simulation's architecture is built upon a set of interconnected components, with `BaseEnv` serving as the primary orchestrator.
 
@@ -129,9 +133,9 @@ The simulation's architecture is built upon a set of interconnected components, 
 *   **Configuration and Driving Scripts**:
     *   Scripts like `self_play_driver.py` show that the system's execution (training, evaluation) is driven by configurations (e.g., `TrainingConfig`, `CFG_AGENT`, `CFG_TRAINER`) that dictate parameters for the environment, agents, and learning process.
 
-## 4. Technical description
+# Technical description
 
-### Language, libraries, tools, and techniques
+## Language, libraries, tools, and techniques
 -   **Programming Language**: Python.
 -   **Core Libraries**:
     -   **skrl** [@skrl]: For Multi-Agent Reinforcement Learning (MARL) implementation, specifically MAPPO.
@@ -146,24 +150,25 @@ The simulation's architecture is built upon a set of interconnected components, 
         -   **Prioritized Fictitious Self-Play (PFSP)**: Implemented to improve training efficiency by sampling opponents based on performance metrics (e.g., win rate closest to 50%), coupled with population-play validation.
     -   **Observation Space**: Implemented using a vision controller (ray casting). Shared observation spaces are used for agents of the same type.
     -   **Reward Function**: Iteratively refined for both cop and thief agents to encourage desired behaviors and scaled between -1 and 1, as detailed in [`docs/slides/src/23-progress-report-4.md`](docs/slides/src/23-progress-report-4.md).
-    -   **Spawn Regions**: Introduced to diversify agent starting positions and reduce overfitting ([`docs/slides/src/22-progress-report-3.md`](docs/slides/src/22-progress-report-3.md)).
+    -   **Spawn Regions**: Introduced to diversify agent starting positions and reduce overfitting \
+        ([`docs/slides/src/22-progress-report-3.md`](docs/slides/src/22-progress-report-3.md)).
 
 
-### Training and Evaluation
+## Training and Evaluation
 
 The training and evaluation of agents in this project are centered around the Multi-Agent Proximal Policy Optimization (MAPPO) algorithm, leveraging a self-play paradigm, specifically Fictitious Self-Play (FSP) and its prioritized variant (PFSP), to foster robust policy development for both Cop and Thief agents. The overall process is designed to iteratively improve agent performance through interaction with past versions of opponent policies stored in an archive.
 
 The core architectural pillars underpinning the training process include:
+
 *   **Simulation Bed**: The [`BaseEnv`](src/environments/base_env.py) (specifically `SimpleEnv`) provides the Cops & Thieves scenario.
 *   **Agent Intelligence**: LSTM-based Policy and Value Networks are used for each agent, enabling them to learn from sequences of observations.
 *   **Learning Strategy**: The MAPPO algorithm is employed, supporting both role-based training and simultaneous co-training of all agents.
 *   **Performance Benchmarking**: Cross-evaluation against archived policies (PFSP) is a key component for measuring progress and selecting opponents.
 *   **Knowledge Repository**: A Policy Archive maintains trained policies along with their win-rate metrics against various opponents.
 
-The general training flow, as depicted in the activity diagram below (Figure X1), outlines the iterative process:
+The general training flow, as depicted in the activity diagram [@fig:training-flow], outlines the iterative process:
 
-![](uml_graphs/training_flow.svg){width=60%}
-*Figure X1: MAPPO Multi-Agent Reinforcement Learning Training Flow*
+![MAPPO Multi-Agent Reinforcement Learning Training Flow](uml_graphs/training_flow.svg){#fig:training-flow width=100%}
 
 1.  **Initialization**:
     *   The environment ([`SimpleEnv`](src/environments/simple_env.py) utilizing a [`Map`](src/maps/map.py)) is initialized.
@@ -175,10 +180,12 @@ The general training flow, as depicted in the activity diagram below (Figure X1)
         *   One role (e.g., Cops) is actively trained while the other role (e.g., Thieves) uses a fixed policy sampled from the opponent's policy archive.
         *   The process involves:
             1.  Loading the latest checkpoint for the role being trained.
-            2.  Sampling an opponent policy from the archive using PFSP principles (e.g., via `sample_policy_from_archive` in `src.utils.policy_archive_utils.py`).
+            2.  Sampling an opponent policy from the archive using PFSP principles (e.g., via \
+                `sample_policy_from_archive` in `src.utils.policy_archive_utils.py`).
             3.  Freezing the parameters of the opponent's policy and value networks, while unfreezing those of the training role.
             4.  Running the `skrl.trainers.SequentialTrainer` to update the training role's models.
-            5.  Evaluating the newly trained policy against the sampled opponent (e.g., using `evaluate_agents` from `src.utils.eval_pfsp_agents.py`).
+            5.  Evaluating the newly trained policy against the sampled opponent (e.g., using \
+                `evaluate_agents` from `src.utils.eval_pfsp_agents.py`).
             6.  Updating the win-rate of the sampled opponent policy in the archive based on the evaluation outcome (e.g., using `update_policy_win_rate`).
             7.  Optionally, performing additional evaluations against other archived opponents.
     *   **Simultaneous Training (Co-training)**:
@@ -197,13 +204,14 @@ The general training flow, as depicted in the activity diagram below (Figure X1)
     *   The training loop continues until a predefined number of iterations or another completion criterion is met.
     *   In role-based training, roles might be switched for the next iteration. In simultaneous training, the process simply continues.
 
-The orchestration of this training flow and the interaction between different software components are illustrated in the component diagram (Figure X2):
+The orchestration of this training flow and the interaction between different software components are illustrated in the component diagram [@fig:orchestration-training-flow]:
 
-![](uml_graphs/orchestration_training_flow.svg){width=60%}
-*Figure X2: Training Orchestration and Component Dependencies*
+![Training Orchestration and Component Dependencies](uml_graphs/orchestration_training_flow.svg){#fig:orchestration-training-flow width=100%}
+
 
 *   **Orchestration Layer**:
-    *   High-level functions like `_orchestrate_training_phase` (for role-based) and `_orchestrate_simultaneous_training_iteration` (for simultaneous, as seen in [`self_play_driver.py`](src/self_play_driver.py)) manage the overall training iterations.
+    *   High-level functions like `_orchestrate_training_phase` (for role-based) and \
+        `_orchestrate_simultaneous_training_iteration` (for simultaneous, as seen in [`self_play_driver.py`](src/self_play_driver.py)) manage the overall training iterations.
     *   These orchestrators call specific training utility functions and handle the archiving of policies.
 
 *   **Training Utilities (`Training_Utils`)**:
@@ -223,6 +231,7 @@ The orchestration of this training flow and the interaction between different so
 
 **Evaluation Strategy**:
 Evaluation is an integral part of the training loop.
+
 *   **Cross-Evaluation**: After a training phase (either role-based or simultaneous), the newly trained policies are evaluated against a range of opponent policies sampled from the archive. This helps in assessing generalization and robustness.
 *   **Win-Rate Tracking**: Win-rates are calculated based on these evaluations and stored as metadata with the archived policies. This metric is crucial for:
     *   Monitoring training progress.
@@ -231,24 +240,28 @@ Evaluation is an integral part of the training loop.
 
 The [`self_play_driver.py`](src/self_play_driver.py) script exemplifies how these components are brought together, initializing the environment, managing policy archives, and iteratively invoking the `_orchestrate_simultaneous_training_iteration` function to drive the self-play learning process. It handles loading the latest checkpoints for Cops and Thieves from their respective archives to continue training.
 
-## 5. How to use the application/ project
+# How to use the application/ project
+
 The project is run using Python scripts. Key scripts include:
--   [`src/driver.py`](src/driver.py): Likely for standard training or evaluation runs.
--   [`src/self_play_driver.py`](src/self_play_driver.py): For initiating training sessions utilizing the self-play mechanisms.
--   [`src/eval.py`](src/eval.py) and [`src/self_play_eval.py`](src/self_play_eval.py): For evaluating trained agent policies.
 
-Configuration files within [`src/configs/`](src/configs/) likely manage parameters for training, environment setup, and agent models. The environment maps can be generated or loaded from the [`src/maps/`](src/maps/) directory.
+-   `src/driver.py`: Likely for standard training or evaluation runs.
+-   `src/self_play_driver.py`: For initiating training sessions utilizing the self-play mechanisms.
+-  [`src/eval.py` and `src/self_play_eval.py`: For evaluating trained agent policies.
 
-## 6. Results and conclusions
+Configuration files within `src/configs/` likely manage parameters for training, environment setup, and agent models. The environment maps can be generated or loaded from the `src/maps/` directory.
+
+# Results and conclusions
+
 The training process, particularly with MAPPO, is computationally intensive and sample inefficient. Achieving complex emergent behaviors, as seen in benchmarks like OpenAI's work [@baker2020emergenttoolusemultiagent], requires a significant number of training episodes (e.g., OpenAI: $3-4 \cdot 10^8$ episodes with a more sample-efficient attention-based algorithm).
 
 Despite the ongoing nature of the training, preliminary results show:
+
 -   Cops demonstrate an ability to chase and occasionally catch thieves.
 -   Thieves exhibit hiding and evasion tactics.
 
 The introduction of LSTM networks and PFSP has been crucial in progressing towards more sophisticated agent behaviors. The current setup, while not yet achieving fully complex behaviors, is on a promising trajectory.
 
-## 7. Possible future work
+# Possible future work
 -   **Extended Training**: Continue training the agents to foster more complex and robust behaviors.
 -   **Curriculum Learning with Maps**: Utilize maps as a curriculum learning platform by:
     -   Creating more complex maps with varied layouts and obstacles.
@@ -258,74 +271,4 @@ The introduction of LSTM networks and PFSP has been crucial in progressing towar
 -   **Agent Architecture Enhancement**:
     -   Explore adding more complex features to the agent architecture, such as attention mechanisms, to improve observational analysis and decision-making.
 
-## 8. Bibliography
-
-```bibtex
-@misc{mappo,
-      title={The Surprising Effectiveness of PPO in Cooperative, Multi-Agent Games}, 
-      author={Chao Yu and Akash Velu and Eugene Vinitsky and Jiaxuan Gao and Yu Wang and Alexandre Bayen and Yi Wu},
-      year={2022},
-      eprint={2103.01955},
-      archivePrefix={arXiv},
-      primaryClass={cs.LG},
-      url={https://arxiv.org/abs/2103.01955}, 
-}
-
-@inproceedings{FictitiousSelfPlay,
-author = {Heinrich, Johannes and Lanctot, Marc and Silver, David},
-title = {Fictitious self-play in extensive-form games},
-year = {2015},
-publisher = {JMLR.org},
-abstract = {Fictitious play is a popular game-theoretic model of learning in games. However, it has received little attention in practical applications to large problems. This paper introduces two variants of fictitious play that are implemented in behavioural strategies of an extensive-form game. The first variant is a full-width process that is realization equivalent to its normal-form counterpart and therefore inherits its convergence guarantees. However, its computational requirements are linear in time and space rather than exponential. The second variant, Fictitious Self-Play, is a machine learning framework that implements fictitious play in a sample-based fashion. Experiments in imperfect-information poker games compare our approaches and demonstrate their convergence to approximate Nash equilibria.},
-booktitle = {Proceedings of the 32nd International Conference on International Conference on Machine Learning - Volume 37},
-pages = {805–813},
-numpages = {9},
-location = {Lille, France},
-series = {ICML'15}
-}
-
-@misc{lin2023tizeromasteringmultiagentfootball,
-      title={TiZero: Mastering Multi-Agent Football with Curriculum Learning and Self-Play}, 
-      author={Fanqi Lin and Shiyu Huang and Tim Pearce and Wenze Chen and Wei-Wei Tu},
-      year={2023},
-      eprint={2302.07515},
-      archivePrefix={arXiv},
-      primaryClass={cs.AI},
-      url={https://arxiv.org/abs/2302.07515}, 
-}
-
-@misc{selfplay_survey,
-      title={A Survey on Self-play Methods in Reinforcement Learning}, 
-      author={Ruize Zhang and Zelai Xu and Chengdong Ma and Chao Yu and Wei-Wei Tu and Wenhao Tang and Shiyu Huang and Deheng Ye and Wenbo Ding and Yaodong Yang and Yu Wang},
-      year={2025},
-      eprint={2408.01072},
-      archivePrefix={arXiv},
-      primaryClass={cs.AI},
-      url={https://arxiv.org/abs/2408.01072}, 
-}
-
-@misc{baker2020emergenttoolusemultiagent,
-      title={Emergent Tool Use From Multi-Agent Autocurricula}, 
-      author={Bowen Baker and Ingmar Kanitscheider and Todor Markov and Yi Wu and Glenn Powell and Bob McGrew and Igor Mordatch},
-      year={2020},
-      eprint={1909.07528},
-      archivePrefix={arXiv},
-      primaryClass={cs.LG},
-      url={https://arxiv.org/abs/1909.07528}, 
-}
-
-@article{skrl,
-  author  = {Antonio Serrano-Muñoz and Dimitrios Chrysostomou and Simon Bøgh and Nestor Arana-Arexolaleiba},
-  title   = {skrl: Modular and Flexible Library for Reinforcement Learning},
-  journal = {Journal of Machine Learning Research},
-  year    = {2023},
-  volume  = {24},
-  number  = {254},
-  pages   = {1--9},
-  url     = {http://jmlr.org/papers/v24/23-0112.html}
-}
-
-```
-
----
-*References will be generated by Pandoc from the bibliography file.*
+# Bibliography

@@ -1,0 +1,12 @@
+
+pdf:
+    pandoc report.md -o report.pdf \
+        --pdf-engine=xelatex \
+        --toc \
+        --toc-depth=1 \
+        --number-sections \
+        -F pandoc-crossref \
+        --slide-level=2 \
+        --citeproc \
+        --bibliography=../slides/src/bibliography.bib \
+        --csl=../slides/csl/acm-sig-proceedings-long-author-list.csl
