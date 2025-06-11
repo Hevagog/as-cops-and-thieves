@@ -253,9 +253,9 @@ The [`self_play_driver.py`](src/self_play_driver.py) script exemplifies how thes
 
 The project is run using Python scripts. Key scripts include:
 
--   `src/driver.py`: Likely for standard training or evaluation runs.
+-   `src/driver.py`: Basic mappo learning mechanism.
 -   `src/self_play_driver.py`: For initiating training sessions utilizing the self-play mechanisms.
--  [`src/eval.py` and `src/self_play_eval.py`: For evaluating trained agent policies.
+-  `src/eval.py` and `src/self_play_eval.py`: For evaluating trained agent policies.
 
 Configuration files within `src/configs/` likely manage parameters for training, environment setup, and agent models. The environment maps can be generated or loaded from the `src/maps/` directory.
 
@@ -279,5 +279,10 @@ The introduction of LSTM networks and PFSP has been crucial in progressing towar
     -   Refine the reward function further to incentivize more nuanced and complex behaviors.
 -   **Agent Architecture Enhancement**:
     -   Explore adding more complex features to the agent architecture, such as attention mechanisms, to improve observational analysis and decision-making.
+
+# Work distribution
+
+-  **Mateusz Mazur**: Focused on the implementation of the environment, map functionality, visualization and integration.
+-  **Tomasz Kawiak**: Concentrated on the reinforcement learning algorithms, self-play mechanism and learning process.
 
 # Bibliography
